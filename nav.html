@@ -43,7 +43,7 @@
     }
   </style>
 </head>
-<body class="min-h-screen font-sans antialiased" data-page="nav" style="font-family: var(--font-body); color: var(--text-body); background-color: var(--surface-bg);">
+<body class="min-h-screen font-sans antialiased" data-page="nav" style="font-family: var(--font-body); color: var(--text-body); background-color: var(--surface-bg); overflow-x: hidden; max-width: 100vw;">
 
 <div id="app-backdrop" class="app-backdrop"></div>
 
@@ -514,7 +514,42 @@ var navData = [
   { name: 'Kraflio', desc: '学习个人专属写作风格并自动生成内容的AI领英发帖工具Kraflio 是一款专为领英（LinkedIn）创作者、企业高管、顾问和营销团队设计的专属 AI 动态生成工具。不同于市面上产出套路化、机械...', url: 'https://kraflio.com', cat: 'AI工具库' },
   { name: 'GMCFix', desc: '解决Google Merchant Center封号的违规修复工具GMCFix.com 是一款专门针对 Google Merchant Center（GMC）账号因违规被封停而设计的自动化诊断与...', url: 'https://gmcfix.com', cat: 'AI工具库' },
   { name: 'MuseSpark AI', desc: '支持一键生成商业网站并自动获取本地客户的智能建站工具MuseSpark AI 是一款专为自由职业者、代理商以及本地实体企业设计的“业务闭环型”全自动AI建站平台。与传统的拖拽式建站工具（如Wix...', url: 'https://www.musespark.ai/', cat: 'AI工具库' },
-  { name: 'Schemawriter.ai', desc: '自动生成网页结构化数据的SEO优化工具Schemawriter.ai 是一款专门用于自动生成网页JSON-LD结构化数据（Schema Markup）和优化SEO内容的AI软件平台。基于“实体S...', url: 'https://schemawriter.ai', cat: 'AI工具库' }
+  { name: 'Schemawriter.ai', desc: '自动生成网页结构化数据的SEO优化工具Schemawriter.ai 是一款专门用于自动生成网页JSON-LD结构化数据（Schema Markup）和优化SEO内容的AI软件平台。基于"实体S...', url: 'https://schemawriter.ai', cat: 'AI工具库' },
+  { name: 'ChatGPT', desc: 'OpenAI推出的全球领先AI对话助手，基于GPT系列大语言模型，支持文本生成、代码编写、创意写作、数据分析等多种任务，拥有强大的自然语言理解和推理能力。', url: 'https://chatgpt.com/', cat: 'AI对话工具' },
+  { name: 'Claude', desc: 'Anthropic公司开发的AI助手，以安全性和准确性著称，支持超长上下文对话（200K tokens），擅长复杂推理、代码生成和文档分析。', url: 'https://claude.ai/', cat: 'AI对话工具' },
+  { name: 'Gemini', desc: 'Google DeepMind推出的多模态AI模型，支持文本、图像、音频、视频和代码等多格式输入输出，深度集成Google生态，功能强大且免费。', url: 'https://gemini.google.com/', cat: 'AI对话工具' },
+  { name: 'DeepSeek', desc: '深度求索公司开发的国产大模型，以高性能和低成本著称，在数学推理、代码生成等任务上表现优异，支持超长上下文和联网搜索。', url: 'https://chat.deepseek.com/', cat: 'AI对话工具' },
+  { name: 'Kimi', desc: '月之暗面公司推出的AI智能助手，以其超长上下文处理能力（200万字）著称，支持多文件格式上传和分析，适合长文档阅读和深度研究。', url: 'https://kimi.moonshot.cn/', cat: 'AI对话工具' },
+  { name: '豆包', desc: '字节跳动推出的AI对话助手，集成多种大模型能力，支持文字对话、图片生成、语音交互等，深度整合抖音、飞书等字节生态产品。', url: 'https://www.doubao.com/', cat: 'AI对话工具' },
+  { name: '通义千问', desc: '阿里巴巴推出的AI大模型助手，支持多轮对话、文案创作、逻辑推理、多模态理解，与阿里云生态深度集成，提供丰富的API服务。', url: 'https://tongyi.aliyun.com/', cat: 'AI对话工具' },
+  { name: '文心一言', desc: '百度公司推出的知识增强大语言模型，基于文心大模型，在中文理解与生成方面表现突出，支持对话、写作、绘画等多种AI能力。', url: 'https://yiyan.baidu.com/', cat: 'AI对话工具' },
+  { name: '讯飞星火', desc: '科大讯飞推出的认知大模型，具备跨领域的知识和语言理解能力，在语音交互、教育、办公等场景应用广泛，支持多模态交互。', url: 'https://xinghuo.xfyun.cn/', cat: 'AI对话工具' },
+  { name: 'Perplexity', desc: 'AI驱动的智能搜索引擎，能够实时搜索互联网信息并提供带引用来源的精准答案，支持深度研究模式和文档上传分析。', url: 'https://www.perplexity.ai/', cat: 'AI对话工具' },
+  { name: 'Midjourney', desc: '全球最知名的AI图像生成平台之一，通过Discord或Web界面输入文本提示词即可生成高质量艺术图像，以卓越的美学风格和细节表现力著称。', url: 'https://www.midjourney.com/', cat: 'AI绘画' },
+  { name: 'DALL·E', desc: 'OpenAI推出的AI图像生成模型，集成于ChatGPT平台，支持通过自然语言描述生成高精度、创意丰富的图像，可精确控制画面细节和风格。', url: 'https://openai.com/dall-e-3', cat: 'AI绘画' },
+  { name: 'Stable Diffusion', desc: 'Stability AI开发的开源AI图像生成模型，支持本地部署和自定义训练，拥有庞大的社区生态和海量模型资源，灵活性极高。', url: 'https://stability.ai/', cat: 'AI绘画' },
+  { name: '即梦AI', desc: '字节跳动旗下剪映推出的AI图像与视频生成工具，支持文生图、图生图、AI视频创作，提供丰富的创意模板和编辑功能。', url: 'https://jimeng.jianying.com/', cat: 'AI绘画' },
+  { name: 'Canva AI', desc: 'Canva平台集成的AI设计工具套件，支持AI图像生成、智能背景移除、魔法设计等功能，让非设计师也能轻松创作专业视觉内容。', url: 'https://www.canva.com/', cat: 'AI绘画' },
+  { name: 'Leonardo AI', desc: '专为游戏和创意行业设计的AI图像生成平台，提供精细的模型训练、角色一致性控制和丰富的艺术风格预设，深受游戏开发者喜爱。', url: 'https://leonardo.ai/', cat: 'AI绘画' },
+  { name: 'Runway', desc: '领先的AI视频创作平台，提供文本生成视频、视频编辑、视觉效果等工具，支持Gen-3等前沿视频生成模型，是专业视频创作者的强大助手。', url: 'https://runwayml.com/', cat: 'AI视频' },
+  { name: 'Sora', desc: 'OpenAI推出的革命性AI视频生成模型，能够根据文本描述生成长达一分钟的高质量视频，理解物理世界运动规律，视觉效果逼真。', url: 'https://sora.com/', cat: 'AI视频' },
+  { name: 'Pika', desc: 'AI驱动的视频生成和编辑平台，支持文本转视频、图像转视频、视频风格转换等功能，操作简单，适合社交媒体内容创作。', url: 'https://pika.art/', cat: 'AI视频' },
+  { name: 'Kling 可灵', desc: '快手推出的AI视频生成大模型，支持文生视频和图生视频，能够生成最长2分钟的高质量视频，在动作连贯性和物理合理性上表现突出。', url: 'https://kling.kuaishou.com/', cat: 'AI视频' },
+  { name: 'Suno', desc: 'AI音乐生成平台，用户通过简单的文本描述即可生成完整的歌曲，包含歌词、旋律、伴奏和人声，支持多种音乐风格和语言。', url: 'https://suno.com/', cat: 'AI音频' },
+  { name: 'Udio', desc: 'AI音乐创作工具，由前Google DeepMind研究员创立，能够生成高质量、结构完整的音乐作品，音质细腻，支持多种音乐类型。', url: 'https://www.udio.com/', cat: 'AI音频' },
+  { name: 'Notion AI', desc: 'Notion办公平台集成的AI助手，支持智能写作、文档摘要、翻译、头脑风暴等功能，深度融入笔记、项目管理和知识库工作流。', url: 'https://www.notion.so/product/ai', cat: 'AI工作效率' },
+  { name: 'Gamma', desc: 'AI驱动的演示文稿和文档创建工具，通过简单的提示即可生成精美的PPT、网页和文档，支持一键切换主题和布局，大幅提升办公效率。', url: 'https://gamma.app/', cat: 'AI工作效率' },
+  { name: 'Cursor', desc: '新一代AI编程编辑器，基于VS Code深度定制，集成GPT-4和Claude等先进模型，支持代码补全、智能重构、自然语言编程等功能。', url: 'https://cursor.sh/', cat: 'AI工作效率' },
+  { name: 'GitHub Copilot', desc: 'GitHub推出的AI编程助手，由OpenAI技术驱动，深度集成主流IDE，提供实时代码建议、函数生成和代码解释，是开发者最广泛使用的AI编程工具。', url: 'https://github.com/features/copilot', cat: 'AI工作效率' },
+  { name: 'Napkin AI', desc: 'AI驱动的可视化工具，能将文本内容快速转换为专业的图表、流程图和信息图，支持多种图表类型，适合商务演示和内容创作。', url: 'https://www.napkin.ai/', cat: 'AI工作效率' },
+  { name: 'Hugging Face', desc: '全球最大的AI模型开源社区和平台，提供数十万个预训练模型、数据集和演示空间，是AI开发者和研究者必备的工具平台。', url: 'https://huggingface.co/', cat: 'AI专业应用' },
+  { name: 'Replicate', desc: '云端AI模型部署和运行平台，让开发者可以通过简单的API调用运行数千个开源AI模型，无需管理基础设施，按使用量付费。', url: 'https://replicate.com/', cat: 'AI专业应用' },
+  { name: 'Vercel AI', desc: 'Vercel推出的AI应用开发SDK和平台，提供统一的API接口调用多种AI模型，支持流式响应和边缘计算，简化AI应用开发流程。', url: 'https://vercel.com/ai', cat: 'AI专业应用' },
+  { name: 'LangChain', desc: '最流行的AI应用开发框架，提供链式调用、智能体、记忆管理等核心组件，帮助开发者快速构建基于大语言模型的复杂应用。', url: 'https://www.langchain.com/', cat: 'AI专业应用' },
+  { name: 'ComfyUI', desc: '基于节点的AI图像生成工作流工具，支持Stable Diffusion等模型，通过可视化节点编排实现复杂的图像生成和编辑流程。', url: 'https://github.com/comfyanonymous/ComfyUI', cat: 'AI专业应用' },
+  { name: 'Figma AI', desc: 'Figma设计平台集成的AI功能套件，支持AI辅助设计、智能布局、自动生成设计稿和组件，提升UI/UX设计效率。', url: 'https://www.figma.com/ai/', cat: 'AI商业应用' },
+  { name: 'Adobe Firefly', desc: 'Adobe推出的生成式AI模型家族，深度集成于Photoshop、Illustrator等创意工具，支持AI图像生成、扩展、填充等专业功能。', url: 'https://www.adobe.com/products/firefly.html', cat: 'AI商业应用' },
+  { name: 'Remove.bg', desc: '一键智能移除图片背景的AI工具，上传图片即可在5秒内自动去除背景，支持批量处理和API集成，广泛应用于电商和设计领域。', url: 'https://www.remove.bg/', cat: 'AI商业应用' }
 ];
 
 var catLabels = {
@@ -547,17 +582,34 @@ var catIcons = {
   'AI工具库': '🛠️'
 };
 
+  // ===== Favorites State =====
+  var favorites = JSON.parse(localStorage.getItem('nav_favorites') || '[]');
+
+  function saveFavorites() {
+    localStorage.setItem('nav_favorites', JSON.stringify(favorites));
+  }
+
+  window.toggleFavorite = function(url) {
+    var idx = favorites.indexOf(url);
+    if (idx === -1) {
+      favorites.push(url);
+    } else {
+      favorites.splice(idx, 1);
+    }
+    saveFavorites();
+    renderCards();
+  };
+
   var cats = ['all'].concat([...new Set(navData.map(function(d) { return d.cat; }))]);
-  var filterLabels = { all: '全部' };
+  var filterLabels = { all: '全部', fav: '收藏' };
   Object.keys(catLabels).forEach(function(k) { filterLabels[k] = catLabels[k]; });
 
-  cats.forEach(function(cat) {
+  function createCatBtn(cat, label) {
     var btn = document.createElement('button');
     btn.className = 'category-filter px-4 py-1.5 text-sm font-medium rounded-full transition-colors duration-150';
     btn.setAttribute('data-cat', cat);
-    btn.textContent = filterLabels[cat] || cat;
+    btn.innerHTML = label;
     btn.style.cssText = 'font-family: var(--font-heading); background-color: var(--surface-card); color: var(--text-secondary); border: 1px solid var(--border-default); cursor: pointer;';
-    if (cat === 'all') { btn.classList.add('active'); btn.style.cssText += 'background-color: var(--color-primary) !important; color: #fff !important; border-color: var(--color-primary) !important;'; }
     btn.addEventListener('click', function() {
       document.querySelectorAll('.category-filter').forEach(function(b) {
         b.classList.remove('active');
@@ -569,7 +621,18 @@ var catIcons = {
       renderCards();
     });
     categoryFilters.appendChild(btn);
+    return btn;
+  }
+
+  var allBtn = createCatBtn('all', '全部');
+  allBtn.classList.add('active');
+  allBtn.style.cssText += 'background-color: var(--color-primary) !important; color: #fff !important; border-color: var(--color-primary) !important;';
+
+  cats.slice(1).forEach(function(cat) {
+    createCatBtn(cat, filterLabels[cat] || cat);
   });
+
+  createCatBtn('fav', '❤️ 收藏');
 
   // Search
   searchInput.addEventListener('input', function() {
@@ -579,22 +642,33 @@ var catIcons = {
 
   function renderCards() {
     var filtered = navData.filter(function(d) {
+      if (currentCat === 'fav') return favorites.indexOf(d.url) !== -1;
       var matchCat = currentCat === 'all' || d.cat === currentCat;
       var matchSearch = !currentSearch || d.name.toLowerCase().includes(currentSearch) || d.desc.toLowerCase().includes(currentSearch);
       return matchCat && matchSearch;
     });
 
     grid.innerHTML = filtered.map(function(d, i) {
-      var icon = catIcons[d.cat] || '🔗';
+      var hostname = (function(url) { try { return new URL(url).hostname; } catch(e) { return ''; } })(d.url);
+      var faviconUrl = hostname ? 'https://www.google.com/s2/favicons?domain=' + hostname + '&sz=64' : '';
       var label = catLabels[d.cat] || d.cat;
-      return '<div class="nav-card rounded-lg p-5" style="background-color: var(--surface-card); border: 1px solid var(--border-default);" onclick="openDetail(' + i + ', \'' + d.cat + '\')">' +
+      var isFav = favorites.indexOf(d.url) !== -1;
+      var heartIcon = isFav
+        ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="#ef4444" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>'
+        : '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-muted);"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>';
+      var escapedUrl = d.url.replace(/'/g, "\\'");
+      return '<div class="nav-card rounded-lg p-5" style="background-color: var(--surface-card); border: 1px solid var(--border-default);" onclick="openDetail(\'' + escapedUrl + '\')">' +
         '<div class="flex items-start justify-between mb-3">' +
-        '<div class="flex items-center gap-3">' +
-        '<div class="flex items-center justify-center flex-shrink-0 rounded-lg" style="width: 40px; height: 40px; background-color: var(--surface-inset); font-size: 20px;">' + icon + '</div>' +
+        '<div class="flex items-center gap-3 min-w-0">' +
+        '<div style="position:relative;width:40px;height:40px;flex-shrink:0;border-radius:8px;overflow:hidden;background-color:var(--surface-inset);display:flex;align-items:center;justify-content:center;font-size:20px;">' + (catIcons[d.cat] || '🔗') +
+        (faviconUrl ? '<img src="' + faviconUrl + '" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:contain;border-radius:8px;background:white;" />' : '') +
+        '</div>' +
         '<div class="min-w-0">' +
         '<h3 class="text-sm font-semibold truncate" style="font-family: var(--font-heading); color: var(--text-heading);">' + d.name + '</h3>' +
         '<span class="category-tag" style="background-color: var(--color-primary-light); color: var(--color-primary);">' + label + '</span>' +
-        '</div></div></div>' +
+        '</div></div>' +
+        '<button class="flex-shrink-0 p-1 rounded-md transition-colors" style="background:none;border:none;cursor:pointer;" onclick="event.stopPropagation();toggleFavorite(\'' + escapedUrl + '\')" onmouseover="this.style.backgroundColor=\'var(--surface-hover)\'" onmouseout="this.style.backgroundColor=\'transparent\'" title="' + (isFav ? '取消收藏' : '收藏') + '">' + heartIcon + '</button>' +
+        '</div>' +
         '<p class="text-xs leading-relaxed mb-3" style="font-family: var(--font-body); color: var(--text-secondary); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">' + d.desc + '</p>' +
         '<div class="flex items-center justify-between mt-3 pt-3" style="border-top: 1px solid var(--border-subtle);">' +
         '<span class="text-xs" style="font-family: var(--font-body); color: var(--text-muted);">点击查看详情</span>' +
@@ -603,30 +677,37 @@ var catIcons = {
     }).join('');
 
     if (filtered.length === 0) {
-      grid.innerHTML = '<div class="col-span-full text-center py-16"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-muted); margin: 0 auto 12px;"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.3-4.3"/></svg><p class="text-sm" style="font-family: var(--font-heading); color: var(--text-muted);">没有找到匹配的 AI 工具</p></div>';
+      var emptyMsg = currentCat === 'fav' ? '还没有收藏任何网站，点击卡片右上角爱心图标收藏吧' : '没有找到匹配的 AI 工具';
+      grid.innerHTML = '<div class="col-span-full text-center py-16"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-muted); margin: 0 auto 12px;"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.3-4.3"/></svg><p class="text-sm" style="font-family: var(--font-heading); color: var(--text-muted);">' + emptyMsg + '</p></div>';
     }
   }
 
   // ===== Detail Modal =====
-  var filteredCache = [];
-  window.openDetail = function(idx, cat) {
-    // Re-filter to get the correct item
-    var filtered = navData.filter(function(d) {
-      var matchCat = currentCat === 'all' || d.cat === currentCat;
-      var matchSearch = !currentSearch || d.name.toLowerCase().includes(currentSearch) || d.desc.toLowerCase().includes(currentSearch);
-      return matchCat && matchSearch;
-    });
-    var d = filtered[idx];
+  window.openDetail = function(url) {
+    var d = null;
+    for (var i = 0; i < navData.length; i++) {
+      if (navData[i].url === url) { d = navData[i]; break; }
+    }
     if (!d) return;
 
+    var hostname = (function(u) { try { return new URL(u).hostname; } catch(e) { return ''; } })(d.url);
+    var faviconUrl = hostname ? 'https://www.google.com/s2/favicons?domain=' + hostname + '&sz=64' : '';
+    var isFav = favorites.indexOf(d.url) !== -1;
     var content = document.getElementById('detail-content');
     content.innerHTML =
       '<div class="flex items-center gap-4 mb-4">' +
-      '<div class="flex items-center justify-center flex-shrink-0 rounded-lg" style="width: 56px; height: 56px; background-color: var(--surface-inset); font-size: 28px;">' + (catIcons[d.cat] || '🔗') + '</div>' +
+      '<div style="position:relative;width:56px;height:56px;flex-shrink:0;border-radius:12px;overflow:hidden;background-color:var(--surface-inset);display:flex;align-items:center;justify-content:center;font-size:28px;">' + (catIcons[d.cat] || '🔗') +
+      (faviconUrl ? '<img src="' + faviconUrl + '" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:contain;border-radius:12px;background:white;" />' : '') +
+      '</div>' +
       '<div>' +
       '<h2 class="text-xl font-semibold" style="font-family: var(--font-heading); color: var(--text-heading);">' + d.name + '</h2>' +
       '<span class="category-tag" style="background-color: var(--color-primary-light); color: var(--color-primary);">' + (catLabels[d.cat] || d.cat) + '</span>' +
-      '</div></div>' +
+      '</div>' +
+      '<button class="flex-shrink-0 p-1.5 rounded-md transition-colors" style="background:none;border:none;cursor:pointer;margin-left:auto;" onclick="event.stopPropagation();toggleFavorite(\'' + d.url.replace(/'/g, "\\'") + '\')" onmouseover="this.style.backgroundColor=\'var(--surface-hover)\'" onmouseout="this.style.backgroundColor=\'transparent\'" title="' + (isFav ? '取消收藏' : '收藏') + '">' +
+      (isFav
+        ? '<svg width="22" height="22" viewBox="0 0 24 24" fill="#ef4444" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>'
+        : '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-muted);"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>') +
+      '</button></div>' +
       '<p class="text-sm leading-relaxed mb-4" style="font-family: var(--font-body); color: var(--text-body);">' + d.desc + '</p>' +
       '<div class="rounded-lg p-4 mb-4" style="background-color: var(--surface-inset); border: 1px solid var(--border-subtle);">' +
       '<p class="text-xs mb-1" style="font-family: var(--font-heading); color: var(--text-muted);">网站地址</p>' +
