@@ -125,10 +125,13 @@ create table if not exists public.generated_assets (
   result_data jsonb default '{}'::jsonb,
   model text default '',
   status text default 'pending' check (status in ('pending', 'processing', 'completed', 'failed')),
-  employee_id uuid references public.employees(id),
-  project_id uuid references public.projects(id),
+  employee_id uuid,
+  project_id uuid,
   created_at timestamptz default now()
 );
+
+create index if not exists idx_generated_assets_employee on public.generated_assets(employee_id);
+create index if not exists idx_generated_assets_project on public.generated_assets(project_id);
 
 -- ============================================
 -- 7. 资源库表
