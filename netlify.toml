@@ -1,3 +1,7 @@
 [build]
-  command = "npm run build"
-  publish = "dist"
+  publish = "."  # Static site, publish root directory
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200  # SPA-style fallback for clean URLs

@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="dark" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>创作工坊 — AI Workspace</title>
+  <link rel="stylesheet" href="assets/css/theme.css">
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+  <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+  <style type="text/tailwindcss">
+    @theme inline { --color-primary: var(--color-primary); --color-secondary: var(--color-secondary); }
+    @layer base { body { background: var(--surface-bg); color: var(--text-body); } }
+  </style>
+</head>
+<body class="min-h-screen font-sans antialiased" data-page="creative-studio" style="font-family: var(--font-body); color: var(--text-body); background-color: var(--surface-bg);">
+
+<div id="app-backdrop" class="app-backdrop"></div>
+
+<!-- ===== LEFT SIDEBAR ===== -->
+<aside id="app-sidebar" class="app-sidebar fixed top-0 left-0 z-30 flex flex-col h-screen border-r"
+  style="width: var(--sidebar-width); background-color: var(--surface-inset); border-color: var(--border-default);">
+  <div class="flex items-center gap-3 px-5 h-16 border-b" style="border-color: var(--border-default);">
+    <div class="flex items-center justify-center flex-shrink-0" style="width: 32px; height: 32px; background-color: var(--color-primary); border-radius: var(--radius-md);">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+    </div>
+    <span class="text-sm font-semibold tracking-tight" style="font-family: var(--font-heading); color: var(--text-heading);">AI Workspace</span>
+  </div>
+  <nav class="flex-1 overflow-y-auto py-4 px-3">
+    <ul class="flex flex-col gap-1" style="list-style: none; margin: 0; padding: 0;">
+      <li><a href="index.html" data-nav-key="dashboard" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors duration-150" style="font-family: var(--font-heading); color: var(--text-secondary);" onmouseover="if(!this.hasAttribute('data-active'))this.style.backgroundColor='var(--surface-hover)'" onmouseout="if(!this.hasAttribute('data-active'))this.style.backgroundColor='transparent'"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>工作台</span></a></li>
+      <li><a href="ai-employees.html" data-nav-key="ai-employees" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors duration-150" style="font-family: var(--font-heading); color: var(--text-secondary);" onmouseover="if(!this.hasAttribute('data-active'))this.style.backgroundColor='var(--surface-hover)'" onmouseout="if(!this.hasAttribute('data-active'))this.style.backgroundColor='transparent'"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>AI员工</span></a></li>
+      <li><a href="news-hub.html" data-nav-key="news-hub" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors duration-150" style="font-family: var(--font-heading); color: var(--text-secondary);" onmouseover="if(!this.hasAttribute('data-active'))this.style.backgroundColor='var(--surface-hover)'" onmouseout="if(!this.hasAttribute('data-active'))this.style.backgroundColor='transparent'"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/></svg><span>资讯台</span></a></li>
+      <li><a href="creative-studio.html" data-nav-key="creative-studio" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors duration-150" style="font-family: var(--font-heading); color: var(--text-secondary);" onmouseover="if(!this.hasAttribute('data-active'))this.style.backgroundColor='var(--surface-hover)'" onmouseout="if(!this.hasAttribute('data-active'))this.style.backgroundColor='transparent'"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg><span>创作工坊</span></a></li>
+      <li><a href="projects.html" data-nav-key="projects" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors duration-150" style="font-family: var(--font-heading); color: var(--text-secondary);" onmouseover="if(!this.hasAttribute('data-active'))this.style.backgroundColor='var(--surface-hover)'" onmouseout="if(!this.hasAttribute('data-active'))this.style.backgroundColor='transparent'"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h16Z"/></svg><span>项目中心</span></a></li>
+      <li><a href="resources.html" data-nav-key="resources" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors duration-150" style="font-family: var(--font-heading); color: var(--text-secondary);" onmouseover="if(!this.hasAttribute('data-active'))this.style.backgroundColor='var(--surface-hover)'" onmouseout="if(!this.hasAttribute('data-active'))this.style.backgroundColor='transparent'"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3"/></svg><span>资源库</span></a></li>
+      <li><a href="settings.html" data-nav-key="settings" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors duration-150" style="font-family: var(--font-heading); color: var(--text-secondary);" onmouseover="if(!this.hasAttribute('data-active'))this.style.backgroundColor='var(--surface-hover)'" onmouseout="if(!this.hasAttribute('data-active'))this.style.backgroundColor='transparent'"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg><span>设置</span></a></li>
+    </ul>
+  </nav>
+  <div class="px-4 py-4 border-t" style="border-color: var(--border-default);">
+    <div class="flex items-center gap-2.5">
+      <div class="flex items-center justify-center flex-shrink-0 text-xs font-semibold" style="width: 28px; height: 28px; background-color: var(--color-primary-light); color: var(--color-primary); border-radius: var(--radius-full); font-family: var(--font-heading);">U</div>
+      <div class="flex-1 min-w-0">
+        <p class="text-xs font-medium truncate" style="font-family: var(--font-heading); color: var(--text-heading);">创作者</p>
+        <p class="text-xs truncate" style="color: var(--text-muted);">专业版</p>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- ===== MAIN CONTENT WRAPPER ===== -->
+<div class="app-main flex flex-col flex-1" style="margin-left: var(--sidebar-width);">
+  <header class="sticky top-0 z-20 flex items-center justify-between h-16 px-4 sm:px-6 border-b gap-3" style="background-color: var(--surface-card); border-color: var(--border-default);">
+    <div class="flex items-center gap-3 min-w-0">
+      <button id="menu-toggle" class="menu-toggle items-center justify-center p-2 rounded-md" style="color: var(--text-secondary); display:none;" aria-label="打开菜单" aria-expanded="false" aria-controls="app-sidebar"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+      <h1 class="header-page-title text-lg font-semibold truncate" style="font-family: var(--font-heading); color: var(--text-heading);">创作工坊</h1>
+    </div>
+    <div class="header-search flex items-center justify-center flex-1 mx-4 sm:mx-8" style="max-width: 480px;">
+      <div class="relative w-full">
+        <svg class="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-muted);"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.3-4.3"/></svg>
+        <input type="text" data-role="search" placeholder="搜索创作工具..." class="w-full pl-9 pr-4 py-2 text-sm rounded-md outline-none transition-colors duration-150" style="font-family: var(--font-body); background-color: var(--surface-inset); color: var(--text-body); border: 1px solid var(--border-default);" onfocus="this.style.borderColor='var(--color-primary)'; this.style.boxShadow='0 0 0 2px var(--color-primary-light)'" onblur="this.style.borderColor='var(--border-default)'; this.style.boxShadow='none'" />
+      </div>
+    </div>
+    <div class="flex items-center gap-1 sm:gap-3 flex-shrink-0">
+      <button id="theme-toggle" class="relative flex items-center justify-center p-2 rounded-md transition-colors duration-150" style="color: var(--text-secondary);" aria-label="切换主题"><svg data-theme-icon-moon width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg><svg data-theme-icon-sun width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="M4.93 4.93l1.41 1.41"/><path d="M17.66 17.66l1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="M4.93 19.07l1.41-1.41"/><path d="M17.66 6.34l1.41-1.41"/></svg></button>
+      <div class="relative">
+        <button id="notif-btn" class="relative flex items-center justify-center p-2 rounded-md transition-colors duration-150" style="color: var(--text-secondary);" aria-label="通知"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><span class="absolute top-1.5 right-1.5" style="width: 7px; height: 7px; background-color: var(--color-primary); border-radius: var(--radius-full);"></span></button>
+        <div id="notif-dropdown" class="notif-dropdown">
+          <div class="notif-item"><div style="width:8px;height:8px;border-radius:9999px;background:var(--color-primary);margin-top:6px;flex-shrink:0;"></div><div><p class="text-sm font-medium" style="font-family:var(--font-heading);color:var(--text-heading);">创作任务完成</p><p class="text-xs mt-0.5" style="color:var(--text-muted);">星际漫旅 第 4 集分镜已生成 · 30 分钟前</p></div></div>
+          <div class="notif-item"><div style="width:8px;height:8px;border-radius:9999px;background:var(--state-success);margin-top:6px;flex-shrink:0;"></div><div><p class="text-sm font-medium" style="font-family:var(--font-heading);color:var(--text-heading);">新模板可用</p><p class="text-xs mt-0.5" style="color:var(--text-muted);">古风仙侠模板包已上线 · 2 小时前</p></div></div>
+        </div>
+      </div>
+      <button class="flex items-center justify-center flex-shrink-0" style="width: 34px; height: 34px; background-color: var(--color-primary-light); color: var(--color-primary); border-radius: var(--radius-full); font-family: var(--font-heading); font-size: 13px; font-weight: 600; transition: background-color 150ms ease;" onmouseover="this.style.backgroundColor='var(--color-primary)'; this.style.color='var(--text-inverse)'" onmouseout="this.style.backgroundColor='var(--color-primary-light)'; this.style.color='var(--color-primary)'" aria-label="用户菜单">U</button>
+    </div>
+  </header>
+
+  <main class="flex-1 overflow-y-auto" style="background-color: var(--surface-bg);">
+    <div class="p-4 sm:p-6 lg:p-8">
+
+      <!-- Page Heading -->
+      <div class="mb-6">
+        <h2 class="text-2xl font-semibold" style="font-family: var(--font-heading); color: var(--text-heading); text-wrap: balance; word-break: keep-all; overflow-wrap: break-word;">创作工坊</h2>
+        <p class="mt-1 text-sm" style="font-family: var(--font-body); color: var(--text-secondary);">一键开启你的AI创作之旅</p>
+      </div>
+
+      <!-- Primary CTA Banner -->
+      <section class="relative overflow-hidden mb-8" style="border-radius: var(--radius-xl); padding: 40px;">
+        <div class="absolute inset-0" style="background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary-dark) 100%); border-radius: var(--radius-xl);"></div>
+        <div class="relative z-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <h3 class="text-xl sm:text-2xl font-bold text-white mb-2" style="font-family: var(--font-heading); text-wrap: balance; word-break: keep-all; overflow-wrap: break-word;">新建创作</h3>
+            <p class="text-sm text-white opacity-90 max-w-md" style="font-family: var(--font-body);">选择创作模式，输入主题，让 AI 员工为你完成从剧本到成片的全流程。</p>
+          </div>
+          <button class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg text-sm font-semibold whitespace-nowrap transition-all duration-150 self-start sm:self-auto" style="font-family: var(--font-heading); background-color: #fff; color: var(--color-primary); border: none;" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 8px 20px rgba(0,0,0,0.15)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'" onmousedown="this.style.transform='translateY(0)'" data-clickable="新建创作任务">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+            开始创作
+          </button>
+        </div>
+      </section>
+
+      <!-- 创作模式 Section -->
+      <div class="mb-8">
+        <h3 class="text-lg font-semibold mb-4" style="font-family: var(--font-heading); color: var(--text-heading);">创作模式</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+
+          <!-- Mode 1: 剧本创作 -->
+          <div class="rounded-lg transition-all duration-200 cursor-pointer" style="background-color: var(--surface-card); border: 1px solid var(--border-default); padding: 24px;" onmouseover="this.style.borderColor='var(--color-primary)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--border-default)'; this.style.transform='translateY(0)'" data-clickable="进入 剧本创作">
+            <div class="flex items-center justify-center mb-4" style="width: 48px; height: 48px; background-color: rgba(217, 119, 87, 0.15); border-radius: var(--radius-full);">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#d97757" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            </div>
+            <h4 class="text-base font-semibold mb-1.5" style="font-family: var(--font-heading); color: var(--text-heading);">剧本创作</h4>
+            <p class="text-xs mb-4" style="font-family: var(--font-body); color: var(--text-secondary);">输入主题与风格，AI 自动生成结构化剧本、台词与场景描述。</p>
+            <div class="flex justify-end">
+              <span class="text-xs font-medium" style="font-family: var(--font-heading); color: var(--color-primary);">进入 →</span>
+            </div>
+          </div>
+
+          <!-- Mode 2: 分镜生成 -->
+          <div class="rounded-lg transition-all duration-200 cursor-pointer" style="background-color: var(--surface-card); border: 1px solid var(--border-default); padding: 24px;" onmouseover="this.style.borderColor='var(--color-primary)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--border-default)'; this.style.transform='translateY(0)'" data-clickable="进入 分镜生成">
+            <div class="flex items-center justify-center mb-4" style="width: 48px; height: 48px; background-color: rgba(106, 155, 204, 0.15); border-radius: var(--radius-full);">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6a9bcc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+            </div>
+            <h4 class="text-base font-semibold mb-1.5" style="font-family: var(--font-heading); color: var(--text-heading);">分镜生成</h4>
+            <p class="text-xs mb-4" style="font-family: var(--font-body); color: var(--text-secondary);">基于剧本自动拆分镜头，生成构图、景别与镜头运动建议。</p>
+            <div class="flex justify-end">
+              <span class="text-xs font-medium" style="font-family: var(--font-heading); color: var(--color-primary);">进入 →</span>
+            </div>
+          </div>
+
+          <!-- Mode 3: 角色设计 -->
+          <div class="rounded-lg transition-all duration-200 cursor-pointer" style="background-color: var(--surface-card); border: 1px solid var(--border-default); padding: 24px;" onmouseover="this.style.borderColor='var(--color-primary)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--border-default)'; this.style.transform='translateY(0)'" data-clickable="进入 角色设计">
+            <div class="flex items-center justify-center mb-4" style="width: 48px; height: 48px; background-color: rgba(120, 140, 93, 0.15); border-radius: var(--radius-full);">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#788c5d" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/><circle cx="12" cy="12" r="10"/></svg>
+            </div>
+            <h4 class="text-base font-semibold mb-1.5" style="font-family: var(--font-heading); color: var(--text-heading);">角色设计</h4>
+            <p class="text-xs mb-4" style="font-family: var(--font-body); color: var(--text-secondary);">一句话生成多角度角色立绘，支持风格锁定与表情包扩展。</p>
+            <div class="flex justify-end">
+              <span class="text-xs font-medium" style="font-family: var(--font-heading); color: var(--color-primary);">进入 →</span>
+            </div>
+          </div>
+
+          <!-- Mode 4: 配音合成 -->
+          <div class="rounded-lg transition-all duration-200 cursor-pointer" style="background-color: var(--surface-card); border: 1px solid var(--border-default); padding: 24px;" onmouseover="this.style.borderColor='var(--color-primary)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--border-default)'; this.style.transform='translateY(0)'" data-clickable="进入 配音合成">
+            <div class="flex items-center justify-center mb-4" style="width: 48px; height: 48px; background-color: rgba(217, 119, 87, 0.15); border-radius: var(--radius-full);">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#d97757" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+            </div>
+            <h4 class="text-base font-semibold mb-1.5" style="font-family: var(--font-heading); color: var(--text-heading);">配音合成</h4>
+            <p class="text-xs mb-4" style="font-family: var(--font-body); color: var(--text-secondary);">为角色匹配音色，批量合成台词配音，支持情绪与语速调节。</p>
+            <div class="flex justify-end">
+              <span class="text-xs font-medium" style="font-family: var(--font-heading); color: var(--color-primary);">进入 →</span>
+            </div>
+          </div>
+
+          <!-- Mode 5: 视频生成 -->
+          <div class="rounded-lg transition-all duration-200 cursor-pointer" style="background-color: var(--surface-card); border: 1px solid var(--border-default); padding: 24px;" onmouseover="this.style.borderColor='var(--color-primary)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--border-default)'; this.style.transform='translateY(0)'" data-clickable="进入 视频生成">
+            <div class="flex items-center justify-center mb-4" style="width: 48px; height: 48px; background-color: rgba(106, 155, 204, 0.15); border-radius: var(--radius-full);">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6a9bcc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+            </div>
+            <h4 class="text-base font-semibold mb-1.5" style="font-family: var(--font-heading); color: var(--text-heading);">视频生成</h4>
+            <p class="text-xs mb-4" style="font-family: var(--font-body); color: var(--text-secondary);">将分镜与配音合成动态视频，自动添加转场与字幕。</p>
+            <div class="flex justify-end">
+              <span class="text-xs font-medium" style="font-family: var(--font-heading); color: var(--color-primary);">进入 →</span>
+            </div>
+          </div>
+
+          <!-- Mode 6: 后期特效 -->
+          <div class="rounded-lg transition-all duration-200 cursor-pointer" style="background-color: var(--surface-card); border: 1px solid var(--border-default); padding: 24px;" onmouseover="this.style.borderColor='var(--color-primary)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--border-default)'; this.style.transform='translateY(0)'" data-clickable="进入 后期特效">
+            <div class="flex items-center justify-center mb-4" style="width: 48px; height: 48px; background-color: rgba(120, 140, 93, 0.15); border-radius: var(--radius-full);">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#788c5d" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l1.5 4.5L18 8l-4.5 1.5L12 14l-1.5-4.5L6 8l4.5-1.5L12 2z"/><path d="M5 19l.7-2.1L7.8 16l-2.1-.7L5 13l-.7 2.3L2.2 16l2.1.9L5 19z"/><path d="M19 14l.6-1.8L21.4 11.6l-1.8-.6L19 9l-.6 1.9L16.6 11.6l1.8.6L19 14z"/></svg>
+            </div>
+            <h4 class="text-base font-semibold mb-1.5" style="font-family: var(--font-heading); color: var(--text-heading);">后期特效</h4>
+            <p class="text-xs mb-4" style="font-family: var(--font-body); color: var(--text-secondary);">一键添加粒子、光效与滤镜，提升画面质感与氛围感。</p>
+            <div class="flex justify-end">
+              <span class="text-xs font-medium" style="font-family: var(--font-heading); color: var(--color-primary);">进入 →</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- 最近创作 Section -->
+      <div>
+        <h3 class="text-lg font-semibold mb-4" style="font-family: var(--font-heading); color: var(--text-heading);">最近创作</h3>
+        <div class="flex flex-col gap-4">
+
+          <!-- Recent 1 -->
+          <div class="flex gap-4 p-4 border transition-all duration-150 cursor-pointer" style="background-color: var(--surface-card); border-color: var(--border-default); border-radius: var(--radius-md);" onmouseover="this.style.borderColor='var(--color-primary)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--border-default)'; this.style.transform='translateY(0)'" data-clickable="打开创作：星际漫旅 第4集分镜">
+            <div class="flex-shrink-0 overflow-hidden" style="width: 120px; height: 80px; background-color: var(--surface-inset); border-radius: var(--radius-sm);">
+              <img src="assets/image_1_yi19x4.jpg" alt="星际漫旅 第4集分镜" class="w-full h-full object-cover" style="border-radius: var(--radius-sm);" />
+            </div>
+            <div class="flex-1 min-w-0 flex flex-col justify-between">
+              <div>
+                <h4 class="text-sm font-semibold truncate mb-1" style="font-family: var(--font-heading); color: var(--text-heading);">星际漫旅 · 第 4 集分镜</h4>
+                <p class="text-xs truncate" style="font-family: var(--font-body); color: var(--text-secondary);">科幻题材，12 镜，正在生成第 5 镜</p>
+              </div>
+              <div class="flex items-center gap-3 mt-2">
+                <span class="inline-flex items-center justify-center px-2 py-0.5 text-xs rounded-md whitespace-nowrap" style="font-family: var(--font-heading); background-color: rgba(217, 119, 87, 0.08); color: var(--color-primary);">进行中</span>
+                <div class="flex-1 h-1.5 rounded-full overflow-hidden" style="background-color: var(--surface-inset);">
+                  <div class="h-full rounded-full" style="width: 42%; background-color: var(--color-primary);"></div>
+                </div>
+                <span class="text-xs whitespace-nowrap" style="font-family: var(--font-heading); color: var(--text-muted);">42%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recent 2 -->
+          <div class="flex gap-4 p-4 border transition-all duration-150 cursor-pointer" style="background-color: var(--surface-card); border-color: var(--border-default); border-radius: var(--radius-md);" onmouseover="this.style.borderColor='var(--color-primary)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--border-default)'; this.style.transform='translateY(0)'" data-clickable="打开创作：古风仙侠 角色立绘">
+            <div class="flex-shrink-0 overflow-hidden" style="width: 120px; height: 80px; background-color: var(--surface-inset); border-radius: var(--radius-sm);">
+              <img src="assets/image_1_yi19x4.jpg" alt="古风仙侠 角色立绘" class="w-full h-full object-cover" style="border-radius: var(--radius-sm);" />
+            </div>
+            <div class="flex-1 min-w-0 flex flex-col justify-between">
+              <div>
+                <h4 class="text-sm font-semibold truncate mb-1" style="font-family: var(--font-heading); color: var(--text-heading);">古风仙侠 · 主角立绘</h4>
+                <p class="text-xs truncate" style="font-family: var(--font-body); color: var(--text-secondary);">3 套造型，已完成 2 套</p>
+              </div>
+              <div class="flex items-center gap-3 mt-2">
+                <span class="inline-flex items-center justify-center px-2 py-0.5 text-xs rounded-md whitespace-nowrap" style="font-family: var(--font-heading); background-color: rgba(34, 197, 94, 0.10); color: var(--state-success);">已完成</span>
+                <div class="flex-1 h-1.5 rounded-full overflow-hidden" style="background-color: var(--surface-inset);">
+                  <div class="h-full rounded-full" style="width: 100%; background-color: var(--state-success);"></div>
+                </div>
+                <span class="text-xs whitespace-nowrap" style="font-family: var(--font-heading); color: var(--text-muted);">100%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recent 3 -->
+          <div class="flex gap-4 p-4 border transition-all duration-150 cursor-pointer" style="background-color: var(--surface-card); border-color: var(--border-default); border-radius: var(--radius-md);" onmouseover="this.style.borderColor='var(--color-primary)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--border-default)'; this.style.transform='translateY(0)'" data-clickable="打开创作：都市情感 剧本草稿">
+            <div class="flex-shrink-0 overflow-hidden" style="width: 120px; height: 80px; background-color: var(--surface-inset); border-radius: var(--radius-sm);">
+              <img src="assets/image_1_yi19x4.jpg" alt="都市情感 剧本草稿" class="w-full h-full object-cover" style="border-radius: var(--radius-sm);" />
+            </div>
+            <div class="flex-1 min-w-0 flex flex-col justify-between">
+              <div>
+                <h4 class="text-sm font-semibold truncate mb-1" style="font-family: var(--font-heading); color: var(--text-heading);">都市情感 · 第 1 集剧本</h4>
+                <p class="text-xs truncate" style="font-family: var(--font-body); color: var(--text-secondary);">现代都市爱情，初稿生成中</p>
+              </div>
+              <div class="flex items-center gap-3 mt-2">
+                <span class="inline-flex items-center justify-center px-2 py-0.5 text-xs rounded-md whitespace-nowrap" style="font-family: var(--font-heading); background-color: rgba(217, 119, 87, 0.08); color: var(--color-primary);">进行中</span>
+                <div class="flex-1 h-1.5 rounded-full overflow-hidden" style="background-color: var(--surface-inset);">
+                  <div class="h-full rounded-full" style="width: 18%; background-color: var(--color-primary);"></div>
+                </div>
+                <span class="text-xs whitespace-nowrap" style="font-family: var(--font-heading); color: var(--text-muted);">18%</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<script src="assets/js/app.js"></script>
+</body>
+</html>

@@ -1,20 +1,46 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# AI Workspace
 
-# Run and deploy your AI Studio app
+基于设计稿还原的AI工作台多页面静态网站。
 
-This contains everything you need to run your app locally.
+## 项目结构
 
-View your app in AI Studio: https://ai.studio/apps/drive/12IgMrw8GY5rog2DYeg7W-QASkKyC4XMN
+```
+ai-workspace/
+├── index.html          工作台（设计稿还原）
+├── ai-employees.html   AI员工管理（设计稿还原）
+├── new-employee.html   新建AI员工（设计稿还原）
+├── news-hub.html       资讯台
+├── creative-studio.html 创作工坊
+├── projects.html       项目中心
+├── resources.html      资源库
+├── settings.html       设置
+└── assets/
+    ├── css/theme.css   设计令牌
+    ├── js/app.js       共享交互
+    ├── image_0_yi19x4.jpg
+    └── image_1_yi19x4.jpg
+```
 
-## Run Locally
+## 本地运行
 
-**Prerequisites:**  Node.js
+```bash
+cd ai-workspace
+python3 -m http.server 8765
+# 打开 http://127.0.0.1:8765/
+```
 
+## 技术栈
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+- 纯静态HTML（无构建步骤）
+- Tailwind CSS (CDN)
+- Lucide Icons (CDN)
+- CSS设计令牌系统
+- 响应式布局（桌面220px侧边栏 / 移动端离屏抽屉）
+
+## 功能
+
+- 深色/浅色主题切换
+- 响应式侧边栏导航
+- AI员工筛选与搜索
+- 表单验证与文件上传
+- Toast提示系统

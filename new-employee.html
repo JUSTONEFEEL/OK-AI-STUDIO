@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="dark" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>新建AI员工 — AI Workspace</title>
+  <link rel="stylesheet" href="assets/css/theme.css">
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+  <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+  <style type="text/tailwindcss">
+    @theme inline { --color-primary: var(--color-primary); --color-secondary: var(--color-secondary); }
+    @layer base { body { background: var(--surface-bg); color: var(--text-body); } }
+  </style>
+</head>
+<body class="min-h-screen font-sans antialiased" data-page="ai-employees" style="font-family: var(--font-body); color: var(--text-body); background-color: var(--surface-bg);">
+
+<div id="app-backdrop" class="app-backdrop"></div>
+
+<!-- ===== LEFT SIDEBAR ===== -->
+<aside id="app-sidebar" class="app-sidebar fixed top-0 left-0 z-30 flex flex-col h-screen border-r"
+  style="width: var(--sidebar-width); background-color: var(--surface-inset); border-color: var(--border-default);">
+  <div class="flex items-center gap-3 px-5 h-16 border-b" style="border-color: var(--border-default);">
+    <div class="flex items-center justify-center flex-shrink-0" style="width: 32px; height: 32px; background-color: var(--color-primary); border-radius: var(--radius-md);">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+    </div>
+    <span class="text-sm font-semibold tracking-tight" style="font-family: var(--font-heading); color: var(--text-heading);">AI Workspace</span>
+  </div>
+  <nav class="flex-1 overflow-y-auto py-4 px-3">
+    <ul class="flex flex-col gap-1" style="list-style: none; margin: 0; padding: 0;">
+      <li><a href="index.html" data-nav-key="dashboard" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors duration-150" style="font-family: var(--font-heading); color: var(--text-secondary);" onmouseover="if(!this.hasAttribute('data-active'))this.style.backgroundColor='var(--surface-hover)'" onmouseout="if(!this.hasAttribute('data-active'))this.style.backgroundColor='transparent'"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>工作台</span></a></li>
+      <li><a href="ai-employees.html" data-nav-key="ai-employees" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors duration-150" style="font-family: var(--font-heading); color: var(--text-secondary);" onmouseover="if(!this.hasAttribute('data-active'))this.style.backgroundColor='var(--surface-hover)'" onmouseout="if(!this.hasAttribute('data-active'))this.style.backgroundColor='transparent'"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>AI员工</span></a></li>
+      <li><a href="news-hub.html" data-nav-key="news-hub" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors duration-150" style="font-family: var(--font-heading); color: var(--text-secondary);" onmouseover="if(!this.hasAttribute('data-active'))this.style.backgroundColor='var(--surface-hover)'" onmouseout="if(!this.hasAttribute('data-active'))this.style.backgroundColor='transparent'"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/></svg><span>资讯台</span></a></li>
+      <li><a href="creative-studio.html" data-nav-key="creative-studio" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors duration-150" style="font-family: var(--font-heading); color: var(--text-secondary);" onmouseover="if(!this.hasAttribute('data-active'))this.style.backgroundColor='var(--surface-hover)'" onmouseout="if(!this.hasAttribute('data-active'))this.style.backgroundColor='transparent'"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg><span>创作工坊</span></a></li>
+      <li><a href="projects.html" data-nav-key="projects" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors duration-150" style="font-family: var(--font-heading); color: var(--text-secondary);" onmouseover="if(!this.hasAttribute('data-active'))this.style.backgroundColor='var(--surface-hover)'" onmouseout="if(!this.hasAttribute('data-active'))this.style.backgroundColor='transparent'"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h16Z"/></svg><span>项目中心</span></a></li>
+      <li><a href="resources.html" data-nav-key="resources" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors duration-150" style="font-family: var(--font-heading); color: var(--text-secondary);" onmouseover="if(!this.hasAttribute('data-active'))this.style.backgroundColor='var(--surface-hover)'" onmouseout="if(!this.hasAttribute('data-active'))this.style.backgroundColor='transparent'"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3"/></svg><span>资源库</span></a></li>
+      <li><a href="settings.html" data-nav-key="settings" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors duration-150" style="font-family: var(--font-heading); color: var(--text-secondary);" onmouseover="if(!this.hasAttribute('data-active'))this.style.backgroundColor='var(--surface-hover)'" onmouseout="if(!this.hasAttribute('data-active'))this.style.backgroundColor='transparent'"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg><span>设置</span></a></li>
+    </ul>
+  </nav>
+  <div class="px-4 py-4 border-t" style="border-color: var(--border-default);">
+    <div class="flex items-center gap-2.5">
+      <div class="flex items-center justify-center flex-shrink-0 text-xs font-semibold" style="width: 28px; height: 28px; background-color: var(--color-primary-light); color: var(--color-primary); border-radius: var(--radius-full); font-family: var(--font-heading);">U</div>
+      <div class="flex-1 min-w-0">
+        <p class="text-xs font-medium truncate" style="font-family: var(--font-heading); color: var(--text-heading);">创作者</p>
+        <p class="text-xs truncate" style="color: var(--text-muted);">专业版</p>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- ===== MAIN CONTENT WRAPPER ===== -->
+<div class="app-main flex flex-col flex-1" style="margin-left: var(--sidebar-width);">
+  <header class="sticky top-0 z-20 flex items-center justify-between h-16 px-4 sm:px-6 border-b gap-3" style="background-color: var(--surface-card); border-color: var(--border-default);">
+    <div class="flex items-center gap-3 min-w-0">
+      <button id="menu-toggle" class="menu-toggle items-center justify-center p-2 rounded-md" style="color: var(--text-secondary); display:none;" aria-label="打开菜单" aria-expanded="false" aria-controls="app-sidebar"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+      <h1 class="header-page-title text-lg font-semibold truncate" style="font-family: var(--font-heading); color: var(--text-heading);">新建AI员工</h1>
+    </div>
+    <div class="header-search flex items-center justify-center flex-1 mx-4 sm:mx-8" style="max-width: 480px;">
+      <div class="relative w-full">
+        <svg class="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-muted);"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.3-4.3"/></svg>
+        <input type="text" data-role="search" placeholder="搜索..." class="w-full pl-9 pr-4 py-2 text-sm rounded-md outline-none transition-colors duration-150" style="font-family: var(--font-body); background-color: var(--surface-inset); color: var(--text-body); border: 1px solid var(--border-default);" onfocus="this.style.borderColor='var(--color-primary)'; this.style.boxShadow='0 0 0 2px var(--color-primary-light)'" onblur="this.style.borderColor='var(--border-default)'; this.style.boxShadow='none'" />
+      </div>
+    </div>
+    <div class="flex items-center gap-1 sm:gap-3 flex-shrink-0">
+      <button id="theme-toggle" class="relative flex items-center justify-center p-2 rounded-md transition-colors duration-150" style="color: var(--text-secondary);" aria-label="切换主题"><svg data-theme-icon-moon width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg><svg data-theme-icon-sun width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="M4.93 4.93l1.41 1.41"/><path d="M17.66 17.66l1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="M4.93 19.07l1.41-1.41"/><path d="M17.66 6.34l1.41-1.41"/></svg></button>
+      <div class="relative">
+        <button id="notif-btn" class="relative flex items-center justify-center p-2 rounded-md transition-colors duration-150" style="color: var(--text-secondary);" aria-label="通知"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><span class="absolute top-1.5 right-1.5" style="width: 7px; height: 7px; background-color: var(--color-primary); border-radius: var(--radius-full);"></span></button>
+        <div id="notif-dropdown" class="notif-dropdown">
+          <div class="notif-item"><div style="width:8px;height:8px;border-radius:9999px;background:var(--color-primary);margin-top:6px;flex-shrink:0;"></div><div><p class="text-sm font-medium" style="font-family:var(--font-heading);color:var(--text-heading);">表单未保存</p><p class="text-xs mt-0.5" style="color:var(--text-muted);">记得在离开前保存配置</p></div></div>
+        </div>
+      </div>
+      <button class="flex items-center justify-center flex-shrink-0" style="width: 34px; height: 34px; background-color: var(--color-primary-light); color: var(--color-primary); border-radius: var(--radius-full); font-family: var(--font-heading); font-size: 13px; font-weight: 600; transition: background-color 150ms ease;" onmouseover="this.style.backgroundColor='var(--color-primary)'; this.style.color='var(--text-inverse)'" onmouseout="this.style.backgroundColor='var(--color-primary-light)'; this.style.color='var(--color-primary)'" aria-label="用户菜单">U</button>
+    </div>
+  </header>
+
+  <main class="flex-1" style="background-color: var(--surface-bg);">
+    <div class="p-4 sm:p-6 lg:p-8">
+
+      <!-- Breadcrumb + Title -->
+      <div class="mb-8">
+        <nav class="flex items-center gap-2 mb-4" aria-label="面包屑">
+          <a href="ai-employees.html" class="text-sm transition-colors duration-150" style="font-family: var(--font-heading); color: var(--color-primary);" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">AI员工</a>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-muted);"><polyline points="9 18 15 12 9 6"/></svg>
+          <span class="text-sm" style="font-family: var(--font-heading); color: var(--text-muted);">新建AI员工</span>
+        </nav>
+        <h2 class="text-2xl font-semibold" style="font-family: var(--font-heading); color: var(--text-heading); text-wrap: balance; word-break: keep-all;">新建AI员工</h2>
+        <p class="mt-1 text-sm" style="font-family: var(--font-body); color: var(--text-secondary);">配置你的AI员工的能力、技能文件和参数</p>
+      </div>
+
+      <!-- Form Container -->
+      <form id="create-employee-form" class="mx-auto" style="max-width: 768px;">
+
+        <!-- ===== Section 1: 基本信息 ===== -->
+        <div class="mb-6 rounded-lg" style="background-color: var(--surface-card); border: 1px solid var(--border-default); padding: 24px;">
+          <h3 class="text-base font-semibold mb-5" style="font-family: var(--font-heading); color: var(--text-heading);">基本信息</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div>
+              <label class="block text-sm font-medium mb-1.5" style="font-family: var(--font-heading); color: var(--text-secondary);">AI员工名称</label>
+              <input id="emp-name" name="name" type="text" placeholder="例如：视频导演AI" class="w-full px-3 py-2.5 text-sm rounded-md outline-none transition-colors duration-150" style="font-family: var(--font-body); background-color: var(--surface-bg); color: var(--text-body); border: 1px solid var(--border-default);" onfocus="this.style.borderColor='var(--color-primary)'; this.style.boxShadow='0 0 0 2px var(--color-primary-light)'" onblur="this.style.borderColor='var(--border-default)'; this.style.boxShadow='none'" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-1.5" style="font-family: var(--font-heading); color: var(--text-secondary);">角色类型</label>
+              <select name="role" class="w-full px-3 py-2.5 text-sm rounded-md outline-none transition-colors duration-150 appearance-none" style="font-family: var(--font-body); background-color: var(--surface-bg); color: var(--text-body); border: 1px solid var(--border-default); background-image: url('data:image/svg+xml,<svg width=%2212%22 height=%2212%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%239ca3af%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22 xmlns=%22http://www.w3.org/2000/svg%22><polyline points=%226 9 12 15 18 9%22/></svg>'); background-repeat: no-repeat; background-position: right 12px center;" onfocus="this.style.borderColor='var(--color-primary)'; this.style.boxShadow='0 0 0 2px var(--color-primary-light)'" onblur="this.style.borderColor='var(--border-default)'; this.style.boxShadow='none'">
+                <option value="">选择角色</option>
+                <option value="director">导演</option>
+                <option value="design">设计</option>
+                <option value="generate">生成</option>
+                <option value="screenwriter">编剧</option>
+                <option value="audio">音频</option>
+                <option value="vfx">特效</option>
+                <option value="custom">自定义</option>
+              </select>
+            </div>
+          </div>
+          <div class="mt-5">
+            <label class="block text-sm font-medium mb-1.5" style="font-family: var(--font-heading); color: var(--text-secondary);">描述</label>
+            <textarea name="description" rows="3" placeholder="描述这个AI员工的职责和能力..." class="w-full px-3 py-2.5 text-sm rounded-md outline-none transition-colors duration-150 resize-none" style="font-family: var(--font-body); background-color: var(--surface-bg); color: var(--text-body); border: 1px solid var(--border-default);" onfocus="this.style.borderColor='var(--color-primary)'; this.style.boxShadow='0 0 0 2px var(--color-primary-light)'" onblur="this.style.borderColor='var(--border-default)'; this.style.boxShadow='none'"></textarea>
+          </div>
+          <div class="mt-5">
+            <label class="block text-sm font-medium mb-1.5" style="font-family: var(--font-heading); color: var(--text-secondary);">头像设置</label>
+            <div class="flex items-center gap-4">
+              <div id="avatar-preview" class="flex items-center justify-center flex-shrink-0" style="width: 56px; height: 56px; background-color: var(--surface-inset); border-radius: var(--radius-full); border: 1px dashed var(--border-default);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-muted);"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              </div>
+              <label class="flex items-center justify-center rounded-md cursor-pointer transition-colors duration-150" style="padding: 8px 16px; border: 1px dashed var(--border-default); background-color: var(--surface-bg);" onmouseover="this.style.borderColor='var(--border-strong)'" onmouseout="this.style.borderColor='var(--border-default)'">
+                <span class="text-sm" style="font-family: var(--font-heading); color: var(--text-secondary);">上传头像</span>
+                <input type="file" accept="image/*" style="display:none;" id="avatar-input" />
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== Section 2: 技能文件 ===== -->
+        <div class="mb-6 rounded-lg" style="background-color: var(--surface-card); border: 1px solid var(--border-default); padding: 24px;">
+          <h3 class="text-base font-semibold mb-5" style="font-family: var(--font-heading); color: var(--text-heading);">技能文件</h3>
+          <div class="flex items-center gap-1 p-1 rounded-md mb-5" style="background-color: var(--surface-inset); border: 1px solid var(--border-subtle); display: inline-flex;">
+            <button id="tab-upload" type="button" class="inline-flex items-center justify-center px-4 py-2 text-sm rounded-md whitespace-nowrap transition-colors duration-150" style="font-family: var(--font-heading); font-weight: 600; background-color: var(--surface-card); color: var(--color-primary); box-shadow: var(--shadow-static); border: 1px solid var(--border-default);" onclick="switchSkillTab('upload')">上传文件</button>
+            <button id="tab-editor" type="button" class="inline-flex items-center justify-center px-4 py-2 text-sm rounded-md whitespace-nowrap transition-colors duration-150" style="font-family: var(--font-heading); color: var(--text-secondary); border: none; background: transparent;" onclick="switchSkillTab('editor')">文本编辑</button>
+          </div>
+
+          <!-- Upload Mode -->
+          <div id="skill-upload-panel">
+            <div id="upload-dropzone" class="flex flex-col items-center justify-center rounded-lg transition-colors duration-150 cursor-pointer" style="border: 2px dashed var(--border-default); background-color: var(--surface-bg); padding: 40px 24px; min-height: 160px;" onmouseover="this.style.borderColor='var(--border-strong)'" onmouseout="this.style.borderColor='var(--border-default)'">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-muted); margin-bottom: 12px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              <p class="text-sm font-medium" style="font-family: var(--font-heading); color: var(--text-secondary);">拖拽文件到此处，或点击上传</p>
+              <p class="text-xs mt-2" style="font-family: var(--font-body); color: var(--text-muted);">支持 .zip、.md、.json 格式，最大 50MB</p>
+              <input type="file" id="skill-file-input" accept=".zip,.md,.json" style="display:none;" />
+            </div>
+            <div id="uploaded-file-row" class="mt-4 flex items-center gap-3 rounded-md px-4 py-3" style="background-color: var(--surface-bg); border: 1px solid var(--border-subtle);">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--color-primary);"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              <div class="flex-1 min-w-0">
+                <p id="uploaded-file-name" class="text-sm font-medium truncate" style="font-family: var(--font-heading); color: var(--text-heading);">video_director_skills_v2.zip</p>
+                <p id="uploaded-file-meta" class="text-xs" style="font-family: var(--font-body); color: var(--text-muted);">3.2MB</p>
+              </div>
+              <span class="inline-flex items-center justify-center px-2.5 py-1 text-xs font-medium rounded-md whitespace-nowrap" style="font-family: var(--font-heading); background-color: rgba(34, 197, 94, 0.10); color: var(--state-success);">上传成功</span>
+              <button type="button" class="inline-flex items-center justify-center px-3 py-1.5 text-xs font-medium rounded-md whitespace-nowrap transition-colors duration-150" style="font-family: var(--font-heading); background-color: var(--surface-inset); color: var(--text-secondary); border: 1px solid var(--border-default);" onmouseover="this.style.borderColor='var(--border-strong)'; this.style.color='var(--text-heading)'" onmouseout="this.style.borderColor='var(--border-default)'; this.style.color='var(--text-secondary)'" onclick="document.getElementById('skill-file-input').click()">替换</button>
+            </div>
+          </div>
+
+          <!-- Text Editor Mode -->
+          <div id="skill-editor-panel" style="display: none;">
+            <div class="flex items-center gap-2 mb-3">
+              <button type="button" class="inline-flex items-center justify-center px-3 py-1.5 text-xs font-medium rounded-md whitespace-nowrap transition-colors duration-150" style="font-family: var(--font-heading); background-color: var(--surface-inset); color: var(--text-secondary); border: 1px solid var(--border-default);" onmouseover="this.style.borderColor='var(--border-strong)'; this.style.color='var(--text-heading)'" onmouseout="this.style.borderColor='var(--border-default)'; this.style.color='var(--text-secondary)'" onclick="formatEditor()">格式化</button>
+              <button type="button" class="inline-flex items-center justify-center px-3 py-1.5 text-xs font-medium rounded-md whitespace-nowrap transition-colors duration-150" style="font-family: var(--font-heading); background-color: var(--surface-inset); color: var(--text-secondary); border: 1px solid var(--border-default);" onmouseover="this.style.borderColor='var(--border-strong)'; this.style.color='var(--text-heading)'" onmouseout="this.style.borderColor='var(--border-default)'; this.style.color='var(--text-secondary)'" onclick="togglePreview()">预览</button>
+            </div>
+            <textarea id="skill-editor" rows="10" placeholder="# 在此编写技能描述..." class="w-full px-4 py-3 text-sm rounded-md outline-none transition-colors duration-150 resize-none" style="font-family: 'SF Mono', 'Fira Code', 'JetBrains Mono', 'Cascadia Code', 'Consolas', monospace; font-size: 13px; line-height: 1.6; background-color: var(--surface-inset); color: var(--text-body); border: 1px solid var(--border-default); tab-size: 2;" onfocus="this.style.borderColor='var(--color-primary)'; this.style.boxShadow='0 0 0 2px var(--color-primary-light)'" onblur="this.style.borderColor='var(--border-default)'; this.style.boxShadow='none'"></textarea>
+          </div>
+        </div>
+
+        <!-- ===== Section 3: 历史版本 ===== -->
+        <div class="mb-6 rounded-lg" style="background-color: var(--surface-card); border: 1px solid var(--border-default); padding: 24px;">
+          <h3 class="text-base font-semibold mb-5" style="font-family: var(--font-heading); color: var(--text-heading);">历史版本</h3>
+          <div class="rounded-md overflow-hidden" style="border: 1px solid var(--border-default);">
+            <table class="w-full" style="border-collapse: collapse;">
+              <thead>
+                <tr style="background-color: var(--surface-inset);">
+                  <th class="text-left text-xs font-medium px-4 py-2.5" style="font-family: var(--font-heading); color: var(--text-secondary); border-bottom: 1px solid var(--border-default);">版本</th>
+                  <th class="text-left text-xs font-medium px-4 py-2.5" style="font-family: var(--font-heading); color: var(--text-secondary); border-bottom: 1px solid var(--border-default);">文件名</th>
+                  <th class="text-left text-xs font-medium px-4 py-2.5 hidden sm:table-cell" style="font-family: var(--font-heading); color: var(--text-secondary); border-bottom: 1px solid var(--border-default);">上传时间</th>
+                  <th class="text-left text-xs font-medium px-4 py-2.5 hidden sm:table-cell" style="font-family: var(--font-heading); color: var(--text-secondary); border-bottom: 1px solid var(--border-default);">大小</th>
+                  <th class="text-right text-xs font-medium px-4 py-2.5" style="font-family: var(--font-heading); color: var(--text-secondary); border-bottom: 1px solid var(--border-default);">操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="px-4 py-3 text-sm" style="font-family: var(--font-heading); font-weight: 500; color: var(--text-heading); border-bottom: 1px solid var(--border-subtle);">v2.0</td>
+                  <td class="px-4 py-3 text-sm" style="font-family: var(--font-body); color: var(--text-body); border-bottom: 1px solid var(--border-subtle);">video_director_skills_v2.zip</td>
+                  <td class="px-4 py-3 text-sm hidden sm:table-cell" style="font-family: var(--font-body); color: var(--text-secondary); border-bottom: 1px solid var(--border-subtle);">2025-06-30 09:00</td>
+                  <td class="px-4 py-3 text-sm hidden sm:table-cell" style="font-family: var(--font-body); color: var(--text-secondary); border-bottom: 1px solid var(--border-subtle);">3.2MB</td>
+                  <td class="px-4 py-3 text-right" style="border-bottom: 1px solid var(--border-subtle);"><span class="inline-flex items-center justify-center px-2.5 py-1 text-xs font-medium rounded-md whitespace-nowrap" style="font-family: var(--font-heading); background-color: var(--color-primary-light); color: var(--color-primary);">当前版本</span></td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-3 text-sm" style="font-family: var(--font-heading); font-weight: 500; color: var(--text-heading); border-bottom: 1px solid var(--border-subtle);">v1.1</td>
+                  <td class="px-4 py-3 text-sm" style="font-family: var(--font-body); color: var(--text-body); border-bottom: 1px solid var(--border-subtle);">video_director_skills_v1.1.zip</td>
+                  <td class="px-4 py-3 text-sm hidden sm:table-cell" style="font-family: var(--font-body); color: var(--text-secondary); border-bottom: 1px solid var(--border-subtle);">2025-06-29 10:15</td>
+                  <td class="px-4 py-3 text-sm hidden sm:table-cell" style="font-family: var(--font-body); color: var(--text-secondary); border-bottom: 1px solid var(--border-subtle);">3.0MB</td>
+                  <td class="px-4 py-3 text-right" style="border-bottom: 1px solid var(--border-subtle);">
+                    <div class="flex items-center justify-end gap-2">
+                      <button type="button" class="inline-flex items-center justify-center px-3 py-1.5 text-xs font-medium rounded-md whitespace-nowrap transition-colors duration-150" style="font-family: var(--font-heading); background-color: transparent; color: var(--text-secondary); border: 1px solid var(--border-default);" onmouseover="this.style.borderColor='var(--border-strong)'; this.style.color='var(--text-heading)'" onmouseout="this.style.borderColor='var(--border-default)'; this.style.color='var(--text-secondary)'" data-clickable="还原到 v1.1">还原</button>
+                      <button type="button" class="inline-flex items-center justify-center px-3 py-1.5 text-xs font-medium rounded-md whitespace-nowrap transition-colors duration-150" style="font-family: var(--font-heading); background-color: transparent; color: var(--text-secondary); border: 1px solid var(--border-default);" onmouseover="this.style.borderColor='var(--border-strong)'; this.style.color='var(--text-heading)'" onmouseout="this.style.borderColor='var(--border-default)'; this.style.color='var(--text-secondary)'" data-clickable="下载 v1.1">下载</button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-3 text-sm" style="font-family: var(--font-heading); font-weight: 500; color: var(--text-heading);">v1.0</td>
+                  <td class="px-4 py-3 text-sm" style="font-family: var(--font-body); color: var(--text-body);">video_director_skills_v1.zip</td>
+                  <td class="px-4 py-3 text-sm hidden sm:table-cell" style="font-family: var(--font-body); color: var(--text-secondary);">2025-06-28 14:30</td>
+                  <td class="px-4 py-3 text-sm hidden sm:table-cell" style="font-family: var(--font-body); color: var(--text-secondary);">2.8MB</td>
+                  <td class="px-4 py-3 text-right">
+                    <div class="flex items-center justify-end gap-2">
+                      <button type="button" class="inline-flex items-center justify-center px-3 py-1.5 text-xs font-medium rounded-md whitespace-nowrap transition-colors duration-150" style="font-family: var(--font-heading); background-color: transparent; color: var(--text-secondary); border: 1px solid var(--border-default);" onmouseover="this.style.borderColor='var(--border-strong)'; this.style.color='var(--text-heading)'" onmouseout="this.style.borderColor='var(--border-default)'; this.style.color='var(--text-secondary)'" data-clickable="还原到 v1.0">还原</button>
+                      <button type="button" class="inline-flex items-center justify-center px-3 py-1.5 text-xs font-medium rounded-md whitespace-nowrap transition-colors duration-150" style="font-family: var(--font-heading); background-color: transparent; color: var(--text-secondary); border: 1px solid var(--border-default);" onmouseover="this.style.borderColor='var(--border-strong)'; this.style.color='var(--text-heading)'" onmouseout="this.style.borderColor='var(--border-default)'; this.style.color='var(--text-secondary)'" data-clickable="下载 v1.0">下载</button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="flex items-start gap-2 mt-4">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0 mt-0.5" style="color: var(--text-muted);"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+            <p class="text-xs" style="font-family: var(--font-body); color: var(--text-muted);">最多保留 3 个历史版本，超出后自动覆盖最早版本</p>
+          </div>
+        </div>
+
+        <!-- ===== Section 4: 模型配置 ===== -->
+        <div class="mb-6 rounded-lg" style="background-color: var(--surface-card); border: 1px solid var(--border-default); padding: 24px;">
+          <h3 class="text-base font-semibold mb-5" style="font-family: var(--font-heading); color: var(--text-heading);">模型配置</h3>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+            <div>
+              <label class="block text-sm font-medium mb-1.5" style="font-family: var(--font-heading); color: var(--text-secondary);">默认生图模型</label>
+              <select class="w-full px-3 py-2.5 text-sm rounded-md outline-none transition-colors duration-150 appearance-none" style="font-family: var(--font-body); background-color: var(--surface-bg); color: var(--text-body); border: 1px solid var(--border-default); background-image: url('data:image/svg+xml,<svg width=%2212%22 height=%2212%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%239ca3af%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22 xmlns=%22http://www.w3.org/2000/svg%22><polyline points=%226 9 12 15 18 9%22/></svg>'); background-repeat: no-repeat; background-position: right 12px center;" onfocus="this.style.borderColor='var(--color-primary)'; this.style.boxShadow='0 0 0 2px var(--color-primary-light)'" onblur="this.style.borderColor='var(--border-default)'; this.style.boxShadow='none'">
+                <option value="midjourney">Midjourney</option>
+                <option value="dalle3">DALL-E 3</option>
+                <option value="sdxl">Stable Diffusion XL</option>
+                <option value="flux">Flux</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-1.5" style="font-family: var(--font-heading); color: var(--text-secondary);">默认视频模型</label>
+              <select class="w-full px-3 py-2.5 text-sm rounded-md outline-none transition-colors duration-150 appearance-none" style="font-family: var(--font-body); background-color: var(--surface-bg); color: var(--text-body); border: 1px solid var(--border-default); background-image: url('data:image/svg+xml,<svg width=%2212%22 height=%2212%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%239ca3af%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22 xmlns=%22http://www.w3.org/2000/svg%22><polyline points=%226 9 12 15 18 9%22/></svg>'); background-repeat: no-repeat; background-position: right 12px center;" onfocus="this.style.borderColor='var(--color-primary)'; this.style.boxShadow='0 0 0 2px var(--color-primary-light)'" onblur="this.style.borderColor='var(--border-default)'; this.style.boxShadow='none'">
+                <option value="runway">Runway Gen-3</option>
+                <option value="sora">Sora</option>
+                <option value="kling">Kling</option>
+                <option value="pika">Pika</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-1.5" style="font-family: var(--font-heading); color: var(--text-secondary);">默认音频模型</label>
+              <select class="w-full px-3 py-2.5 text-sm rounded-md outline-none transition-colors duration-150 appearance-none" style="font-family: var(--font-body); background-color: var(--surface-bg); color: var(--text-body); border: 1px solid var(--border-default); background-image: url('data:image/svg+xml,<svg width=%2212%22 height=%2212%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%239ca3af%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22 xmlns=%22http://www.w3.org/2000/svg%22><polyline points=%226 9 12 15 18 9%22/></svg>'); background-repeat: no-repeat; background-position: right 12px center;" onfocus="this.style.borderColor='var(--color-primary)'; this.style.boxShadow='0 0 0 2px var(--color-primary-light)'" onblur="this.style.borderColor='var(--border-default)'; this.style.boxShadow='none'">
+                <option value="elevenlabs">ElevenLabs</option>
+                <option value="bark">Bark</option>
+                <option value="cosyvoice">CosyVoice</option>
+              </select>
+            </div>
+          </div>
+          <div class="mt-5">
+            <label class="block text-sm font-medium mb-1.5" style="font-family: var(--font-heading); color: var(--text-secondary);">API密钥</label>
+            <div class="flex flex-wrap items-center gap-4">
+              <select class="px-3 py-2.5 text-sm rounded-md outline-none transition-colors duration-150 appearance-none" style="font-family: var(--font-body); background-color: var(--surface-bg); color: var(--text-body); border: 1px solid var(--border-default); width: 200px; background-image: url('data:image/svg+xml,<svg width=%2212%22 height=%2212%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%239ca3af%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22 xmlns=%22http://www.w3.org/2000/svg%22><polyline points=%226 9 12 15 18 9%22/></svg>'); background-repeat: no-repeat; background-position: right 12px center;" onfocus="this.style.borderColor='var(--color-primary)'; this.style.boxShadow='0 0 0 2px var(--color-primary-light)'" onblur="this.style.borderColor='var(--border-default)'; this.style.boxShadow='none'">
+                <option value="global">使用全局密钥</option>
+                <option value="custom">自定义密钥</option>
+              </select>
+              <a href="settings.html" class="text-xs transition-colors duration-150" style="font-family: var(--font-heading); color: var(--color-primary);" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">在设置中管理</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== Section 5: 高级设置 ===== -->
+        <div class="mb-8 rounded-lg" style="background-color: var(--surface-card); border: 1px solid var(--border-default); padding: 24px;">
+          <h3 class="text-base font-semibold mb-5" style="font-family: var(--font-heading); color: var(--text-heading);">高级设置</h3>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+            <div>
+              <label class="block text-sm font-medium mb-1.5" style="font-family: var(--font-heading); color: var(--text-secondary);">最大并发任务数</label>
+              <input type="number" value="3" min="1" max="10" class="w-full px-3 py-2.5 text-sm rounded-md outline-none transition-colors duration-150" style="font-family: var(--font-body); background-color: var(--surface-bg); color: var(--text-body); border: 1px solid var(--border-default); font-variant-numeric: tabular-nums;" onfocus="this.style.borderColor='var(--color-primary)'; this.style.boxShadow='0 0 0 2px var(--color-primary-light)'" onblur="this.style.borderColor='var(--border-default)'; this.style.boxShadow='none'" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-1.5" style="font-family: var(--font-heading); color: var(--text-secondary);">优先级</label>
+              <select class="w-full px-3 py-2.5 text-sm rounded-md outline-none transition-colors duration-150 appearance-none" style="font-family: var(--font-body); background-color: var(--surface-bg); color: var(--text-body); border: 1px solid var(--border-default); background-image: url('data:image/svg+xml,<svg width=%2212%22 height=%2212%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%239ca3af%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22 xmlns=%22http://www.w3.org/2000/svg%22><polyline points=%226 9 12 15 18 9%22/></svg>'); background-repeat: no-repeat; background-position: right 12px center;" onfocus="this.style.borderColor='var(--color-primary)'; this.style.boxShadow='0 0 0 2px var(--color-primary-light)'" onblur="this.style.borderColor='var(--border-default)'; this.style.boxShadow='none'">
+                <option value="high">高</option>
+                <option value="medium" selected>中</option>
+                <option value="low">低</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-1.5" style="font-family: var(--font-heading); color: var(--text-secondary);">超时设置</label>
+              <div class="flex items-center gap-2">
+                <input type="number" value="300" min="30" class="flex-1 px-3 py-2.5 text-sm rounded-md outline-none transition-colors duration-150" style="font-family: var(--font-body); background-color: var(--surface-bg); color: var(--text-body); border: 1px solid var(--border-default); font-variant-numeric: tabular-nums;" onfocus="this.style.borderColor='var(--color-primary)'; this.style.boxShadow='0 0 0 2px var(--color-primary-light)'" onblur="this.style.borderColor='var(--border-default)'; this.style.boxShadow='none'" />
+                <span class="text-sm whitespace-nowrap" style="font-family: var(--font-heading); color: var(--text-secondary);">秒</span>
+              </div>
+            </div>
+          </div>
+          <div class="flex items-center justify-between mt-5 pt-5" style="border-top: 1px solid var(--border-subtle);">
+            <div>
+              <p class="text-sm font-medium" style="font-family: var(--font-heading); color: var(--text-heading);">自动接受任务</p>
+              <p class="text-xs mt-0.5" style="font-family: var(--font-body); color: var(--text-muted);">开启后，AI员工将自动接受分配的任务</p>
+            </div>
+            <button type="button" id="toggle-auto-accept" role="switch" aria-checked="true" class="relative flex-shrink-0 rounded-full transition-colors duration-150 cursor-pointer" style="width: 44px; height: 24px; background-color: var(--color-primary);" onclick="toggleSwitch(this)">
+              <span class="absolute top-0.5 rounded-full transition-transform duration-150" style="width: 20px; height: 20px; background-color: #fff; left: 22px; box-shadow: 0 1px 2px rgba(0,0,0,0.1);"></span>
+            </button>
+          </div>
+        </div>
+
+        <!-- ===== Bottom Actions ===== -->
+        <div class="flex items-center justify-between">
+          <a href="ai-employees.html" class="inline-flex items-center justify-center px-5 py-2.5 text-sm font-semibold rounded-md whitespace-nowrap transition-colors duration-150" style="font-family: var(--font-heading); background-color: transparent; color: var(--text-secondary); border: 1px solid var(--border-default); text-decoration:none;" onmouseover="this.style.borderColor='var(--border-strong)'; this.style.color='var(--text-heading)'" onmouseout="this.style.borderColor='var(--border-default)'; this.style.color='var(--text-secondary)'">取消</a>
+          <button type="submit" class="inline-flex items-center justify-center px-5 py-2.5 text-sm font-semibold rounded-md whitespace-nowrap transition-colors duration-150" style="font-family: var(--font-heading); background-color: var(--color-primary); color: var(--text-inverse); border: none;" onmouseover="this.style.backgroundColor='var(--color-primary-hover)'; this.style.transform='translateY(-1px)'" onmouseout="this.style.backgroundColor='var(--color-primary)'; this.style.transform='translateY(0)'" onmousedown="this.style.transform='translateY(0)'">创建AI员工</button>
+        </div>
+
+      </form>
+    </div>
+  </main>
+</div>
+
+<script src="assets/js/app.js"></script>
+<script>
+  // ===== Skill tab switching (from the design) =====
+  function switchSkillTab(tab) {
+    var uploadPanel = document.getElementById('skill-upload-panel');
+    var editorPanel = document.getElementById('skill-editor-panel');
+    var tabUpload = document.getElementById('tab-upload');
+    var tabEditor = document.getElementById('tab-editor');
+    if (tab === 'upload') {
+      uploadPanel.style.display = 'block';
+      editorPanel.style.display = 'none';
+      tabUpload.style.fontWeight = '600';
+      tabUpload.style.backgroundColor = 'var(--surface-card)';
+      tabUpload.style.color = 'var(--color-primary)';
+      tabUpload.style.boxShadow = 'var(--shadow-static)';
+      tabUpload.style.border = '1px solid var(--border-default)';
+      tabEditor.style.fontWeight = 'normal';
+      tabEditor.style.backgroundColor = 'transparent';
+      tabEditor.style.color = 'var(--text-secondary)';
+      tabEditor.style.boxShadow = 'none';
+      tabEditor.style.border = 'none';
+    } else {
+      uploadPanel.style.display = 'none';
+      editorPanel.style.display = 'block';
+      tabEditor.style.fontWeight = '600';
+      tabEditor.style.backgroundColor = 'var(--surface-card)';
+      tabEditor.style.color = 'var(--color-primary)';
+      tabEditor.style.boxShadow = 'var(--shadow-static)';
+      tabEditor.style.border = '1px solid var(--border-default)';
+      tabUpload.style.fontWeight = 'normal';
+      tabUpload.style.backgroundColor = 'transparent';
+      tabUpload.style.color = 'var(--text-secondary)';
+      tabUpload.style.boxShadow = 'none';
+      tabUpload.style.border = 'none';
+    }
+  }
+
+  // ===== Toggle switch (from the design) =====
+  function toggleSwitch(btn) {
+    var knob = btn.querySelector('span');
+    var isOn = btn.getAttribute('aria-checked') === 'true';
+    if (isOn) {
+      btn.setAttribute('aria-checked', 'false');
+      btn.style.backgroundColor = 'var(--border-strong)';
+      knob.style.left = '2px';
+    } else {
+      btn.setAttribute('aria-checked', 'true');
+      btn.style.backgroundColor = 'var(--color-primary)';
+      knob.style.left = '22px';
+    }
+  }
+
+  // ===== Editor toolbar (format / preview) =====
+  function formatEditor() {
+    var ta = document.getElementById('skill-editor');
+    if (!ta || !ta.value.trim()) { window.awShowToast && window.awShowToast('没有可格式化的内容'); return; }
+    // Naive JSON pretty-print when the content parses as JSON, otherwise tidy indentation.
+    try {
+      var parsed = JSON.parse(ta.value);
+      ta.value = JSON.stringify(parsed, null, 2);
+      window.awShowToast && window.awShowToast('已格式化 JSON');
+    } catch (e) {
+      ta.value = ta.value.replace(/\t/g, '  ');
+      window.awShowToast && window.awShowToast('已规整缩进');
+    }
+  }
+  function togglePreview() {
+    window.awShowToast && window.awShowToast('预览模式：请先编写内容');
+  }
+
+  // ===== File upload (client-side demo) =====
+  (function () {
+    var dz = document.getElementById('upload-dropzone');
+    var input = document.getElementById('skill-file-input');
+    var nameEl = document.getElementById('uploaded-file-name');
+    var metaEl = document.getElementById('uploaded-file-meta');
+    if (!dz || !input) return;
+    dz.addEventListener('click', function () { input.click(); });
+    input.addEventListener('change', function () {
+      if (input.files && input.files[0]) {
+        var f = input.files[0];
+        if (nameEl) nameEl.textContent = f.name;
+        if (metaEl) metaEl.textContent = (f.size / 1024 / 1024).toFixed(2) + 'MB';
+        window.awShowToast && window.awShowToast('已选择文件：' + f.name);
+      }
+    });
+    // Drag & drop
+    ['dragenter', 'dragover'].forEach(function (ev) {
+      dz.addEventListener(ev, function (e) { e.preventDefault(); dz.style.borderColor = 'var(--color-primary)'; });
+    });
+    ['dragleave', 'drop'].forEach(function (ev) {
+      dz.addEventListener(ev, function (e) { e.preventDefault(); dz.style.borderColor = 'var(--border-default)'; });
+    });
+    dz.addEventListener('drop', function (e) {
+      var files = e.dataTransfer && e.dataTransfer.files;
+      if (files && files[0]) {
+        var f = files[0];
+        if (nameEl) nameEl.textContent = f.name;
+        if (metaEl) metaEl.textContent = (f.size / 1024 / 1024).toFixed(2) + 'MB';
+        window.awShowToast && window.awShowToast('已上传文件：' + f.name);
+      }
+    });
+  })();
+
+  // ===== Avatar upload preview =====
+  (function () {
+    var input = document.getElementById('avatar-input');
+    var preview = document.getElementById('avatar-preview');
+    if (!input || !preview) return;
+    input.addEventListener('change', function () {
+      if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+          preview.innerHTML = '<img src="' + e.target.result + '" alt="头像预览" style="width:100%;height:100%;object-fit:cover;border-radius:var(--radius-full);" />';
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
+    });
+  })();
+
+  // ===== Form submit =====
+  (function () {
+    var form = document.getElementById('create-employee-form');
+    if (!form) return;
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var name = document.getElementById('emp-name');
+      if (name && !name.value.trim()) {
+        name.style.borderColor = 'var(--state-error)';
+        name.style.boxShadow = '0 0 0 2px rgba(239,68,68,0.18)';
+        name.focus();
+        window.awShowToast && window.awShowToast('请填写AI员工名称');
+        setTimeout(function () {
+          name.style.borderColor = 'var(--border-default)';
+          name.style.boxShadow = 'none';
+        }, 2000);
+        return;
+      }
+      window.awShowToast && window.awShowToast('AI员工创建成功（演示）');
+      setTimeout(function () { window.location.href = 'ai-employees.html'; }, 900);
+    });
+  })();
+</script>
+</body>
+</html>
