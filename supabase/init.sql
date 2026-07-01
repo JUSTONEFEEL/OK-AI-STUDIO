@@ -18,6 +18,23 @@ create table if not exists public.employees (
   created_at timestamptz default now()
 );
 
+-- 确保所有列都存在
+do $$
+begin
+  if not exists (select 1 from information_schema.columns where table_schema='public' and table_name='employees' and column_name='description') then
+    alter table public.employees add column description text default '';
+  end if;
+  if not exists (select 1 from information_schema.columns where table_schema='public' and table_name='employees' and column_name='avatar') then
+    alter table public.employees add column avatar text;
+  end if;
+  if not exists (select 1 from information_schema.columns where table_schema='public' and table_name='employees' and column_name='category') then
+    alter table public.employees add column category text default '创作';
+  end if;
+  if not exists (select 1 from information_schema.columns where table_schema='public' and table_name='employees' and column_name='status') then
+    alter table public.employees add column status text default 'offline';
+  end if;
+end $$;
+
 -- ============================================
 -- 2. 项目表
 -- ============================================
@@ -30,6 +47,23 @@ create table if not exists public.projects (
   description text default '',
   created_at timestamptz default now()
 );
+
+-- 确保所有列都存在（如果表之前已创建但缺字段）
+do $$
+begin
+  if not exists (select 1 from information_schema.columns where table_schema='public' and table_name='projects' and column_name='description') then
+    alter table public.projects add column description text default '';
+  end if;
+  if not exists (select 1 from information_schema.columns where table_schema='public' and table_name='projects' and column_name='thumbnail') then
+    alter table public.projects add column thumbnail text;
+  end if;
+  if not exists (select 1 from information_schema.columns where table_schema='public' and table_name='projects' and column_name='status') then
+    alter table public.projects add column status text default '进行中';
+  end if;
+  if not exists (select 1 from information_schema.columns where table_schema='public' and table_name='projects' and column_name='progress') then
+    alter table public.projects add column progress int4 default 0;
+  end if;
+end $$;
 
 -- ============================================
 -- 3. 设置/配置表
