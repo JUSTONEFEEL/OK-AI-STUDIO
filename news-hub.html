@@ -247,7 +247,7 @@
     <div class="header-search flex items-center justify-center flex-1 mx-4 sm:mx-8" style="max-width: 480px;">
       <div class="relative w-full">
         <svg class="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-muted);"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.3-4.3"/></svg>
-        <input id="news-search-input" type="text" data-role="search" placeholder="搜索资讯标题..."
+        <input id="news-search-input" type="text" data-role="search" placeholder="搜索资讯标题或摘要..."
           class="w-full pl-9 pr-4 py-2 text-sm rounded-md outline-none transition-colors duration-150"
           style="font-family: var(--font-body); background-color: var(--surface-inset); color: var(--text-body); border: 1px solid var(--border-default);"
           onfocus="this.style.borderColor='var(--color-primary)'; this.style.boxShadow='0 0 0 2px var(--color-primary-light)'"
@@ -297,12 +297,30 @@
         <p class="mt-1 text-sm" style="font-family: var(--font-body); color: var(--text-secondary);">AI创作行业动态与产品更新</p>
       </div>
 
-      <!-- Filter Tabs -->
-      <div class="flex items-center gap-1 p-1 rounded-md mb-6" style="background-color: var(--surface-inset); border: 1px solid var(--border-default); display: inline-flex;">
-        <button class="filter-tab inline-flex items-center justify-center px-3.5 py-1.5 text-sm rounded-md whitespace-nowrap transition-colors duration-150" data-filter="all" data-active="true" style="font-family: var(--font-heading);">全部</button>
-        <button class="filter-tab inline-flex items-center justify-center px-3.5 py-1.5 text-sm rounded-md whitespace-nowrap transition-colors duration-150" data-filter="industry" style="font-family: var(--font-heading); color: var(--text-secondary); border: none; background: transparent;">行业动态</button>
-        <button class="filter-tab inline-flex items-center justify-center px-3.5 py-1.5 text-sm rounded-md whitespace-nowrap transition-colors duration-150" data-filter="tutorial" style="font-family: var(--font-heading); color: var(--text-secondary); border: none; background: transparent;">技术教程</button>
-        <button class="filter-tab inline-flex items-center justify-center px-3.5 py-1.5 text-sm rounded-md whitespace-nowrap transition-colors duration-150" data-filter="product" style="font-family: var(--font-heading); color: var(--text-secondary); border: none; background: transparent;">产品更新</button>
+      <!-- Filter + Sort Bar -->
+      <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+        <!-- Filter Tabs -->
+        <div class="flex items-center gap-1 p-1 rounded-md" style="background-color: var(--surface-inset); border: 1px solid var(--border-default); display: inline-flex;">
+          <button class="filter-tab inline-flex items-center justify-center px-3.5 py-1.5 text-sm rounded-md whitespace-nowrap transition-colors duration-150" data-filter="all" data-active="true" style="font-family: var(--font-heading);">全部</button>
+          <button class="filter-tab inline-flex items-center justify-center px-3.5 py-1.5 text-sm rounded-md whitespace-nowrap transition-colors duration-150" data-filter="industry" style="font-family: var(--font-heading); color: var(--text-secondary); border: none; background: transparent;">行业动态</button>
+          <button class="filter-tab inline-flex items-center justify-center px-3.5 py-1.5 text-sm rounded-md whitespace-nowrap transition-colors duration-150" data-filter="tutorial" style="font-family: var(--font-heading); color: var(--text-secondary); border: none; background: transparent;">技术教程</button>
+          <button class="filter-tab inline-flex items-center justify-center px-3.5 py-1.5 text-sm rounded-md whitespace-nowrap transition-colors duration-150" data-filter="product" style="font-family: var(--font-heading); color: var(--text-secondary); border: none; background: transparent;">产品更新</button>
+        </div>
+
+        <!-- Sort Selector -->
+        <div class="flex items-center gap-2">
+          <span class="text-xs" style="color: var(--text-muted); font-family: var(--font-heading);">排序：</span>
+          <div class="flex items-center gap-0.5 p-0.5 rounded-md" style="background-color: var(--surface-inset); border: 1px solid var(--border-default);">
+            <button class="sort-btn inline-flex items-center justify-center px-2.5 py-1 text-xs rounded-sm whitespace-nowrap transition-colors duration-150 cursor-pointer" data-sort="date" data-active="true" style="font-family: var(--font-heading); border: none; background: transparent;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg>
+              最新
+            </button>
+            <button class="sort-btn inline-flex items-center justify-center px-2.5 py-1 text-xs rounded-sm whitespace-nowrap transition-colors duration-150 cursor-pointer" data-sort="hot" style="font-family: var(--font-heading); color: var(--text-secondary); border: none; background: transparent;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
+              最热
+            </button>
+          </div>
+        </div>
       </div>
 
       <!-- News Grid -->
@@ -329,6 +347,20 @@
   </div>
   <div id="news-modal-body" class="news-modal-body">
     <div id="news-modal-content" class="news-content"></div>
+    <div id="news-modal-footer" class="mt-6 pt-5" style="border-top: 1px solid var(--border-default);">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="text-xs" style="color: var(--text-muted); font-family: var(--font-heading);">来源：</span>
+          <span id="news-modal-source" class="text-xs font-medium" style="color: var(--text-secondary); font-family: var(--font-heading);"></span>
+        </div>
+        <a id="news-modal-url" href="#" target="_blank" rel="noopener noreferrer"
+           class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md transition-colors duration-150"
+           style="font-family: var(--font-heading); background-color: var(--color-primary); color: var(--text-inverse); text-decoration: none;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          查看原文
+        </a>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -339,11 +371,13 @@
     'use strict';
 
     var currentFilter = 'all';
+    var currentSort = 'date';
     var currentSearch = '';
     var allNews = [];
 
     var newsGrid = document.getElementById('news-grid');
     var tabs = document.querySelectorAll('.filter-tab');
+    var sortBtns = document.querySelectorAll('.sort-btn');
     var searchInput = document.getElementById('news-search-input');
 
     var modalBackdrop = document.getElementById('news-modal-backdrop');
@@ -353,6 +387,8 @@
     var modalCategory = document.getElementById('news-modal-category');
     var modalDate = document.getElementById('news-modal-date');
     var modalContent = document.getElementById('news-modal-content');
+    var modalSource = document.getElementById('news-modal-source');
+    var modalUrl = document.getElementById('news-modal-url');
 
     function getCategoryColor(category) {
       switch (category) {
@@ -361,10 +397,17 @@
         case 'tutorial':
           return { bg: 'rgba(106, 155, 204, 0.08)', color: '#6a9bcc' };
         case 'industry':
-          return { bg: 'rgba(120, 140, 93, 0.08)', color: '#788c5d' };
+          return { bg: 'rgba(234, 139, 87, 0.10)', color: '#ea8b57' };
         default:
           return { bg: 'rgba(139, 92, 246, 0.10)', color: 'var(--color-primary)' };
       }
+    }
+
+    function formatHotValue(hot) {
+      if (hot >= 10000) {
+        return (hot / 10000).toFixed(1) + '万';
+      }
+      return hot.toString();
     }
 
     function renderNewsCard(news) {
@@ -377,6 +420,7 @@
       card.style.border = '1px solid var(--border-default)';
       card.style.display = 'flex';
       card.style.flexDirection = 'column';
+      card.style.cursor = 'pointer';
 
       var coverImg = news.cover_image || 'assets/image_1_yi19x4.jpg';
 
@@ -415,29 +459,132 @@
       titleH4.style.webkitLineClamp = '2';
       titleH4.style.webkitBoxOrient = 'vertical';
       titleH4.style.overflow = 'hidden';
+      titleH4.style.lineHeight = '1.5';
       titleH4.textContent = news.title;
       contentDiv.appendChild(titleH4);
 
       var summaryP = document.createElement('p');
-      summaryP.className = 'text-xs mb-4 flex-1';
+      summaryP.className = 'text-xs mb-3 flex-1';
       summaryP.style.fontFamily = 'var(--font-body)';
       summaryP.style.color = 'var(--text-secondary)';
       summaryP.style.display = '-webkit-box';
       summaryP.style.webkitLineClamp = '3';
       summaryP.style.webkitBoxOrient = 'vertical';
       summaryP.style.overflow = 'hidden';
+      summaryP.style.lineHeight = '1.6';
       summaryP.textContent = news.summary;
       contentDiv.appendChild(summaryP);
 
+      var metaDiv = document.createElement('div');
+      metaDiv.className = 'flex items-center justify-between mb-3';
+      metaDiv.style.fontSize = '11px';
+      metaDiv.style.color = 'var(--text-muted)';
+      metaDiv.style.fontFamily = 'var(--font-heading)';
+
+      var sourceSpan = document.createElement('span');
+      sourceSpan.className = 'flex items-center gap-1';
+      sourceSpan.style.whiteSpace = 'nowrap';
+      sourceSpan.style.overflow = 'hidden';
+      sourceSpan.style.textOverflow = 'ellipsis';
+      var sourceSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      sourceSvg.setAttribute('width', '11');
+      sourceSvg.setAttribute('height', '11');
+      sourceSvg.setAttribute('viewBox', '0 0 24 24');
+      sourceSvg.setAttribute('fill', 'none');
+      sourceSvg.setAttribute('stroke', 'currentColor');
+      sourceSvg.setAttribute('stroke-width', '2');
+      sourceSvg.setAttribute('stroke-linecap', 'round');
+      sourceSvg.setAttribute('stroke-linejoin', 'round');
+      var sourcePath1 = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      sourcePath1.setAttribute('cx', '12');
+      sourcePath1.setAttribute('cy', '12');
+      sourcePath1.setAttribute('r', '10');
+      var sourcePath2 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      sourcePath2.setAttribute('d', 'M2 12h20');
+      var sourcePath3 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      sourcePath3.setAttribute('d', 'M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z');
+      sourceSvg.appendChild(sourcePath1);
+      sourceSvg.appendChild(sourcePath2);
+      sourceSvg.appendChild(sourcePath3);
+      sourceSpan.appendChild(sourceSvg);
+      var sourceText = document.createElement('span');
+      sourceText.textContent = news.source || '未知来源';
+      sourceText.style.whiteSpace = 'nowrap';
+      sourceText.style.overflow = 'hidden';
+      sourceText.style.textOverflow = 'ellipsis';
+      sourceSpan.appendChild(sourceText);
+      metaDiv.appendChild(sourceSpan);
+
+      var hotSpan = document.createElement('span');
+      hotSpan.className = 'flex items-center gap-1 flex-shrink-0';
+      hotSpan.style.color = '#f59e0b';
+      var hotSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      hotSvg.setAttribute('width', '11');
+      hotSvg.setAttribute('height', '11');
+      hotSvg.setAttribute('viewBox', '0 0 24 24');
+      hotSvg.setAttribute('fill', 'currentColor');
+      hotSvg.setAttribute('stroke', 'currentColor');
+      hotSvg.setAttribute('stroke-width', '1');
+      hotSvg.setAttribute('stroke-linecap', 'round');
+      hotSvg.setAttribute('stroke-linejoin', 'round');
+      var hotPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      hotPath.setAttribute('d', 'M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z');
+      hotSvg.appendChild(hotPath);
+      hotSpan.appendChild(hotSvg);
+      var hotText = document.createElement('span');
+      hotText.textContent = formatHotValue(news.hot || 0);
+      hotSpan.appendChild(hotText);
+      metaDiv.appendChild(hotSpan);
+
+      contentDiv.appendChild(metaDiv);
+
       var footerDiv = document.createElement('div');
-      footerDiv.className = 'flex items-center justify-between mt-auto pt-3';
+      footerDiv.className = 'flex items-center justify-between pt-3';
       footerDiv.style.borderTop = '1px solid var(--border-default)';
 
       var dateSpan = document.createElement('span');
-      dateSpan.className = 'text-xs';
+      dateSpan.className = 'text-xs flex items-center gap-1';
       dateSpan.style.fontFamily = 'var(--font-heading)';
       dateSpan.style.color = 'var(--text-muted)';
-      dateSpan.textContent = news.published_at;
+      var dateSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      dateSvg.setAttribute('width', '11');
+      dateSvg.setAttribute('height', '11');
+      dateSvg.setAttribute('viewBox', '0 0 24 24');
+      dateSvg.setAttribute('fill', 'none');
+      dateSvg.setAttribute('stroke', 'currentColor');
+      dateSvg.setAttribute('stroke-width', '2');
+      dateSvg.setAttribute('stroke-linecap', 'round');
+      dateSvg.setAttribute('stroke-linejoin', 'round');
+      var dateRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+      dateRect.setAttribute('x', '3');
+      dateRect.setAttribute('y', '4');
+      dateRect.setAttribute('width', '18');
+      dateRect.setAttribute('height', '18');
+      dateRect.setAttribute('rx', '2');
+      dateRect.setAttribute('ry', '2');
+      var dateLine1 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      dateLine1.setAttribute('x1', '16');
+      dateLine1.setAttribute('y1', '2');
+      dateLine1.setAttribute('x2', '16');
+      dateLine1.setAttribute('y2', '6');
+      var dateLine2 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      dateLine2.setAttribute('x1', '8');
+      dateLine2.setAttribute('y1', '2');
+      dateLine2.setAttribute('x2', '8');
+      dateLine2.setAttribute('y2', '6');
+      var dateLine3 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      dateLine3.setAttribute('x1', '3');
+      dateLine3.setAttribute('y1', '10');
+      dateLine3.setAttribute('x2', '21');
+      dateLine3.setAttribute('y2', '10');
+      dateSvg.appendChild(dateRect);
+      dateSvg.appendChild(dateLine1);
+      dateSvg.appendChild(dateLine2);
+      dateSvg.appendChild(dateLine3);
+      dateSpan.appendChild(dateSvg);
+      var dateText = document.createElement('span');
+      dateText.textContent = news.published_at;
+      dateSpan.appendChild(dateText);
       footerDiv.appendChild(dateSpan);
 
       var readBtn = document.createElement('button');
@@ -483,6 +630,10 @@
       footerDiv.appendChild(readBtn);
       contentDiv.appendChild(footerDiv);
       card.appendChild(contentDiv);
+
+      card.addEventListener('click', function () {
+        openNewsModal(news.id);
+      });
 
       card.addEventListener('mouseenter', function () {
         this.style.borderColor = 'var(--color-primary)';
@@ -566,31 +717,75 @@
     function filterAndRender() {
       var filtered = allNews.filter(function (item) {
         var matchCategory = currentFilter === 'all' || item.category === currentFilter;
+        var searchLower = currentSearch.toLowerCase();
         var matchSearch = !currentSearch ||
-          item.title.toLowerCase().includes(currentSearch.toLowerCase());
+          item.title.toLowerCase().includes(searchLower) ||
+          (item.summary && item.summary.toLowerCase().includes(searchLower));
         return matchCategory && matchSearch;
       });
 
-      filtered.sort(function (a, b) {
-        return new Date(b.published_at) - new Date(a.published_at);
-      });
+      if (currentSort === 'date') {
+        filtered.sort(function (a, b) {
+          return new Date(b.published_at) - new Date(a.published_at);
+        });
+      } else if (currentSort === 'hot') {
+        filtered.sort(function (a, b) {
+          return (b.hot || 0) - (a.hot || 0);
+        });
+      }
 
       renderNewsList(filtered);
     }
 
+    function setActiveTab(activeTab) {
+      tabs.forEach(function (t) {
+        t.removeAttribute('data-active');
+        t.style.fontWeight = '500';
+        t.style.color = 'var(--text-secondary)';
+        t.style.background = 'transparent';
+        t.style.boxShadow = 'none';
+      });
+      activeTab.setAttribute('data-active', 'true');
+      activeTab.style.color = 'var(--text-heading)';
+      activeTab.style.fontWeight = '600';
+      activeTab.style.backgroundColor = 'var(--surface-card)';
+      activeTab.style.boxShadow = '0 1px 2px rgba(0,0,0,0.05)';
+    }
+
     function initTabs() {
       tabs.forEach(function (tab) {
+        if (tab.hasAttribute('data-active')) {
+          setActiveTab(tab);
+        }
         tab.addEventListener('click', function () {
-          tabs.forEach(function (t) {
-            t.removeAttribute('data-active');
-            t.style.fontWeight = 'normal';
-            t.style.color = 'var(--text-secondary)';
-            t.style.background = 'transparent';
-            t.style.border = 'none';
-            t.style.boxShadow = 'none';
-          });
-          tab.setAttribute('data-active', 'true');
+          setActiveTab(tab);
           currentFilter = tab.getAttribute('data-filter');
+          filterAndRender();
+        });
+      });
+    }
+
+    function setActiveSort(activeBtn) {
+      sortBtns.forEach(function (b) {
+        b.removeAttribute('data-active');
+        b.style.color = 'var(--text-secondary)';
+        b.style.backgroundColor = 'transparent';
+        b.style.fontWeight = '500';
+      });
+      activeBtn.setAttribute('data-active', 'true');
+      activeBtn.style.color = 'var(--text-heading)';
+      activeBtn.style.fontWeight = '600';
+      activeBtn.style.backgroundColor = 'var(--surface-card)';
+    }
+
+    function initSort() {
+      sortBtns.forEach(function (btn) {
+        if (btn.hasAttribute('data-active')) {
+          setActiveSort(btn);
+        }
+        btn.addEventListener('click', function () {
+          setActiveSort(btn);
+          currentSort = btn.getAttribute('data-sort');
           filterAndRender();
         });
       });
@@ -683,8 +878,22 @@
       modalCategory.style.color = colors.color;
 
       modalTitle.textContent = news.title;
-      modalDate.textContent = news.published_at + ' · 阅读 ' + (news.views || 0) + ' 次';
+      modalDate.textContent = news.published_at + ' · 热度 ' + formatHotValue(news.hot || 0);
       modalContent.innerHTML = formatContent(news.content);
+
+      if (news.source) {
+        modalSource.textContent = news.source;
+        modalSource.parentElement.style.display = 'flex';
+      } else {
+        modalSource.parentElement.style.display = 'none';
+      }
+
+      if (news.url) {
+        modalUrl.href = news.url;
+        modalUrl.style.display = 'inline-flex';
+      } else {
+        modalUrl.style.display = 'none';
+      }
 
       modalBackdrop.classList.add('is-open');
       modal.classList.add('is-open');
@@ -714,6 +923,7 @@
       });
 
       initTabs();
+      initSort();
       initSearch();
       initModal();
     }

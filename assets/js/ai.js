@@ -3,7 +3,7 @@
 // API 基础地址: https://api.lk888.ai/api
 
 const AI_CONFIG_KEY = 'api_config';
-const AI_BASE_URL = 'https://api.lk888.ai/api';
+const AI_BASE_URL = 'https://api.lk888.ai';
 
 async function getAIConfig() {
   if (typeof db === 'undefined') {
@@ -58,7 +58,7 @@ const ai = {
       throw new Error('请先在设置页面配置 API Key');
     }
 
-    const url = `${this.getBaseUrl()}${path}`;
+    const url = `${this.getBaseUrl()}/api${path}`;
     const headers = {
       'Authorization': `Bearer ${this.getApiKey()}`,
       ...(options.headers || {})
