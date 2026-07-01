@@ -105,7 +105,6 @@
   <main class="flex-1 p-4 sm:p-6 lg:p-8" style="background-color: var(--surface-bg);">
     <!-- Category Filter -->
     <div class="flex flex-wrap items-center gap-2 mb-6" id="category-filters">
-      <button class="category-filter active px-4 py-1.5 text-sm font-medium rounded-full transition-colors duration-150" data-cat="all" style="font-family: var(--font-heading); background-color: var(--color-primary); color: #fff; border: none; cursor: pointer;">全部</button>
     </div>
 
     <!-- Cards Grid -->
@@ -611,7 +610,7 @@ var catIcons = {
     renderCards();
   };
 
-  var cats = ['all'];
+  var cats = ['all'].concat([...new Set(navData.map(function(d) { return d.cat; }))]);
   var filterLabels = { all: '全部', fav: '收藏' };
   Object.keys(catLabels).forEach(function(k) { filterLabels[k] = catLabels[k]; });
 
@@ -638,6 +637,10 @@ var catIcons = {
   var allBtn = createCatBtn('all', '全部');
   allBtn.classList.add('active');
   allBtn.style.cssText += 'background-color: var(--color-primary) !important; color: #fff !important; border-color: var(--color-primary) !important;';
+
+  cats.slice(1).forEach(function(cat) {
+    createCatBtn(cat, filterLabels[cat] || cat);
+  });
 
   createCatBtn('fav', '❤️ 收藏');
 
