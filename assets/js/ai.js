@@ -21,14 +21,16 @@ async function getAIConfig() {
 }
 
 async function saveAIConfig(config) {
+  // 始终先存 localStorage 作为兜底
   localStorage.setItem('ai_config_cache', JSON.stringify(config));
   if (typeof db === 'undefined') return true;
   try {
     await db.upsertSetting(AI_CONFIG_KEY, config);
     return true;
   } catch (e) {
-    console.error('Failed to save AI config:', e);
-    return false;
+    console.error('Supabase 保存失败，已回退到本地存储:', e);
+    // 即使 Supabase 失败，localStorage 已保存，返回 true
+    return true;
   }
 }
 

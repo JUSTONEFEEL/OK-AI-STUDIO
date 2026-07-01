@@ -152,8 +152,11 @@
     card.setAttribute('data-status', project.status);
     card.setAttribute('data-id', project.id);
     card.style.cssText = 'background-color: var(--surface-card); border: 1px solid var(--border-default); opacity: ' + opacity + ';';
-    card.onmouseover = function() { this.style.borderColor='var(--color-primary)'; this.style.transform='translateY(-2px)'; };
+    card.onmouseover = function() { this.style.borderColor='var(--color-primary)'; this.style.transform='translateY(-2px)'; this.style.cursor='pointer'; };
     card.onmouseout = function() { this.style.borderColor='var(--border-default)'; this.style.transform='translateY(0)'; };
+    card.addEventListener('click', function() {
+      window.location.href = 'canvas.html?id=' + encodeURIComponent(project.id) + '&title=' + encodeURIComponent(project.title || '');
+    });
 
     card.innerHTML =
       '<div class="overflow-hidden" style="height: 160px; background-color: var(--surface-inset);">' +

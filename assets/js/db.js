@@ -94,8 +94,15 @@ const db = {
     return supabaseRequest('settings', 'GET', null, `select=*&key=eq.${key}`).then(arr => arr?.[0] || null);
   },
 
-  upsertSetting: (key, value) => {
-    return supabaseRequest('settings', 'POST', { key, value }, '', { upsert: true });
+  upsertSetting: async (key, value) => {
+    // 先查是否存在，存在则 PATCH 更新，不存在则 POST 插入
+    const arr = await supabaseRequest('settings', 'GET', null, `select=*&key=eq.${encodeURIComponent(key)}`);
+    const existing = arr?.[0] || null;
+    if (existing) {
+      return supabaseRequest('settings', 'PATCH', { value, updated_at: new Date().toISOString() }, `key=eq.${encodeURIComponent(key)}`);
+    } else {
+      return supabaseRequest('settings', 'POST', { key, value });
+    }
   },
 
   deleteSetting: (key) => {
