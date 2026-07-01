@@ -108,14 +108,38 @@
 
       <!-- AI Employee Grid -->
       <div id="employee-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-        <!-- Dynamic content loaded from Supabase -->
       </div>
 
-      <!-- Empty state (hidden by default) -->
-      <div id="empty-state" class="hidden flex-col items-center justify-center py-16 text-center">
+      <!-- Empty state: no employees at all -->
+      <div id="empty-state-zero" class="hidden flex-col items-center justify-center py-20 text-center">
+        <div class="flex items-center justify-center mb-4" style="width: 72px; height: 72px; background-color: var(--surface-inset); border-radius: var(--radius-full);">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-muted);"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <p class="text-base font-semibold" style="font-family: var(--font-heading); color: var(--text-heading);">暂无AI员工</p>
+        <p class="text-sm mt-1.5" style="font-family: var(--font-body); color: var(--text-muted);">创建你的第一个AI员工，开始自动化创作</p>
+        <a href="new-employee.html" class="inline-flex items-center justify-center gap-2 px-5 py-2.5 text-sm font-semibold rounded-md whitespace-nowrap transition-colors duration-150 mt-6" style="font-family: var(--font-heading); background-color: var(--color-primary); color: var(--text-inverse); border: none; text-decoration: none;" onmouseover="this.style.backgroundColor='var(--color-primary-hover)'" onmouseout="this.style.backgroundColor='var(--color-primary)'">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          创建AI员工
+        </a>
+      </div>
+
+      <!-- Empty state: no search/filter results -->
+      <div id="empty-state-filter" class="hidden flex-col items-center justify-center py-16 text-center">
         <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-muted); margin-bottom: 12px;"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.3-4.3"/></svg>
         <p class="text-sm font-medium" style="font-family: var(--font-heading); color: var(--text-heading);">没有匹配的AI员工</p>
         <p class="text-xs mt-1" style="font-family: var(--font-body); color: var(--text-muted);">试试切换筛选条件或修改搜索关键词</p>
+      </div>
+
+      <!-- Delete Confirmation Modal -->
+      <div id="delete-modal" class="fixed inset-0 z-50 hidden items-center justify-center" style="background-color: rgba(0,0,0,0.5);">
+        <div class="rounded-lg mx-4" style="background-color: var(--surface-card); border: 1px solid var(--border-default); padding: 24px; max-width: 400px; width: 100%;">
+          <h3 class="text-lg font-semibold mb-2" style="font-family: var(--font-heading); color: var(--text-heading);">确认删除</h3>
+          <p class="text-sm mb-6" style="font-family: var(--font-body); color: var(--text-secondary);">确定要删除 <span id="delete-employee-name" class="font-medium" style="color: var(--text-heading);"></span> 吗？此操作无法撤销。</p>
+          <div class="flex items-center justify-end gap-3">
+            <button id="delete-cancel" class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-md whitespace-nowrap transition-colors duration-150" style="font-family: var(--font-heading); background-color: var(--surface-inset); color: var(--text-secondary); border: 1px solid var(--border-default);" onmouseover="this.style.borderColor='var(--border-strong)'; this.style.color='var(--text-heading)'" onmouseout="this.style.borderColor='var(--border-default)'; this.style.color='var(--text-secondary)'">取消</button>
+            <button id="delete-confirm" class="inline-flex items-center justify-center px-4 py-2 text-sm font-semibold rounded-md whitespace-nowrap transition-colors duration-150" style="font-family: var(--font-heading); background-color: var(--state-error); color: #fff; border: none;" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">删除</button>
+          </div>
+        </div>
       </div>
 
     </div>
@@ -129,9 +153,23 @@
     var tabs = document.querySelectorAll('.filter-tab');
     var grid = document.getElementById('employee-grid');
     var searchInput = document.getElementById('employee-search');
-    var emptyState = document.getElementById('empty-state');
+    var emptyStateZero = document.getElementById('empty-state-zero');
+    var emptyStateFilter = document.getElementById('empty-state-filter');
+    var deleteModal = document.getElementById('delete-modal');
+    var deleteEmployeeName = document.getElementById('delete-employee-name');
+    var deleteCancelBtn = document.getElementById('delete-cancel');
+    var deleteConfirmBtn = document.getElementById('delete-confirm');
     var currentFilter = 'all';
     var employees = [];
+    var pendingDeleteId = null;
+
+    var statusMap = {
+      'active': 'online',
+      'online': 'online',
+      'busy': 'busy',
+      'offline': 'offline',
+      'inactive': 'offline'
+    };
 
     var statusColors = {
       online: 'var(--state-success)',
@@ -139,79 +177,239 @@
       offline: 'var(--text-muted)'
     };
 
-    var roleColors = {
-      '视频创作': '#d97757', '导演': '#d97757',
-      '角色设计': '#8b5cf6', '设计': '#8b5cf6',
-      '分镜设计': '#3b82f6', '剧本创作': '#22c55e',
-      '配音制作': '#f59e0b', '制作': '#f59e0b',
-      '后期制作': '#ec4899'
+    var statusLabels = {
+      online: '在线',
+      busy: '忙碌',
+      offline: '离线'
     };
 
+    var roleDisplayMap = {
+      'director': '导演',
+      'design': '设计',
+      'generate': '生成',
+      'screenwriter': '编剧',
+      'audio': '音频',
+      'vfx': '特效',
+      'custom': '自定义'
+    };
+
+    var roleColors = {
+      '导演': '#d97757', '视频创作': '#d97757',
+      '设计': '#8b5cf6', '角色设计': '#8b5cf6',
+      '分镜设计': '#3b82f6', '剧本创作': '#22c55e', '编剧': '#22c55e',
+      '配音制作': '#f59e0b', '音频': '#f59e0b', '制作': '#f59e0b',
+      '后期制作': '#ec4899', '特效': '#ec4899', '生成': '#3b82f6'
+    };
+
+    function getDisplayRole(role) {
+      if (!role) return 'AI员工';
+      return roleDisplayMap[role] || role;
+    }
+
+    function getNormalizedStatus(status) {
+      if (!status) return 'offline';
+      return statusMap[status] || 'offline';
+    }
+
     function getRoleColor(role) {
+      var displayRole = getDisplayRole(role);
       for (var key in roleColors) {
-        if (role.indexOf(key) !== -1) return roleColors[key];
+        if (displayRole.indexOf(key) !== -1) return roleColors[key];
       }
       return 'var(--color-primary)';
+    }
+
+    function showEmptyState(type) {
+      if (!grid || !emptyStateZero || !emptyStateFilter) return;
+      grid.classList.add('hidden');
+      if (type === 'zero') {
+        emptyStateZero.classList.remove('hidden');
+        emptyStateZero.classList.add('flex');
+        emptyStateFilter.classList.add('hidden');
+        emptyStateFilter.classList.remove('flex');
+      } else {
+        emptyStateZero.classList.add('hidden');
+        emptyStateZero.classList.remove('flex');
+        emptyStateFilter.classList.remove('hidden');
+        emptyStateFilter.classList.add('flex');
+      }
+    }
+
+    function hideEmptyStates() {
+      if (!grid || !emptyStateZero || !emptyStateFilter) return;
+      grid.classList.remove('hidden');
+      emptyStateZero.classList.add('hidden');
+      emptyStateZero.classList.remove('flex');
+      emptyStateFilter.classList.add('hidden');
+      emptyStateFilter.classList.remove('flex');
+    }
+
+    function openDeleteModal(id, name) {
+      pendingDeleteId = id;
+      if (deleteEmployeeName) deleteEmployeeName.textContent = name;
+      if (deleteModal) {
+        deleteModal.classList.remove('hidden');
+        deleteModal.classList.add('flex');
+      }
+    }
+
+    function closeDeleteModal() {
+      pendingDeleteId = null;
+      if (deleteModal) {
+        deleteModal.classList.add('hidden');
+        deleteModal.classList.remove('flex');
+      }
+    }
+
+    function confirmDelete() {
+      if (!pendingDeleteId || typeof db === 'undefined') {
+        closeDeleteModal();
+        return;
+      }
+      var id = pendingDeleteId;
+      if (deleteConfirmBtn) {
+        deleteConfirmBtn.disabled = true;
+        deleteConfirmBtn.textContent = '删除中...';
+      }
+      db.deleteEmployee(id)
+        .then(function () {
+          window.awShowToast && window.awShowToast('删除成功');
+          closeDeleteModal();
+          loadEmployees();
+        })
+        .catch(function (err) {
+          console.error('Delete employee error:', err);
+          window.awShowToast && window.awShowToast('删除失败：' + (err.message || '网络错误'));
+          closeDeleteModal();
+        })
+        .finally(function () {
+          if (deleteConfirmBtn) {
+            deleteConfirmBtn.disabled = false;
+            deleteConfirmBtn.textContent = '删除';
+          }
+        });
     }
 
     function renderCards(list) {
       if (!grid) return;
       grid.innerHTML = '';
       list.forEach(function (emp) {
-        var color = getRoleColor(emp.role || '');
-        var statusColor = statusColors[emp.status] || statusColors.offline;
-        var opacity = emp.status === 'offline' ? 'opacity: 0.7;' : '';
+        var role = emp.role || '';
+        var color = getRoleColor(role);
+        var displayRole = getDisplayRole(role);
+        var normalizedStatus = getNormalizedStatus(emp.status);
+        var statusColor = statusColors[normalizedStatus];
+        var opacity = normalizedStatus === 'offline' ? 'opacity: 0.7;' : '';
         var card = document.createElement('div');
         card.className = 'employee-card rounded-lg transition-all duration-200';
-        card.setAttribute('data-status', emp.status);
+        card.setAttribute('data-status', normalizedStatus);
         card.setAttribute('data-name', emp.name);
+        card.setAttribute('data-id', emp.id);
         card.style.cssText = 'background-color: var(--surface-card); border: 1px solid var(--border-default); padding: 24px;' + opacity;
         card.onmouseover = function () { this.style.borderColor = 'var(--border-strong)'; this.style.boxShadow = 'var(--shadow-static)'; };
         card.onmouseout = function () { this.style.borderColor = 'var(--border-default)'; this.style.boxShadow = 'none'; };
+
+        var avatarHtml = '';
+        if (emp.avatar_url) {
+          avatarHtml = '<img src="' + emp.avatar_url + '" alt="' + emp.name + '" style="width: 48px; height: 48px; border-radius: var(--radius-full); object-fit: cover;" />';
+        } else {
+          avatarHtml = '<div class="flex items-center justify-center" style="width: 48px; height: 48px; background-color: rgba(139, 92, 246, 0.15); border-radius: var(--radius-full);">' +
+            '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="' + color + '" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>' +
+          '</div>';
+        }
+
+        var skillsHtml = '';
+        if (emp.skills && Array.isArray(emp.skills) && emp.skills.length > 0) {
+          var skillTags = emp.skills.slice(0, 3).map(function (s) {
+            return '<span class="inline-flex items-center justify-center px-2 py-0.5 text-xs rounded-md" style="background-color: var(--surface-inset); color: var(--text-muted); font-family: var(--font-body);">' + s + '</span>';
+          }).join('');
+          skillsHtml = '<div class="flex flex-wrap gap-1.5 mb-4">' + skillTags + '</div>';
+        }
+
         card.innerHTML =
           '<div class="flex items-start gap-4 mb-4">' +
             '<div class="relative flex-shrink-0">' +
-              '<div class="flex items-center justify-center" style="width: 48px; height: 48px; background-color: rgba(139, 92, 246, 0.15); border-radius: var(--radius-full);">' +
-                '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="' + color + '" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>' +
-              '</div>' +
-              '<span class="absolute -bottom-0.5 -right-0.5" style="width: 12px; height: 12px; background-color: ' + statusColor + '; border: 2px solid var(--surface-card); border-radius: var(--radius-full);"></span>' +
+              avatarHtml +
+              '<span class="absolute -bottom-0.5 -right-0.5" style="width: 12px; height: 12px; background-color: ' + statusColor + '; border: 2px solid var(--surface-card); border-radius: var(--radius-full);" title="' + statusLabels[normalizedStatus] + '"></span>' +
             '</div>' +
             '<div class="flex-1 min-w-0">' +
-              '<h3 class="text-base font-semibold truncate" style="font-family: var(--font-heading); color: var(--text-heading);">' + emp.name + '</h3>' +
-              '<span class="inline-flex items-center justify-center px-2 py-0.5 text-xs rounded-md whitespace-nowrap mt-1" style="font-family: var(--font-heading); background-color: ' + color + '20; color: ' + color + ';">' + (emp.role || 'AI员工') + '</span>' +
+              '<h3 class="text-base font-semibold truncate" style="font-family: var(--font-heading); color: var(--text-heading);">' + (emp.name || '未命名') + '</h3>' +
+              '<div class="flex items-center gap-2 mt-1">' +
+                '<span class="inline-flex items-center justify-center px-2 py-0.5 text-xs rounded-md whitespace-nowrap" style="font-family: var(--font-heading); background-color: ' + color + '20; color: ' + color + ';">' + displayRole + '</span>' +
+                '<span class="text-xs" style="color: var(--text-muted); font-family: var(--font-body);">' + statusLabels[normalizedStatus] + '</span>' +
+              '</div>' +
             '</div>' +
           '</div>' +
           (emp.description ? '<p class="text-xs mb-4 line-clamp-2" style="font-family: var(--font-body); color: var(--text-muted);">' + emp.description + '</p>' : '') +
-          '<div class="flex items-center gap-2">' +
-            '<button class="flex-1 inline-flex items-center justify-center px-3 py-2 text-xs font-medium rounded-md whitespace-nowrap transition-colors duration-150" style="font-family: var(--font-heading); background-color: var(--surface-inset); color: var(--text-secondary); border: 1px solid var(--border-default);" onmouseover="this.style.borderColor=\'var(--border-strong)\'; this.style.color=\'var(--text-heading)\'" onmouseout="this.style.borderColor=\'var(--border-default)\'; this.style.color=\'var(--text-secondary)\'" data-clickable="管理 ' + emp.name + '">管理</button>' +
-            '<button class="flex-1 inline-flex items-center justify-center px-3 py-2 text-xs font-medium rounded-md whitespace-nowrap transition-colors duration-150" style="font-family: var(--font-heading); background-color: var(--color-primary); color: var(--text-inverse); border: none;" onmouseover="this.style.backgroundColor=\'var(--color-primary-hover)\'" onmouseout="this.style.backgroundColor=\'var(--color-primary)\'" data-clickable="为 ' + emp.name + ' 分配任务">分配任务</button>' +
+          skillsHtml +
+          '<div class="flex items-center gap-2 pt-2" style="border-top: 1px solid var(--border-subtle);">' +
+            '<button class="edit-btn flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-medium rounded-md whitespace-nowrap transition-colors duration-150" data-id="' + emp.id + '" style="font-family: var(--font-heading); background-color: var(--surface-inset); color: var(--text-secondary); border: 1px solid var(--border-default);" onmouseover="this.style.borderColor=\'var(--border-strong)\'; this.style.color=\'var(--text-heading)\'" onmouseout="this.style.borderColor=\'var(--border-default)\'; this.style.color=\'var(--text-secondary)\'">' +
+              '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>' +
+              '编辑' +
+            '</button>' +
+            '<button class="delete-btn flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-medium rounded-md whitespace-nowrap transition-colors duration-150" data-id="' + emp.id + '" data-name="' + (emp.name || '') + '" style="font-family: var(--font-heading); background-color: rgba(239, 68, 68, 0.1); color: var(--state-error); border: 1px solid rgba(239, 68, 68, 0.2);" onmouseover="this.style.backgroundColor=\'rgba(239, 68, 68, 0.15)\'; this.style.borderColor=\'var(--state-error)\'" onmouseout="this.style.backgroundColor=\'rgba(239, 68, 68, 0.1)\'; this.style.borderColor=\'rgba(239, 68, 68, 0.2)\'">' +
+              '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>' +
+              '删除' +
+            '</button>' +
           '</div>';
         grid.appendChild(card);
       });
+
+      var editBtns = grid.querySelectorAll('.edit-btn');
+      editBtns.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var id = btn.getAttribute('data-id');
+          if (id) {
+            window.location.href = 'new-employee.html?id=' + encodeURIComponent(id);
+          }
+        });
+      });
+
+      var deleteBtns = grid.querySelectorAll('.delete-btn');
+      deleteBtns.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var id = btn.getAttribute('data-id');
+          var name = btn.getAttribute('data-name');
+          if (id) {
+            openDeleteModal(id, name);
+          }
+        });
+      });
+
       if (typeof lucide !== 'undefined' && lucide.createIcons) lucide.createIcons();
     }
 
     function applyFilter() {
       var query = (searchInput && searchInput.value ? searchInput.value : '').trim().toLowerCase();
+      var hasFilter = currentFilter !== 'all' || query.length > 0;
+
+      if (employees.length === 0) {
+        showEmptyState('zero');
+        return;
+      }
+
       var filtered = employees.filter(function (emp) {
-        var matchFilter = (currentFilter === 'all' || emp.status === currentFilter);
+        var normalizedStatus = getNormalizedStatus(emp.status);
+        var matchFilter = (currentFilter === 'all' || normalizedStatus === currentFilter);
         var matchQuery = (!query || (emp.name || '').toLowerCase().indexOf(query) !== -1);
         return matchFilter && matchQuery;
       });
-      renderCards(filtered);
-      if (emptyState) {
-        if (filtered.length === 0) {
-          emptyState.classList.remove('hidden');
-          emptyState.classList.add('flex');
-        } else {
-          emptyState.classList.add('hidden');
-          emptyState.classList.remove('flex');
-        }
+
+      if (filtered.length === 0 && hasFilter) {
+        showEmptyState('filter');
+        return;
       }
+
+      hideEmptyStates();
+      renderCards(filtered);
     }
 
     function loadEmployees() {
-      if (typeof db === 'undefined') { applyFilter(); return; }
+      if (typeof db === 'undefined') {
+        console.warn('db is not defined');
+        applyFilter();
+        return;
+      }
       db.getEmployees()
         .then(function (data) {
           employees = data || [];
@@ -219,21 +417,33 @@
         })
         .catch(function (err) {
           console.warn('Failed to load employees from Supabase:', err);
+          employees = [];
           applyFilter();
         });
     }
 
+    function setActiveTab(activeTab) {
+      tabs.forEach(function (t) {
+        t.removeAttribute('data-active');
+        t.style.fontWeight = 'normal';
+        t.style.color = 'var(--text-secondary)';
+        t.style.background = 'transparent';
+        t.style.border = 'none';
+        t.style.boxShadow = 'none';
+      });
+      activeTab.setAttribute('data-active', 'true');
+      activeTab.style.fontWeight = '600';
+      activeTab.style.color = 'var(--text-heading)';
+      activeTab.style.backgroundColor = 'var(--surface-card)';
+      activeTab.style.boxShadow = '0 1px 2px rgba(0,0,0,0.05)';
+    }
+
     tabs.forEach(function (tab) {
+      if (tab.getAttribute('data-active') === 'true') {
+        setActiveTab(tab);
+      }
       tab.addEventListener('click', function () {
-        tabs.forEach(function (t) {
-          t.removeAttribute('data-active');
-          t.style.fontWeight = 'normal';
-          t.style.color = 'var(--text-secondary)';
-          t.style.background = 'transparent';
-          t.style.border = 'none';
-          t.style.boxShadow = 'none';
-        });
-        tab.setAttribute('data-active', 'true');
+        setActiveTab(tab);
         currentFilter = tab.getAttribute('data-filter');
         applyFilter();
       });
@@ -242,6 +452,28 @@
     if (searchInput) {
       searchInput.addEventListener('input', applyFilter);
     }
+
+    if (deleteCancelBtn) {
+      deleteCancelBtn.addEventListener('click', closeDeleteModal);
+    }
+
+    if (deleteConfirmBtn) {
+      deleteConfirmBtn.addEventListener('click', confirmDelete);
+    }
+
+    if (deleteModal) {
+      deleteModal.addEventListener('click', function (e) {
+        if (e.target === deleteModal) {
+          closeDeleteModal();
+        }
+      });
+    }
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && deleteModal && !deleteModal.classList.contains('hidden')) {
+        closeDeleteModal();
+      }
+    });
 
     loadEmployees();
   })();

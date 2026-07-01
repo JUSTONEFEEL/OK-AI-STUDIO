@@ -162,7 +162,7 @@
   function initCardClicks() {
     document.querySelectorAll('[data-clickable]').forEach(function (el) {
       el.addEventListener('click', function () {
-        var label = el.getAttribute('data-clickable);
+        var label = el.getAttribute('data-clickable');
         if (label) window.awShowToast(label);
       });
     });

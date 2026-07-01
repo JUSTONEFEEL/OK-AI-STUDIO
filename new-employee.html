@@ -271,17 +271,54 @@
     var form = document.getElementById('create-employee-form');
     if (!form) return;
 
+    var nameInput = document.getElementById('emp-name');
+    var roleSelect = form.querySelector('select[name="role"]');
+    var descTextarea = form.querySelector('textarea[name="description"]');
+    var skillsInput = document.getElementById('emp-skills');
+    var avatarPreview = document.getElementById('avatar-preview');
+    var submitBtn = form.querySelector('button[type="submit"]');
+    var pageTitle = document.querySelector('.header-page-title');
+    var breadcrumbCurrent = document.querySelector('nav[aria-label="面包屑"] span');
+    var sectionTitle = document.querySelector('h2.text-2xl');
+    var sectionSubtitle = document.querySelector('h2.text-2xl + p');
+
+    var urlParams = new URLSearchParams(window.location.search);
+    var editId = urlParams.get('id');
+    var isEditMode = !!editId;
+
+    if (isEditMode) {
+      if (pageTitle) pageTitle.textContent = '编辑AI员工';
+      if (breadcrumbCurrent) breadcrumbCurrent.textContent = '编辑AI员工';
+      if (sectionTitle) sectionTitle.textContent = '编辑AI员工';
+      if (sectionSubtitle) sectionSubtitle.textContent = '修改AI员工的配置和参数';
+      if (submitBtn) submitBtn.textContent = '保存修改';
+
+      if (typeof db !== 'undefined') {
+        db.getEmployee(editId)
+          .then(function (data) {
+            var emp = data && data[0] ? data[0] : null;
+            if (emp) {
+              if (nameInput) nameInput.value = emp.name || '';
+              if (roleSelect) roleSelect.value = emp.role || '';
+              if (descTextarea) descTextarea.value = emp.description || '';
+              if (skillsInput && emp.skills && Array.isArray(emp.skills)) {
+                skillsInput.value = emp.skills.join(', ');
+              }
+              if (avatarPreview && emp.avatar_url) {
+                avatarPreview.innerHTML = '<img src="' + emp.avatar_url + '" alt="头像预览" style="width:100%;height:100%;object-fit:cover;border-radius:var(--radius-full);" />';
+              }
+            }
+          })
+          .catch(function (err) {
+            console.error('Load employee error:', err);
+            window.awShowToast && window.awShowToast('加载失败：' + (err.message || '网络错误'));
+          });
+      }
+    }
+
     form.addEventListener('submit', async function (e) {
       e.preventDefault();
 
-      // Get form values
-      var nameInput = document.getElementById('emp-name');
-      var roleSelect = form.querySelector('select[name="role"]');
-      var descTextarea = form.querySelector('textarea[name="description"]');
-      var skillsInput = document.getElementById('emp-skills');
-      var avatarPreview = document.getElementById('avatar-preview');
-
-      // Required field validation: name and role
       if (!nameInput.value.trim()) {
         nameInput.style.borderColor = 'var(--state-error)';
         nameInput.style.boxShadow = '0 0 0 2px rgba(239,68,68,0.18)';
@@ -306,7 +343,6 @@
         return;
       }
 
-      // Parse skills from comma-separated string to array
       var skillsArray = [];
       if (skillsInput.value.trim()) {
         skillsArray = skillsInput.value.split(',').map(function (s) {
@@ -316,47 +352,55 @@
         });
       }
 
-      // Get avatar URL from preview image (if uploaded)
       var avatarUrl = null;
       var avatarImg = avatarPreview.querySelector('img');
       if (avatarImg) {
-        // For now, use data URL (local preview). In production, should upload to Supabase Storage
         avatarUrl = avatarImg.src;
       }
 
-      // Build employee data object
       var employeeData = {
         name: nameInput.value.trim(),
         role: roleSelect.value,
         description: descTextarea.value.trim() || null,
         skills: skillsArray.length > 0 ? skillsArray : null,
-        avatar_url: avatarUrl,
-        status: 'active'  // default status
+        avatar_url: avatarUrl
       };
 
-      // Show loading state
-      var submitBtn = form.querySelector('button[type="submit"]');
       var originalText = submitBtn.textContent;
       submitBtn.disabled = true;
-      submitBtn.textContent = '创建中...';
+      submitBtn.textContent = isEditMode ? '保存中...' : '创建中...';
 
       try {
-        // Call db.createEmployee to write to Supabase
-        var result = await db.createEmployee(employeeData);
-
-        if (result && result.length > 0) {
-          window.awShowToast && window.awShowToast('AI员工创建成功');
-          setTimeout(function () {
-            window.location.href = 'ai-employees.html';
-          }, 900);
+        var result;
+        if (isEditMode) {
+          result = await db.updateEmployee(editId, employeeData);
+          if (result && result.length > 0) {
+            window.awShowToast && window.awShowToast('AI员工更新成功');
+            setTimeout(function () {
+              window.location.href = 'ai-employees.html';
+            }, 900);
+          } else {
+            window.awShowToast && window.awShowToast('更新失败，请重试');
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalText;
+          }
         } else {
-          window.awShowToast && window.awShowToast('创建失败，请重试');
-          submitBtn.disabled = false;
-          submitBtn.textContent = originalText;
+          employeeData.status = 'active';
+          result = await db.createEmployee(employeeData);
+          if (result && result.length > 0) {
+            window.awShowToast && window.awShowToast('AI员工创建成功');
+            setTimeout(function () {
+              window.location.href = 'ai-employees.html';
+            }, 900);
+          } else {
+            window.awShowToast && window.awShowToast('创建失败，请重试');
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalText;
+          }
         }
       } catch (error) {
-        console.error('Create employee error:', error);
-        window.awShowToast && window.awShowToast('创建失败：' + (error.message || '网络错误'));
+        console.error(isEditMode ? 'Update employee error:' : 'Create employee error:', error);
+        window.awShowToast && window.awShowToast((isEditMode ? '更新失败：' : '创建失败：') + (error.message || '网络错误'));
         submitBtn.disabled = false;
         submitBtn.textContent = originalText;
       }

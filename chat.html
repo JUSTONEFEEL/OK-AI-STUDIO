@@ -27,6 +27,29 @@
     .conversation-item.active { background-color: var(--color-primary-light); }
     .send-btn:disabled { opacity: 0.5; cursor: not-allowed; }
     .message-content { white-space: pre-wrap; word-break: break-word; }
+    .typing-indicator span {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      background-color: var(--text-muted);
+      border-radius: 50%;
+      margin: 0 2px;
+      animation: typing 1.4s infinite ease-in-out both;
+    }
+    .typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
+    .typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
+    @keyframes typing {
+      0%, 80%, 100% { transform: scale(0.8); opacity: 0.5; }
+      40% { transform: scale(1); opacity: 1; }
+    }
+    .api-setup-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 24px;
+      text-align: center;
+    }
   </style>
 </head>
 <body class="min-h-screen font-sans antialiased" data-page="chat" style="font-family: var(--font-body); color: var(--text-body); background-color: var(--surface-bg);">
@@ -213,7 +236,6 @@
         </button>
       </div>
       <div id="conversation-list" class="flex-1 overflow-y-auto p-2">
-        <!-- 对话列表将由 JS 动态加载 -->
         <div class="flex flex-col items-center justify-center h-full py-12 text-center">
           <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-muted); margin-bottom: 12px;"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
           <p class="text-sm" style="color: var(--text-muted);">暂无对话历史</p>
@@ -231,16 +253,29 @@
           style="font-family: var(--font-body); background-color: var(--surface-inset); color: var(--text-body); border: 1px solid var(--border-default);"
           onfocus="this.style.borderColor='var(--color-primary)'"
           onblur="this.style.borderColor='var(--border-default)'">
-          <option value="gpt-4o">GPT-4o</option>
-          <option value="claude-3.5">Claude 3.5</option>
-          <option value="gemini-2.0">Gemini 2.0</option>
-          <option value="deepseek-v4">DeepSeek V4</option>
+          <option value="gpt-5.4-nano">加载中...</option>
         </select>
         <div id="current-conversation-title" class="ml-auto text-sm truncate" style="color: var(--text-muted);"></div>
       </div>
 
       <!-- 中间：消息列表 -->
       <div id="message-container" class="flex-1 overflow-y-auto p-6">
+        <!-- AI未配置引导 -->
+        <div id="api-setup-state" class="api-setup-card" style="display: none;">
+          <div class="w-20 h-20 rounded-full flex items-center justify-center mb-6" style="background-color: var(--state-warning); opacity: 0.1;">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--state-warning);"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          </div>
+          <h3 class="text-xl font-semibold mb-2" style="font-family: var(--font-heading); color: var(--text-heading);">需要配置 API Key</h3>
+          <p class="text-sm mb-6 max-w-md" style="color: var(--text-muted);">请先在设置页面配置您的 API Key，然后才能开始使用 AI 对话功能。</p>
+          <a href="settings.html" class="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-md text-sm font-semibold transition-all duration-150"
+            style="font-family: var(--font-heading); background-color: var(--color-primary); color: var(--text-inverse); text-decoration: none;"
+            onmouseover="this.style.backgroundColor='var(--color-primary-hover)'"
+            onmouseout="this.style.backgroundColor='var(--color-primary)'">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+            去设置页面配置
+          </a>
+        </div>
+
         <!-- 空状态 -->
         <div id="empty-state" class="flex flex-col items-center justify-center h-full text-center">
           <div class="w-20 h-20 rounded-full flex items-center justify-center mb-6" style="background-color: var(--color-primary-light);">
@@ -269,7 +304,6 @@
 
         <!-- 消息列表 -->
         <div id="message-list" class="flex flex-col gap-4" style="display: none;">
-          <!-- 消息将由 JS 动态添加 -->
         </div>
       </div>
 
@@ -307,12 +341,14 @@
   let currentConversationId = null;
   let messages = [];
   let isSending = false;
+  let aiConfigured = false;
 
   // ===== DOM 元素 =====
   const conversationListEl = document.getElementById('conversation-list');
   const messageContainerEl = document.getElementById('message-container');
   const messageListEl = document.getElementById('message-list');
   const emptyStateEl = document.getElementById('empty-state');
+  const apiSetupStateEl = document.getElementById('api-setup-state');
   const chatInputEl = document.getElementById('chat-input');
   const sendBtnEl = document.getElementById('send-btn');
   const newChatBtnEl = document.getElementById('new-chat-btn');
@@ -324,8 +360,13 @@
   async function init() {
     // 检查 AI 配置
     await ai.init();
-    if (!ai.isConfigured()) {
-      apiWarningEl.style.display = 'block';
+    aiConfigured = ai.isConfigured();
+
+    if (!aiConfigured) {
+      showApiSetupState();
+    } else {
+      // 加载模型列表
+      await loadModels();
     }
 
     // 加载对话列表
@@ -333,18 +374,50 @@
 
     // 绑定事件
     bindEvents();
-
-    // 设置当前导航
-    setActiveNav();
   }
 
-  // ===== 设置当前导航 =====
-  function setActiveNav() {
-    const navLink = document.querySelector('a[data-nav-key="chat"]');
-    if (navLink) {
-      navLink.setAttribute('data-active', '');
-      navLink.style.backgroundColor = 'var(--color-primary-light)';
-      navLink.style.color = 'var(--color-primary)';
+  // ===== 显示API配置引导 =====
+  function showApiSetupState() {
+    apiSetupStateEl.style.display = 'flex';
+    emptyStateEl.style.display = 'none';
+    messageListEl.style.display = 'none';
+    apiWarningEl.style.display = 'block';
+    chatInputEl.disabled = true;
+    sendBtnEl.disabled = true;
+  }
+
+  // ===== 隐藏API配置引导 =====
+  function hideApiSetupState() {
+    apiSetupStateEl.style.display = 'none';
+    apiWarningEl.style.display = 'none';
+    chatInputEl.disabled = false;
+    sendBtnEl.disabled = false;
+    renderMessages();
+  }
+
+  // ===== 加载模型列表 =====
+  async function loadModels() {
+    try {
+      const models = await ai.getModels('chat');
+      if (models && models.length > 0) {
+        modelSelectEl.innerHTML = models.map(m => 
+          `<option value="${m.id || m.model || m.name}">${m.name || m.id || m.model}</option>`
+        ).join('');
+        
+        // 尝试设置默认模型 gpt-5.4-nano
+        const defaultModel = 'gpt-5.4-nano';
+        const hasDefault = models.some(m => 
+          (m.id === defaultModel) || (m.model === defaultModel) || (m.name === defaultModel)
+        );
+        if (hasDefault) {
+          modelSelectEl.value = defaultModel;
+        }
+      } else {
+        modelSelectEl.innerHTML = '<option value="gpt-5.4-nano">GPT-5.4 Nano</option>';
+      }
+    } catch (e) {
+      console.error('Failed to load models:', e);
+      modelSelectEl.innerHTML = '<option value="gpt-5.4-nano">GPT-5.4 Nano</option>';
     }
   }
 
@@ -383,10 +456,12 @@
           <p class="text-sm truncate" style="font-family: var(--font-heading); color: var(--text-heading);">${escapeHtml(conv.title || '新对话')}</p>
           <p class="text-xs truncate" style="color: var(--text-muted);">${formatDate(conv.updated_at)}</p>
         </div>
-        <button class="delete-conv-btn p-1 rounded transition-colors duration-150 hover:bg-red-100"
+        <button class="delete-conv-btn p-1 rounded transition-colors duration-150"
           style="color: var(--text-muted);"
           onclick="event.stopPropagation(); deleteConversation('${conv.id}')"
-          title="删除对话">
+          title="删除对话"
+          onmouseover="this.style.color='var(--state-error)'"
+          onmouseout="this.style.color='var(--text-muted)'">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
         </button>
       </div>
@@ -401,6 +476,11 @@
     if (conv) {
       messages = conv.messages || [];
       currentTitleEl.textContent = conv.title || '新对话';
+      
+      if (conv.model) {
+        modelSelectEl.value = conv.model;
+      }
+      
       renderMessages();
       renderConversationList();
     }
@@ -422,6 +502,7 @@
       }
 
       renderConversationList();
+      if (window.awShowToast) window.awShowToast('对话已删除');
     } catch (e) {
       console.error('Failed to delete conversation:', e);
       alert('删除失败，请重试');
@@ -430,6 +511,10 @@
 
   // ===== 渲染消息列表 =====
   function renderMessages() {
+    if (!aiConfigured) {
+      return;
+    }
+
     if (!messages || messages.length === 0) {
       emptyStateEl.style.display = 'flex';
       messageListEl.style.display = 'none';
@@ -461,8 +546,38 @@
       }
     }).join('');
 
-    // 滚动到底部
     messageContainerEl.scrollTop = messageContainerEl.scrollHeight;
+  }
+
+  // ===== 添加正在思考的加载状态 =====
+  function addTypingIndicator() {
+    const typingDiv = document.createElement('div');
+    typingDiv.id = 'typing-indicator';
+    typingDiv.className = 'chat-message-ai max-w-[80%] p-4 rounded-lg border';
+    typingDiv.style.cssText = 'background-color: var(--surface-card); border-color: var(--border-default);';
+    typingDiv.innerHTML = `
+      <div class="flex items-start gap-3">
+        <div class="flex items-center justify-center flex-shrink-0" style="width: 28px; height: 28px; background-color: var(--color-primary-light); color: var(--color-primary); border-radius: var(--radius-full); font-size: 12px; font-weight: 600;">AI</div>
+        <div class="flex-1 min-w-0">
+          <p class="text-xs mb-2" style="color: var(--text-muted);">正在思考...</p>
+          <div class="typing-indicator">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+      </div>
+    `;
+    messageListEl.appendChild(typingDiv);
+    messageContainerEl.scrollTop = messageContainerEl.scrollHeight;
+  }
+
+  // ===== 移除正在思考的加载状态 =====
+  function removeTypingIndicator() {
+    const indicator = document.getElementById('typing-indicator');
+    if (indicator) {
+      indicator.remove();
+    }
   }
 
   // ===== 发送消息 =====
@@ -470,63 +585,70 @@
     const content = chatInputEl.value.trim();
     if (!content || isSending) return;
 
-    if (!ai.isConfigured()) {
+    if (!aiConfigured) {
       alert('请先在设置页面配置 API Key');
       return;
     }
 
     isSending = true;
     sendBtnEl.disabled = true;
-    sendBtnEl.style.opacity = '0.5';
+    chatInputEl.disabled = true;
 
     const model = modelSelectEl.value;
     const userMessage = { role: 'user', content };
 
-    // 添加用户消息到界面
+    emptyStateEl.style.display = 'none';
+    messageListEl.style.display = 'flex';
+
     messages.push(userMessage);
     renderMessages();
     chatInputEl.value = '';
     autoResizeTextarea();
 
+    addTypingIndicator();
+
     try {
-      // 如果是新对话，先创建
       if (!currentConversationId) {
         const title = content.slice(0, 30) + (content.length > 30 ? '...' : '');
-        const conv = await db.createConversation({
+        const convData = {
           title,
           messages: [userMessage],
           model
-        });
-        currentConversationId = conv[0]?.id || conv.id;
+        };
+        const result = await db.createConversation(convData);
+        const newConv = Array.isArray(result) ? result[0] : result;
+        currentConversationId = newConv?.id;
         currentTitleEl.textContent = title;
         await loadConversations();
       } else {
-        // 保存用户消息
         await db.addMessageToConversation(currentConversationId, userMessage);
       }
 
-      // 调用 AI
       const aiMessages = messages.map(m => ({ role: m.role, content: m.content }));
       const response = await ai.chat(model, aiMessages);
 
-      // 添加 AI 回复
+      removeTypingIndicator();
+
       const aiMessage = { role: 'assistant', content: response, model };
       messages.push(aiMessage);
       renderMessages();
 
-      // 保存 AI 消息
       await db.addMessageToConversation(currentConversationId, aiMessage);
 
     } catch (e) {
       console.error('Failed to send message:', e);
-      alert('发送失败: ' + e.message);
-      // 移除失败的用户消息
-      messages.pop();
+      removeTypingIndicator();
+      
+      const errorMsg = { role: 'assistant', content: '抱歉，发生了错误：' + e.message, model: '系统' };
+      messages.push(errorMsg);
       renderMessages();
+      
+      if (window.awShowToast) window.awShowToast('发送失败：' + e.message);
     } finally {
       isSending = false;
       sendBtnEl.disabled = false;
-      sendBtnEl.style.opacity = '1';
+      chatInputEl.disabled = false;
+      chatInputEl.focus();
     }
   }
 
@@ -538,14 +660,13 @@
     renderMessages();
     renderConversationList();
     chatInputEl.focus();
+    if (window.awShowToast) window.awShowToast('已创建新对话');
   }
 
   // ===== 绑定事件 =====
   function bindEvents() {
-    // 发送按钮
     sendBtnEl.addEventListener('click', sendMessage);
 
-    // 输入框回车发送
     chatInputEl.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
@@ -553,15 +674,13 @@
       }
     });
 
-    // 输入框自动调整高度
     chatInputEl.addEventListener('input', autoResizeTextarea);
 
-    // 新建对话
     newChatBtnEl.addEventListener('click', newChat);
 
-    // 快速提示按钮
     document.querySelectorAll('.quick-prompt').forEach(btn => {
       btn.addEventListener('click', () => {
+        if (!aiConfigured) return;
         chatInputEl.value = btn.dataset.prompt;
         autoResizeTextarea();
         chatInputEl.focus();

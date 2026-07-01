@@ -9,8 +9,108 @@
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
   <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
   <style type="text/tailwindcss">
-    @theme inline { --color-primary: var(--color-primary); --color-secondary: var(--color-secondary); }
-    @layer base { body { background: var(--surface-bg); color: var(--text-body); } }
+    @theme inline {
+      --color-primary: var(--color-primary);
+      --color-secondary: var(--color-secondary);
+    }
+    @layer base {
+      body { background: var(--surface-bg); color: var(--text-body); }
+    }
+  </style>
+  <style>
+    .news-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 15, 20, 0.7);
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 250ms ease;
+    }
+    .news-modal-backdrop.is-open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .news-modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.95);
+      z-index: 101;
+      width: 90%;
+      max-width: 720px;
+      max-height: 85vh;
+      background-color: var(--surface-card);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-float);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 250ms ease, transform 250ms ease;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .news-modal.is-open {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translate(-50%, -50%) scale(1);
+    }
+    .news-modal-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border-default);
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      flex-shrink: 0;
+    }
+    .news-modal-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px;
+    }
+    .news-modal-close {
+      flex-shrink: 0;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius-md);
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: background-color 150ms ease, color 150ms ease;
+    }
+    .news-modal-close:hover {
+      background-color: var(--surface-hover);
+      color: var(--text-heading);
+    }
+    .news-content {
+      line-height: 1.8;
+      font-size: 14px;
+      color: var(--text-body);
+    }
+    .news-content p {
+      margin-bottom: 16px;
+    }
+    .news-content strong {
+      color: var(--text-heading);
+      font-weight: 600;
+    }
+    .news-content ul, .news-content ol {
+      margin-bottom: 16px;
+      padding-left: 24px;
+    }
+    .news-content li {
+      margin-bottom: 8px;
+    }
+    .news-empty {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-muted);
+    }
   </style>
 </head>
 <body class="min-h-screen font-sans antialiased" data-page="news-hub" style="font-family: var(--font-body); color: var(--text-body); background-color: var(--surface-bg);">
@@ -18,28 +118,109 @@
 <div id="app-backdrop" class="app-backdrop"></div>
 
 <!-- ===== LEFT SIDEBAR ===== -->
-<aside id="app-sidebar" class="app-sidebar fixed top-0 left-0 z-30 flex flex-col h-screen border-r"
+<aside id="app-sidebar"
+  class="app-sidebar fixed top-0 left-0 z-30 flex flex-col h-screen border-r"
   style="width: var(--sidebar-width); background-color: var(--surface-inset); border-color: var(--border-default);">
+  <!-- Sidebar Logo / Brand -->
   <div class="flex items-center gap-3 px-5 h-16 border-b" style="border-color: var(--border-default);">
-    <div class="flex items-center justify-center flex-shrink-0" style="width: 32px; height: 32px; background-color: var(--color-primary); border-radius: var(--radius-md);">
+    <div class="flex items-center justify-center flex-shrink-0"
+      style="width: 32px; height: 32px; background-color: var(--color-primary); border-radius: var(--radius-md);">
       <img src="assets/logo.svg" alt="OK AI ART" style="width: 20px; height: 20px;" />
     </div>
     <span class="text-sm font-semibold tracking-tight" style="font-family: var(--font-heading); color: var(--text-heading);">OK AI ART</span>
   </div>
+
+  <!-- Sidebar Navigation -->
   <nav class="flex-1 overflow-y-auto py-4 px-3">
     <ul class="flex flex-col gap-1" style="list-style: none; margin: 0; padding: 0;">
-      <li><a href="index.html" data-nav-key="dashboard" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors duration-150" style="font-family: var(--font-heading); color: var(--text-secondary);" onmouseover="if(!this.hasAttribute('data-active'))this.style.backgroundColor='var(--surface-hover)'" onmouseout="if(!this.hasAttribute('data-active'))this.style.backgroundColor='transparent'"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>工作台</span></a></li>
-      <li><a href="ai-employees.html" data-nav-key="ai-employees" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors duration-150" style="font-family: var(--font-heading); color: var(--text-secondary);" onmouseover="if(!this.hasAttribute('data-active'))this.style.backgroundColor='var(--surface-hover)'" onmouseout="if(!this.hasAttribute('data-active'))this.style.backgroundColor='transparent'"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>AI员工</span></a></li>
-      <li><a href="news-hub.html" data-nav-key="news-hub" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors duration-150" style="font-family: var(--font-heading); color: var(--text-secondary);" onmouseover="if(!this.hasAttribute('data-active'))this.style.backgroundColor='var(--surface-hover)'" onmouseout="if(!this.hasAttribute('data-active'))this.style.backgroundColor='transparent'"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/></svg><span>资讯台</span></a></li>
-      <li><a href="creative-studio.html" data-nav-key="creative-studio" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors duration-150" style="font-family: var(--font-heading); color: var(--text-secondary);" onmouseover="if(!this.hasAttribute('data-active'))this.style.backgroundColor='var(--surface-hover)'" onmouseout="if(!this.hasAttribute('data-active'))this.style.backgroundColor='transparent'"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg><span>创作工坊</span></a></li>
-      <li><a href="projects.html" data-nav-key="projects" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors duration-150" style="font-family: var(--font-heading); color: var(--text-secondary);" onmouseover="if(!this.hasAttribute('data-active'))this.style.backgroundColor='var(--surface-hover)'" onmouseout="if(!this.hasAttribute('data-active'))this.style.backgroundColor='transparent'"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h16Z"/></svg><span>项目中心</span></a></li>
-      <li><a href="resources.html" data-nav-key="resources" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors duration-150" style="font-family: var(--font-heading); color: var(--text-secondary);" onmouseover="if(!this.hasAttribute('data-active'))this.style.backgroundColor='var(--surface-hover)'" onmouseout="if(!this.hasAttribute('data-active'))this.style.backgroundColor='transparent'"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3"/></svg><span>资源库</span></a></li>
-      <li><a href="settings.html" data-nav-key="settings" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors duration-150" style="font-family: var(--font-heading); color: var(--text-secondary);" onmouseover="if(!this.hasAttribute('data-active'))this.style.backgroundColor='var(--surface-hover)'" onmouseout="if(!this.hasAttribute('data-active'))this.style.backgroundColor='transparent'"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg><span>设置</span></a></li>
+      <li>
+        <a href="index.html" data-nav-key="dashboard"
+          class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors duration-150"
+          style="font-family: var(--font-heading); color: var(--text-secondary);"
+          onmouseover="if(!this.hasAttribute('data-active'))this.style.backgroundColor='var(--surface-hover)'"
+          onmouseout="if(!this.hasAttribute('data-active'))this.style.backgroundColor='transparent'">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+          <span>工作台</span>
+        </a>
+      </li>
+      <li>
+        <a href="ai-employees.html" data-nav-key="ai-employees"
+          class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors duration-150"
+          style="font-family: var(--font-heading); color: var(--text-secondary);"
+          onmouseover="if(!this.hasAttribute('data-active'))this.style.backgroundColor='var(--surface-hover)'"
+          onmouseout="if(!this.hasAttribute('data-active'))this.style.backgroundColor='transparent'">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          <span>AI员工</span>
+        </a>
+      </li>
+      <li>
+        <a href="news-hub.html" data-nav-key="news-hub" data-active="true"
+          class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors duration-150"
+          style="font-family: var(--font-heading);"
+          onmouseover="if(!this.hasAttribute('data-active'))this.style.backgroundColor='var(--surface-hover)'"
+          onmouseout="if(!this.hasAttribute('data-active'))this.style.backgroundColor='transparent'">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/></svg>
+          <span>资讯台</span>
+        </a>
+      </li>
+      <li>
+        <a href="chat.html" data-nav-key="chat"
+          class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors duration-150"
+          style="font-family: var(--font-heading); color: var(--text-secondary);"
+          onmouseover="if(!this.hasAttribute('data-active'))this.style.backgroundColor='var(--surface-hover)'"
+          onmouseout="if(!this.hasAttribute('data-active'))this.style.backgroundColor='transparent'">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <span>AI对话</span>
+        </a>
+      </li>
+      <li>
+        <a href="creative-studio.html" data-nav-key="creative-studio"
+          class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors duration-150"
+          style="font-family: var(--font-heading); color: var(--text-secondary);"
+          onmouseover="if(!this.hasAttribute('data-active'))this.style.backgroundColor='var(--surface-hover)'"
+          onmouseout="if(!this.hasAttribute('data-active'))this.style.backgroundColor='transparent'">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>
+          <span>创作工坊</span>
+        </a>
+      </li>
+      <li>
+        <a href="projects.html" data-nav-key="projects"
+          class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors duration-150"
+          style="font-family: var(--font-heading); color: var(--text-secondary);"
+          onmouseover="if(!this.hasAttribute('data-active'))this.style.backgroundColor='var(--surface-hover)'"
+          onmouseout="if(!this.hasAttribute('data-active'))this.style.backgroundColor='transparent'">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h16Z"/></svg>
+          <span>项目中心</span>
+        </a>
+      </li>
+      <li>
+        <a href="resources.html" data-nav-key="resources"
+          class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors duration-150"
+          style="font-family: var(--font-heading); color: var(--text-secondary);"
+          onmouseover="if(!this.hasAttribute('data-active'))this.style.backgroundColor='var(--surface-hover)'"
+          onmouseout="if(!this.hasAttribute('data-active'))this.style.backgroundColor='transparent'">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3"/></svg>
+          <span>资源库</span>
+        </a>
+      </li>
+      <li>
+        <a href="settings.html" data-nav-key="settings"
+          class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors duration-150"
+          style="font-family: var(--font-heading); color: var(--text-secondary);"
+          onmouseover="if(!this.hasAttribute('data-active'))this.style.backgroundColor='var(--surface-hover)'"
+          onmouseout="if(!this.hasAttribute('data-active'))this.style.backgroundColor='transparent'">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+          <span>设置</span>
+        </a>
+      </li>
     </ul>
   </nav>
+
+  <!-- Sidebar Footer -->
   <div class="px-4 py-4 border-t" style="border-color: var(--border-default);">
     <div class="flex items-center gap-2.5">
-      <div class="flex items-center justify-center flex-shrink-0 text-xs font-semibold" style="width: 28px; height: 28px; background-color: var(--color-primary-light); color: var(--color-primary); border-radius: var(--radius-full); font-family: var(--font-heading);">U</div>
+      <div class="flex items-center justify-center flex-shrink-0 text-xs font-semibold"
+        style="width: 28px; height: 28px; background-color: var(--color-primary-light); color: var(--color-primary); border-radius: var(--radius-full); font-family: var(--font-heading);">U</div>
       <div class="flex-1 min-w-0">
         <p class="text-xs font-medium truncate" style="font-family: var(--font-heading); color: var(--text-heading);">创作者</p>
         <p class="text-xs truncate" style="color: var(--text-muted);">专业版</p>
@@ -50,30 +231,63 @@
 
 <!-- ===== MAIN CONTENT WRAPPER ===== -->
 <div class="app-main flex flex-col flex-1" style="margin-left: var(--sidebar-width);">
-  <header class="sticky top-0 z-20 flex items-center justify-between h-16 px-4 sm:px-6 border-b gap-3" style="background-color: var(--surface-card); border-color: var(--border-default);">
+
+  <!-- ===== TOP HEADER BAR ===== -->
+  <header class="sticky top-0 z-20 flex items-center justify-between h-16 px-4 sm:px-6 border-b gap-3"
+    style="background-color: var(--surface-card); border-color: var(--border-default);">
+    <!-- Header Left: hamburger (mobile) + Page Title -->
     <div class="flex items-center gap-3 min-w-0">
-      <button id="menu-toggle" class="menu-toggle items-center justify-center p-2 rounded-md" style="color: var(--text-secondary); display:none;" aria-label="打开菜单" aria-expanded="false" aria-controls="app-sidebar"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+      <button id="menu-toggle" class="menu-toggle items-center justify-center p-2 rounded-md" style="color: var(--text-secondary); display:none;" aria-label="打开菜单" aria-expanded="false" aria-controls="app-sidebar">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
       <h1 class="header-page-title text-lg font-semibold truncate" style="font-family: var(--font-heading); color: var(--text-heading);">资讯台</h1>
     </div>
+
+    <!-- Header Center: Search -->
     <div class="header-search flex items-center justify-center flex-1 mx-4 sm:mx-8" style="max-width: 480px;">
       <div class="relative w-full">
         <svg class="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-muted);"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.3-4.3"/></svg>
-        <input type="text" data-role="search" placeholder="搜索资讯..." class="w-full pl-9 pr-4 py-2 text-sm rounded-md outline-none transition-colors duration-150" style="font-family: var(--font-body); background-color: var(--surface-inset); color: var(--text-body); border: 1px solid var(--border-default);" onfocus="this.style.borderColor='var(--color-primary)'; this.style.boxShadow='0 0 0 2px var(--color-primary-light)'" onblur="this.style.borderColor='var(--border-default)'; this.style.boxShadow='none'" />
+        <input id="news-search-input" type="text" data-role="search" placeholder="搜索资讯标题..."
+          class="w-full pl-9 pr-4 py-2 text-sm rounded-md outline-none transition-colors duration-150"
+          style="font-family: var(--font-body); background-color: var(--surface-inset); color: var(--text-body); border: 1px solid var(--border-default);"
+          onfocus="this.style.borderColor='var(--color-primary)'; this.style.boxShadow='0 0 0 2px var(--color-primary-light)'"
+          onblur="this.style.borderColor='var(--border-default)'; this.style.boxShadow='none'" />
       </div>
     </div>
+
+    <!-- Header Right: theme toggle + notifications + avatar -->
     <div class="flex items-center gap-1 sm:gap-3 flex-shrink-0">
-      <button id="theme-toggle" class="relative flex items-center justify-center p-2 rounded-md transition-colors duration-150" style="color: var(--text-secondary);" aria-label="切换主题"><svg data-theme-icon-moon width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg><svg data-theme-icon-sun width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="M4.93 4.93l1.41 1.41"/><path d="M17.66 17.66l1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="M4.93 19.07l1.41-1.41"/><path d="M17.66 6.34l1.41-1.41"/></svg></button>
+      <button id="theme-toggle" class="relative flex items-center justify-center p-2 rounded-md transition-colors duration-150" style="color: var(--text-secondary);" aria-label="切换主题">
+        <svg data-theme-icon-moon width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg data-theme-icon-sun width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="M4.93 4.93l1.41 1.41"/><path d="M17.66 17.66l1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="M4.93 19.07l1.41-1.41"/><path d="M17.66 6.34l1.41-1.41"/></svg>
+      </button>
       <div class="relative">
-        <button id="notif-btn" class="relative flex items-center justify-center p-2 rounded-md transition-colors duration-150" style="color: var(--text-secondary);" aria-label="通知"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><span class="absolute top-1.5 right-1.5" style="width: 7px; height: 7px; background-color: var(--color-primary); border-radius: var(--radius-full);"></span></button>
+        <button id="notif-btn" class="relative flex items-center justify-center p-2 rounded-md transition-colors duration-150" style="color: var(--text-secondary);" aria-label="通知">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+          <span class="absolute top-1.5 right-1.5" style="width: 7px; height: 7px; background-color: var(--color-primary); border-radius: var(--radius-full);"></span>
+        </button>
         <div id="notif-dropdown" class="notif-dropdown">
-          <div class="notif-item"><div style="width:8px;height:8px;border-radius:9999px;background:var(--color-primary);margin-top:6px;flex-shrink:0;"></div><div><p class="text-sm font-medium" style="font-family:var(--font-heading);color:var(--text-heading);">新资讯发布</p><p class="text-xs mt-0.5" style="color:var(--text-muted);">AI漫剧生成迎来跨越式升级 · 2 小时前</p></div></div>
-          <div class="notif-item"><div style="width:8px;height:8px;border-radius:9999px;background:var(--state-success);margin-top:6px;flex-shrink:0;"></div><div><p class="text-sm font-medium" style="font-family:var(--font-heading);color:var(--text-heading);">每周精选已更新</p><p class="text-xs mt-0.5" style="color:var(--text-muted);">本周 5 篇热门教程 · 昨天</p></div></div>
+          <div class="notif-item">
+            <div style="width:8px;height:8px;border-radius:9999px;background:var(--color-primary);margin-top:6px;flex-shrink:0;"></div>
+            <div>
+              <p class="text-sm font-medium" style="font-family:var(--font-heading);color:var(--text-heading);">新资讯发布</p>
+              <p class="text-xs mt-0.5" style="color:var(--text-muted);">AI漫剧生成迎来跨越式升级 · 2 小时前</p>
+            </div>
+          </div>
+          <div class="notif-item">
+            <div style="width:8px;height:8px;border-radius:9999px;background:var(--state-success);margin-top:6px;flex-shrink:0;"></div>
+            <div>
+              <p class="text-sm font-medium" style="font-family:var(--font-heading);color:var(--text-heading);">每周精选已更新</p>
+              <p class="text-xs mt-0.5" style="color:var(--text-muted);">本周 5 篇热门教程 · 昨天</p>
+            </div>
+          </div>
         </div>
       </div>
       <button class="flex items-center justify-center flex-shrink-0" style="width: 34px; height: 34px; background-color: var(--color-primary-light); color: var(--color-primary); border-radius: var(--radius-full); font-family: var(--font-heading); font-size: 13px; font-weight: 600; transition: background-color 150ms ease;" onmouseover="this.style.backgroundColor='var(--color-primary)'; this.style.color='var(--text-inverse)'" onmouseout="this.style.backgroundColor='var(--color-primary-light)'; this.style.color='var(--color-primary)'" aria-label="用户菜单">U</button>
     </div>
   </header>
 
+  <!-- ===== PAGE CONTENT AREA ===== -->
   <main class="flex-1 overflow-y-auto" style="background-color: var(--surface-bg);">
     <div class="p-4 sm:p-6 lg:p-8">
 
@@ -83,163 +297,432 @@
         <p class="mt-1 text-sm" style="font-family: var(--font-body); color: var(--text-secondary);">AI创作行业动态与产品更新</p>
       </div>
 
-      <!-- Featured Banner -->
-      <section class="relative overflow-hidden mb-6" style="border-radius: var(--radius-xl); min-height: 220px;">
-        <img src="assets/image_0_yi19x4.jpg" alt="头条资讯封面" class="absolute inset-0 w-full h-full object-cover" style="border-radius: var(--radius-xl);" />
-        <div class="absolute inset-0" style="background: linear-gradient(135deg, rgba(20, 20, 19, 0.72) 0%, rgba(217, 119, 87, 0.35) 100%); border-radius: var(--radius-xl);"></div>
-        <div class="relative z-10 flex flex-col justify-end h-full px-6 sm:px-10 py-8" style="min-height: 220px;">
-          <span class="inline-flex items-center justify-center self-start px-2.5 py-1 text-xs font-semibold rounded-md whitespace-nowrap mb-3" style="font-family: var(--font-heading); background-color: var(--color-primary); color: var(--text-inverse);">头条</span>
-          <h3 class="text-xl sm:text-2xl font-bold text-white mb-2" style="font-family: var(--font-heading); text-wrap: balance; word-break: keep-all; overflow-wrap: break-word;">AI漫剧生成迎来跨越式升级</h3>
-          <p class="text-sm text-white opacity-80 max-w-xl mb-2" style="font-family: var(--font-body);">新一代多模态模型上线，分镜一致性、角色表情与镜头语言全面提升，平均出片时间缩短 40%。</p>
-          <p class="text-xs text-white opacity-60" style="font-family: var(--font-heading);">2025-06-30</p>
-        </div>
-      </section>
-
-      <!-- Filter Bar -->
+      <!-- Filter Tabs -->
       <div class="flex items-center gap-1 p-1 rounded-md mb-6" style="background-color: var(--surface-inset); border: 1px solid var(--border-default); display: inline-flex;">
         <button class="filter-tab inline-flex items-center justify-center px-3.5 py-1.5 text-sm rounded-md whitespace-nowrap transition-colors duration-150" data-filter="all" data-active="true" style="font-family: var(--font-heading);">全部</button>
+        <button class="filter-tab inline-flex items-center justify-center px-3.5 py-1.5 text-sm rounded-md whitespace-nowrap transition-colors duration-150" data-filter="industry" style="font-family: var(--font-heading); color: var(--text-secondary); border: none; background: transparent;">行业动态</button>
+        <button class="filter-tab inline-flex items-center justify-center px-3.5 py-1.5 text-sm rounded-md whitespace-nowrap transition-colors duration-150" data-filter="tutorial" style="font-family: var(--font-heading); color: var(--text-secondary); border: none; background: transparent;">技术教程</button>
         <button class="filter-tab inline-flex items-center justify-center px-3.5 py-1.5 text-sm rounded-md whitespace-nowrap transition-colors duration-150" data-filter="product" style="font-family: var(--font-heading); color: var(--text-secondary); border: none; background: transparent;">产品更新</button>
-        <button class="filter-tab inline-flex items-center justify-center px-3.5 py-1.5 text-sm rounded-md whitespace-nowrap transition-colors duration-150" data-filter="tutorial" style="font-family: var(--font-heading); color: var(--text-secondary); border: none; background: transparent;">教程</button>
-        <button class="filter-tab inline-flex items-center justify-center px-3.5 py-1.5 text-sm rounded-md whitespace-nowrap transition-colors duration-150" data-filter="industry" style="font-family: var(--font-heading); color: var(--text-secondary); border: none; background: transparent;">行业</button>
       </div>
 
       <!-- News Grid -->
       <div id="news-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-
-        <!-- Card 1 -->
-        <div class="news-card rounded-lg overflow-hidden transition-all duration-200" data-category="product" style="background-color: var(--surface-card); border: 1px solid var(--border-default);" onmouseover="this.style.borderColor='var(--color-primary)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--border-default)'; this.style.transform='translateY(0)'">
-          <div class="overflow-hidden" style="height: 140px; background-color: var(--surface-inset);">
-            <img src="assets/image_1_yi19x4.jpg" alt="多角色一致性引擎上线" class="w-full h-full object-cover" />
-          </div>
-          <div class="p-5">
-            <span class="inline-flex items-center justify-center px-2 py-0.5 text-xs rounded-md whitespace-nowrap mb-2" style="font-family: var(--font-heading); background-color: rgba(217, 119, 87, 0.08); color: var(--color-primary);">产品更新</span>
-            <h4 class="text-sm font-semibold mb-1.5" style="font-family: var(--font-heading); color: var(--text-heading);">多角色一致性引擎上线</h4>
-            <p class="text-xs mb-3" style="font-family: var(--font-body); color: var(--text-secondary); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">同一项目内多角色立绘保持面孔、服装、配饰高度一致，无需反复调参。</p>
-            <div class="flex items-center justify-between">
-              <span class="text-xs" style="font-family: var(--font-heading); color: var(--text-muted);">2025-06-28</span>
-              <a class="text-xs font-medium cursor-pointer transition-colors duration-150" style="font-family: var(--font-heading); color: var(--color-primary);" data-clickable="打开资讯：多角色一致性引擎上线">阅读全文</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Card 2 -->
-        <div class="news-card rounded-lg overflow-hidden transition-all duration-200" data-category="tutorial" style="background-color: var(--surface-card); border: 1px solid var(--border-default);" onmouseover="this.style.borderColor='var(--color-primary)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--border-default)'; this.style.transform='translateY(0)'">
-          <div class="overflow-hidden" style="height: 140px; background-color: var(--surface-inset);">
-            <img src="assets/image_1_yi19x4.jpg" alt="5分钟掌握分镜构图" class="w-full h-full object-cover" />
-          </div>
-          <div class="p-5">
-            <span class="inline-flex items-center justify-center px-2 py-0.5 text-xs rounded-md whitespace-nowrap mb-2" style="font-family: var(--font-heading); background-color: rgba(106, 155, 204, 0.08); color: #5580ad;">教程</span>
-            <h4 class="text-sm font-semibold mb-1.5" style="font-family: var(--font-heading); color: var(--text-heading);">5分钟掌握分镜构图技巧</h4>
-            <p class="text-xs mb-3" style="font-family: var(--font-body); color: var(--text-secondary); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">从景别、机位到镜头节奏，一篇讲透漫剧分镜的底层逻辑与实操要点。</p>
-            <div class="flex items-center justify-between">
-              <span class="text-xs" style="font-family: var(--font-heading); color: var(--text-muted);">2025-06-26</span>
-              <a class="text-xs font-medium cursor-pointer transition-colors duration-150" style="font-family: var(--font-heading); color: var(--color-primary);" data-clickable="打开资讯：5分钟掌握分镜构图技巧">阅读全文</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Card 3 -->
-        <div class="news-card rounded-lg overflow-hidden transition-all duration-200" data-category="industry" style="background-color: var(--surface-card); border: 1px solid var(--border-default);" onmouseover="this.style.borderColor='var(--color-primary)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--border-default)'; this.style.transform='translateY(0)'">
-          <div class="overflow-hidden" style="height: 140px; background-color: var(--surface-inset);">
-            <img src="assets/image_1_yi19x4.jpg" alt="2025 AI短剧市场报告" class="w-full h-full object-cover" />
-          </div>
-          <div class="p-5">
-            <span class="inline-flex items-center justify-center px-2 py-0.5 text-xs rounded-md whitespace-nowrap mb-2" style="font-family: var(--font-heading); background-color: rgba(120, 140, 93, 0.08); color: #5a6b45;">行业</span>
-            <h4 class="text-sm font-semibold mb-1.5" style="font-family: var(--font-heading); color: var(--text-heading);">2025 AI短剧市场报告解读</h4>
-            <p class="text-xs mb-3" style="font-family: var(--font-body); color: var(--text-secondary); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">头部平台用户规模同比增长 220%，AI辅助生产成本占比已超三成。</p>
-            <div class="flex items-center justify-between">
-              <span class="text-xs" style="font-family: var(--font-heading); color: var(--text-muted);">2025-06-24</span>
-              <a class="text-xs font-medium cursor-pointer transition-colors duration-150" style="font-family: var(--font-heading); color: var(--color-primary);" data-clickable="打开资讯：2025 AI短剧市场报告解读">阅读全文</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Card 4 -->
-        <div class="news-card rounded-lg overflow-hidden transition-all duration-200" data-category="product" style="background-color: var(--surface-card); border: 1px solid var(--border-default);" onmouseover="this.style.borderColor='var(--color-primary)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--border-default)'; this.style.transform='translateY(0)'">
-          <div class="overflow-hidden" style="height: 140px; background-color: var(--surface-inset);">
-            <img src="assets/image_1_yi19x4.jpg" alt="批量生成功能开放" class="w-full h-full object-cover" />
-          </div>
-          <div class="p-5">
-            <span class="inline-flex items-center justify-center px-2 py-0.5 text-xs rounded-md whitespace-nowrap mb-2" style="font-family: var(--font-heading); background-color: rgba(217, 119, 87, 0.08); color: var(--color-primary);">产品更新</span>
-            <h4 class="text-sm font-semibold mb-1.5" style="font-family: var(--font-heading); color: var(--text-heading);">批量生成分镜功能全量开放</h4>
-            <p class="text-xs mb-3" style="font-family: var(--font-body); color: var(--text-secondary); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">一次性按剧本生成整集分镜，支持锁定关键镜头二次微调，效率翻倍。</p>
-            <div class="flex items-center justify-between">
-              <span class="text-xs" style="font-family: var(--font-heading); color: var(--text-muted);">2025-06-22</span>
-              <a class="text-xs font-medium cursor-pointer transition-colors duration-150" style="font-family: var(--font-heading); color: var(--color-primary);" data-clickable="打开资讯：批量生成分镜功能全量开放">阅读全文</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Card 5 -->
-        <div class="news-card rounded-lg overflow-hidden transition-all duration-200" data-category="tutorial" style="background-color: var(--surface-card); border: 1px solid var(--border-default);" onmouseover="this.style.borderColor='var(--color-primary)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--border-default)'; this.style.transform='translateY(0)'">
-          <div class="overflow-hidden" style="height: 140px; background-color: var(--surface-inset);">
-            <img src="assets/image_1_yi19x4.jpg" alt="角色立绘进阶训练指南" class="w-full h-full object-cover" />
-          </div>
-          <div class="p-5">
-            <span class="inline-flex items-center justify-center px-2 py-0.5 text-xs rounded-md whitespace-nowrap mb-2" style="font-family: var(--font-heading); background-color: rgba(106, 155, 204, 0.08); color: #5580ad;">教程</span>
-            <h4 class="text-sm font-semibold mb-1.5" style="font-family: var(--font-heading); color: var(--text-heading);">角色立绘进阶训练指南</h4>
-            <p class="text-xs mb-3" style="font-family: var(--font-body); color: var(--text-secondary); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">从素材准备到 LoRA 微调，手把手教你训练专属风格的角色立绘模型。</p>
-            <div class="flex items-center justify-between">
-              <span class="text-xs" style="font-family: var(--font-heading); color: var(--text-muted);">2025-06-20</span>
-              <a class="text-xs font-medium cursor-pointer transition-colors duration-150" style="font-family: var(--font-heading); color: var(--color-primary);" data-clickable="打开资讯：角色立绘进阶训练指南">阅读全文</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Card 6 -->
-        <div class="news-card rounded-lg overflow-hidden transition-all duration-200" data-category="industry" style="background-color: var(--surface-card); border: 1px solid var(--border-default);" onmouseover="this.style.borderColor='var(--color-primary)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--border-default)'; this.style.transform='translateY(0)'">
-          <div class="overflow-hidden" style="height: 140px; background-color: var(--surface-inset);">
-            <img src="assets/image_1_yi19x4.jpg" alt="海外短剧出海趋势观察" class="w-full h-full object-cover" />
-          </div>
-          <div class="p-5">
-            <span class="inline-flex items-center justify-center px-2 py-0.5 text-xs rounded-md whitespace-nowrap mb-2" style="font-family: var(--font-heading); background-color: rgba(120, 140, 93, 0.08); color: #5a6b45;">行业</span>
-            <h4 class="text-sm font-semibold mb-1.5" style="font-family: var(--font-heading); color: var(--text-heading);">海外短剧出海趋势观察</h4>
-            <p class="text-xs mb-3" style="font-family: var(--font-body); color: var(--text-secondary); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">东南亚与拉美市场增速最快，本地化翻译与配音成为新增长点。</p>
-            <div class="flex items-center justify-between">
-              <span class="text-xs" style="font-family: var(--font-heading); color: var(--text-muted);">2025-06-18</span>
-              <a class="text-xs font-medium cursor-pointer transition-colors duration-150" style="font-family: var(--font-heading); color: var(--color-primary);" data-clickable="打开资讯：海外短剧出海趋势观察">阅读全文</a>
-            </div>
-          </div>
-        </div>
-
       </div>
 
     </div>
   </main>
+
 </div>
 
+<!-- News Modal -->
+<div id="news-modal-backdrop" class="news-modal-backdrop"></div>
+<div id="news-modal" class="news-modal" role="dialog" aria-modal="true" aria-labelledby="news-modal-title">
+  <div class="news-modal-header">
+    <div class="flex-1 min-w-0">
+      <span id="news-modal-category" class="inline-flex items-center justify-center px-2 py-0.5 text-xs rounded-md whitespace-nowrap mb-2" style="font-family: var(--font-heading);"></span>
+      <h3 id="news-modal-title" class="text-lg font-semibold" style="font-family: var(--font-heading); color: var(--text-heading); text-wrap: balance; word-break: keep-all; overflow-wrap: break-word;"></h3>
+      <p id="news-modal-date" class="text-xs mt-1" style="font-family: var(--font-heading); color: var(--text-muted);"></p>
+    </div>
+    <button id="news-modal-close" class="news-modal-close" aria-label="关闭">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div id="news-modal-body" class="news-modal-body">
+    <div id="news-modal-content" class="news-content"></div>
+  </div>
+</div>
+
+<script src="assets/js/db.js"></script>
 <script src="assets/js/app.js"></script>
 <script>
-  // ===== Filter tabs for the news grid =====
   (function () {
-    var tabs = document.querySelectorAll('.filter-tab');
-    var grid = document.getElementById('news-grid');
-    var cards = grid ? Array.prototype.slice.call(grid.querySelectorAll('.news-card')) : [];
-    var currentFilter = 'all';
+    'use strict';
 
-    function applyFilter() {
-      cards.forEach(function (card) {
-        var cat = card.getAttribute('data-category');
-        var show = (currentFilter === 'all' || cat === currentFilter);
-        card.style.display = show ? '' : 'none';
+    var currentFilter = 'all';
+    var currentSearch = '';
+    var allNews = [];
+
+    var newsGrid = document.getElementById('news-grid');
+    var tabs = document.querySelectorAll('.filter-tab');
+    var searchInput = document.getElementById('news-search-input');
+
+    var modalBackdrop = document.getElementById('news-modal-backdrop');
+    var modal = document.getElementById('news-modal');
+    var modalClose = document.getElementById('news-modal-close');
+    var modalTitle = document.getElementById('news-modal-title');
+    var modalCategory = document.getElementById('news-modal-category');
+    var modalDate = document.getElementById('news-modal-date');
+    var modalContent = document.getElementById('news-modal-content');
+
+    function getCategoryColor(category) {
+      switch (category) {
+        case 'product':
+          return { bg: 'rgba(139, 92, 246, 0.10)', color: 'var(--color-primary)' };
+        case 'tutorial':
+          return { bg: 'rgba(106, 155, 204, 0.08)', color: '#6a9bcc' };
+        case 'industry':
+          return { bg: 'rgba(120, 140, 93, 0.08)', color: '#788c5d' };
+        default:
+          return { bg: 'rgba(139, 92, 246, 0.10)', color: 'var(--color-primary)' };
+      }
+    }
+
+    function renderNewsCard(news) {
+      var colors = getCategoryColor(news.category);
+      var card = document.createElement('div');
+      card.className = 'news-card rounded-lg overflow-hidden transition-all duration-200';
+      card.setAttribute('data-category', news.category);
+      card.setAttribute('data-id', news.id);
+      card.style.backgroundColor = 'var(--surface-card)';
+      card.style.border = '1px solid var(--border-default)';
+      card.style.display = 'flex';
+      card.style.flexDirection = 'column';
+
+      var coverImg = news.cover_image || 'assets/image_1_yi19x4.jpg';
+
+      var coverDiv = document.createElement('div');
+      coverDiv.className = 'overflow-hidden';
+      coverDiv.style.height = '160px';
+      coverDiv.style.backgroundColor = 'var(--surface-inset)';
+      coverDiv.style.flexShrink = '0';
+
+      var img = document.createElement('img');
+      img.src = coverImg;
+      img.alt = news.title;
+      img.className = 'w-full h-full object-cover';
+      img.onerror = function() {
+        this.src = 'assets/image_1_yi19x4.jpg';
+      };
+      coverDiv.appendChild(img);
+      card.appendChild(coverDiv);
+
+      var contentDiv = document.createElement('div');
+      contentDiv.className = 'p-5 flex flex-col flex-1';
+
+      var categorySpan = document.createElement('span');
+      categorySpan.className = 'inline-flex items-center justify-center px-2 py-0.5 text-xs rounded-md whitespace-nowrap mb-2 self-start';
+      categorySpan.style.fontFamily = 'var(--font-heading)';
+      categorySpan.style.backgroundColor = colors.bg;
+      categorySpan.style.color = colors.color;
+      categorySpan.textContent = news.category_label;
+      contentDiv.appendChild(categorySpan);
+
+      var titleH4 = document.createElement('h4');
+      titleH4.className = 'text-sm font-semibold mb-1.5';
+      titleH4.style.fontFamily = 'var(--font-heading)';
+      titleH4.style.color = 'var(--text-heading)';
+      titleH4.style.display = '-webkit-box';
+      titleH4.style.webkitLineClamp = '2';
+      titleH4.style.webkitBoxOrient = 'vertical';
+      titleH4.style.overflow = 'hidden';
+      titleH4.textContent = news.title;
+      contentDiv.appendChild(titleH4);
+
+      var summaryP = document.createElement('p');
+      summaryP.className = 'text-xs mb-4 flex-1';
+      summaryP.style.fontFamily = 'var(--font-body)';
+      summaryP.style.color = 'var(--text-secondary)';
+      summaryP.style.display = '-webkit-box';
+      summaryP.style.webkitLineClamp = '3';
+      summaryP.style.webkitBoxOrient = 'vertical';
+      summaryP.style.overflow = 'hidden';
+      summaryP.textContent = news.summary;
+      contentDiv.appendChild(summaryP);
+
+      var footerDiv = document.createElement('div');
+      footerDiv.className = 'flex items-center justify-between mt-auto pt-3';
+      footerDiv.style.borderTop = '1px solid var(--border-default)';
+
+      var dateSpan = document.createElement('span');
+      dateSpan.className = 'text-xs';
+      dateSpan.style.fontFamily = 'var(--font-heading)';
+      dateSpan.style.color = 'var(--text-muted)';
+      dateSpan.textContent = news.published_at;
+      footerDiv.appendChild(dateSpan);
+
+      var readBtn = document.createElement('button');
+      readBtn.className = 'news-read-btn text-xs font-medium cursor-pointer transition-colors duration-150 flex items-center gap-1';
+      readBtn.setAttribute('data-id', news.id);
+      readBtn.style.fontFamily = 'var(--font-heading)';
+      readBtn.style.color = 'var(--color-primary)';
+      readBtn.style.background = 'none';
+      readBtn.style.border = 'none';
+      readBtn.style.padding = '0';
+      readBtn.addEventListener('mouseenter', function() {
+        this.style.color = 'var(--color-primary-hover)';
+      });
+      readBtn.addEventListener('mouseleave', function() {
+        this.style.color = 'var(--color-primary)';
+      });
+      readBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        openNewsModal(news.id);
+      });
+
+      var btnText = document.createElement('span');
+      btnText.textContent = '阅读全文';
+      readBtn.appendChild(btnText);
+
+      var arrowSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      arrowSvg.setAttribute('width', '12');
+      arrowSvg.setAttribute('height', '12');
+      arrowSvg.setAttribute('viewBox', '0 0 24 24');
+      arrowSvg.setAttribute('fill', 'none');
+      arrowSvg.setAttribute('stroke', 'currentColor');
+      arrowSvg.setAttribute('stroke-width', '2');
+      arrowSvg.setAttribute('stroke-linecap', 'round');
+      arrowSvg.setAttribute('stroke-linejoin', 'round');
+      var path1 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      path1.setAttribute('d', 'M5 12h14');
+      var path2 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      path2.setAttribute('d', 'm12 5 7 7-7 7');
+      arrowSvg.appendChild(path1);
+      arrowSvg.appendChild(path2);
+      readBtn.appendChild(arrowSvg);
+
+      footerDiv.appendChild(readBtn);
+      contentDiv.appendChild(footerDiv);
+      card.appendChild(contentDiv);
+
+      card.addEventListener('mouseenter', function () {
+        this.style.borderColor = 'var(--color-primary)';
+        this.style.transform = 'translateY(-2px)';
+        this.style.boxShadow = 'var(--shadow-elevated)';
+      });
+      card.addEventListener('mouseleave', function () {
+        this.style.borderColor = 'var(--border-default)';
+        this.style.transform = 'translateY(0)';
+        this.style.boxShadow = 'none';
+      });
+
+      return card;
+    }
+
+    function renderEmptyState() {
+      var empty = document.createElement('div');
+      empty.className = 'news-empty col-span-full';
+      empty.style.gridColumn = '1 / -1';
+      empty.style.textAlign = 'center';
+      empty.style.padding = '60px 20px';
+
+      var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      svg.setAttribute('width', '48');
+      svg.setAttribute('height', '48');
+      svg.setAttribute('viewBox', '0 0 24 24');
+      svg.setAttribute('fill', 'none');
+      svg.setAttribute('stroke', 'currentColor');
+      svg.setAttribute('stroke-width', '1.5');
+      svg.setAttribute('stroke-linecap', 'round');
+      svg.setAttribute('stroke-linejoin', 'round');
+      svg.style.margin = '0 auto 16px';
+      svg.style.opacity = '0.5';
+      svg.style.color = 'var(--text-muted)';
+
+      var path1 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      path1.setAttribute('d', 'M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2');
+      var path2 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      path2.setAttribute('d', 'M18 14h-8');
+      var path3 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      path3.setAttribute('d', 'M15 18h-5');
+      var path4 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      path4.setAttribute('d', 'M10 6h8v4h-8V6Z');
+      svg.appendChild(path1);
+      svg.appendChild(path2);
+      svg.appendChild(path3);
+      svg.appendChild(path4);
+      empty.appendChild(svg);
+
+      var p1 = document.createElement('p');
+      p1.style.fontFamily = 'var(--font-heading)';
+      p1.style.fontSize = '14px';
+      p1.style.color = 'var(--text-muted)';
+      p1.textContent = '暂无相关资讯';
+      empty.appendChild(p1);
+
+      var p2 = document.createElement('p');
+      p2.style.fontSize = '12px';
+      p2.style.marginTop = '4px';
+      p2.style.color = 'var(--text-muted)';
+      p2.textContent = '试试其他关键词或分类';
+      empty.appendChild(p2);
+
+      newsGrid.appendChild(empty);
+    }
+
+    function renderNewsList(newsList) {
+      newsGrid.innerHTML = '';
+
+      if (newsList.length === 0) {
+        renderEmptyState();
+        return;
+      }
+
+      newsList.forEach(function (news) {
+        var card = renderNewsCard(news);
+        newsGrid.appendChild(card);
       });
     }
 
-    tabs.forEach(function (tab) {
-      tab.addEventListener('click', function () {
-        tabs.forEach(function (t) {
-          t.removeAttribute('data-active');
-          t.style.fontWeight = 'normal';
-          t.style.color = 'var(--text-secondary)';
-          t.style.background = 'transparent';
-          t.style.border = 'none';
-          t.style.boxShadow = 'none';
-        });
-        tab.setAttribute('data-active', 'true');
-        currentFilter = tab.getAttribute('data-filter');
-        applyFilter();
+    function filterAndRender() {
+      var filtered = allNews.filter(function (item) {
+        var matchCategory = currentFilter === 'all' || item.category === currentFilter;
+        var matchSearch = !currentSearch ||
+          item.title.toLowerCase().includes(currentSearch.toLowerCase());
+        return matchCategory && matchSearch;
       });
-    });
+
+      filtered.sort(function (a, b) {
+        return new Date(b.published_at) - new Date(a.published_at);
+      });
+
+      renderNewsList(filtered);
+    }
+
+    function initTabs() {
+      tabs.forEach(function (tab) {
+        tab.addEventListener('click', function () {
+          tabs.forEach(function (t) {
+            t.removeAttribute('data-active');
+            t.style.fontWeight = 'normal';
+            t.style.color = 'var(--text-secondary)';
+            t.style.background = 'transparent';
+            t.style.border = 'none';
+            t.style.boxShadow = 'none';
+          });
+          tab.setAttribute('data-active', 'true');
+          currentFilter = tab.getAttribute('data-filter');
+          filterAndRender();
+        });
+      });
+    }
+
+    function initSearch() {
+      var searchTimeout;
+      searchInput.addEventListener('input', function (e) {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(function () {
+          currentSearch = e.target.value.trim();
+          filterAndRender();
+        }, 200);
+      });
+
+      searchInput.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          currentSearch = e.target.value.trim();
+          filterAndRender();
+        }
+      });
+    }
+
+    function formatContent(content) {
+      var lines = content.split('\n');
+      var html = '';
+      var inList = false;
+      var listType = '';
+
+      lines.forEach(function (line) {
+        line = line.trim();
+        if (!line) {
+          if (inList) {
+            html += listType === 'ul' ? '</ul>' : '</ol>';
+            inList = false;
+          }
+          return;
+        }
+
+        if (line.startsWith('- ') || line.startsWith('* ')) {
+          if (!inList || listType !== 'ul') {
+            if (inList) html += listType === 'ul' ? '</ul>' : '</ol>';
+            html += '<ul>';
+            inList = true;
+            listType = 'ul';
+          }
+          html += '<li>' + formatInline(line.substring(2)) + '</li>';
+        } else if (/^\d+\.\s/.test(line)) {
+          if (!inList || listType !== 'ol') {
+            if (inList) html += listType === 'ul' ? '</ul>' : '</ol>';
+            html += '<ol>';
+            inList = true;
+            listType = 'ol';
+          }
+          html += '<li>' + formatInline(line.replace(/^\d+\.\s/, '')) + '</li>';
+        } else {
+          if (inList) {
+            html += listType === 'ul' ? '</ul>' : '</ol>';
+            inList = false;
+          }
+          if (line.startsWith('**') && line.endsWith('**')) {
+            html += '<p><strong>' + formatInline(line.slice(2, -2)) + '</strong></p>';
+          } else {
+            html += '<p>' + formatInline(line) + '</p>';
+          }
+        }
+      });
+
+      if (inList) {
+        html += listType === 'ul' ? '</ul>' : '</ol>';
+      }
+
+      return html;
+    }
+
+    function formatInline(text) {
+      return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    }
+
+    function openNewsModal(id) {
+      var news = allNews.find(function (item) {
+        return item.id === parseInt(id);
+      });
+      if (!news) return;
+
+      var colors = getCategoryColor(news.category);
+      modalCategory.textContent = news.category_label;
+      modalCategory.style.backgroundColor = colors.bg;
+      modalCategory.style.color = colors.color;
+
+      modalTitle.textContent = news.title;
+      modalDate.textContent = news.published_at + ' · 阅读 ' + (news.views || 0) + ' 次';
+      modalContent.innerHTML = formatContent(news.content);
+
+      modalBackdrop.classList.add('is-open');
+      modal.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeNewsModal() {
+      modalBackdrop.classList.remove('is-open');
+      modal.classList.remove('is-open');
+      document.body.style.overflow = '';
+    }
+
+    function initModal() {
+      modalClose.addEventListener('click', closeNewsModal);
+      modalBackdrop.addEventListener('click', closeNewsModal);
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && modal.classList.contains('is-open')) {
+          closeNewsModal();
+        }
+      });
+    }
+
+    function init() {
+      db.getNews().then(function (news) {
+        allNews = news || [];
+        filterAndRender();
+      });
+
+      initTabs();
+      initSearch();
+      initModal();
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
   })();
 </script>
 </body>

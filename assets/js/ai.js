@@ -1,23 +1,28 @@
-// AI 服务层 - 接入 zhy.lk666.ai API
-// 用户需要在设置页面配置 API Key
+// OK AI ART - AI 服务层
+// 接入大模王AI聚合站 API
+// API 基础地址: https://api.lk888.ai/api
 
 const AI_CONFIG_KEY = 'api_config';
+const AI_BASE_URL = 'https://api.lk888.ai/api';
 
-// 从 Supabase settings 表获取 API 配置
 async function getAIConfig() {
-  if (typeof db === 'undefined') return null;
+  if (typeof db === 'undefined') {
+    const cached = localStorage.getItem('ai_config_cache');
+    return cached ? JSON.parse(cached) : null;
+  }
   try {
     const settings = await db.getSetting(AI_CONFIG_KEY);
     return settings?.value || null;
   } catch (e) {
-    console.warn('Failed to get AI config:', e);
-    return null;
+    console.warn('Failed to get AI config from db, trying localStorage:', e);
+    const cached = localStorage.getItem('ai_config_cache');
+    return cached ? JSON.parse(cached) : null;
   }
 }
 
-// 保存 API 配置到 Supabase
 async function saveAIConfig(config) {
-  if (typeof db === 'undefined') return false;
+  localStorage.setItem('ai_config_cache', JSON.stringify(config));
+  if (typeof db === 'undefined') return true;
   try {
     await db.upsertSetting(AI_CONFIG_KEY, config);
     return true;
@@ -27,158 +32,216 @@ async function saveAIConfig(config) {
   }
 }
 
-// AI 服务
 const ai = {
   config: null,
+  models: { chat: [], image: [], video: [], audio: [] },
 
-  // 初始化配置
   async init() {
     this.config = await getAIConfig();
     return this.config;
   },
 
-  // 检查是否已配置 API Key
   isConfigured() {
-    return this.config?.api_key && this.config?.api_key.length > 0;
+    return !!(this.config?.api_key && this.config.api_key.length > 0);
   },
 
-  // 获取可用模型列表
-  getModels(type) {
-    if (!this.config?.models) return [];
-    return this.config.models[type] || [];
+  getApiKey() {
+    return this.config?.api_key || '';
   },
 
-  // ===== 智能对话 =====
-  async chat(model, messages, options = {}) {
+  getBaseUrl() {
+    return this.config?.base_url || AI_BASE_URL;
+  },
+
+  async request(path, options = {}) {
     if (!this.isConfigured()) {
       throw new Error('请先在设置页面配置 API Key');
     }
 
-    const response = await fetch(`${this.config.base_url}/v1/chat/completions`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${this.config.api_key}`
-      },
-      body: JSON.stringify({
-        model: model,
-        messages: messages,
-        stream: options.stream || false,
-        max_tokens: options.max_tokens || 4096,
-        temperature: options.temperature || 0.7
-      })
+    const url = `${this.getBaseUrl()}${path}`;
+    const headers = {
+      'Authorization': `Bearer ${this.getApiKey()}`,
+      ...(options.headers || {})
+    };
+
+    if (options.body && !options.headers?.['Content-Type']) {
+      headers['Content-Type'] = 'application/json';
+    }
+
+    const res = await fetch(url, {
+      method: options.method || 'GET',
+      headers,
+      body: options.body ? (typeof options.body === 'string' ? options.body : JSON.stringify(options.body)) : undefined
     });
 
-    if (!response.ok) {
-      const err = await response.text();
-      throw new Error(`Chat API error: ${response.status} ${err}`);
+    const contentType = res.headers.get('content-type') || '';
+    if (contentType.includes('application/json')) {
+      const data = await res.json();
+      if (!res.ok) {
+        const msg = data?.error?.message || data?.msg || `HTTP ${res.status}`;
+        throw new Error(msg);
+      }
+      return data;
+    } else {
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(`HTTP ${res.status}: ${text}`);
+      }
+      return res;
     }
-
-    if (options.stream) {
-      return response; // 返回 stream response，由调用方处理
-    }
-
-    const data = await response.json();
-    return data.choices?.[0]?.message?.content || '';
   },
 
-  // ===== 图像生成 =====
-  async generateImage(prompt, model = 'flux', options = {}) {
-    if (!this.isConfigured()) {
-      throw new Error('请先在设置页面配置 API Key');
+  async getModels(type) {
+    const data = await this.request('/v1/skills/models');
+    const all = data?.models || [];
+    if (type) {
+      return all.filter(m => m.type === type);
     }
-
-    const response = await fetch(`${this.config.base_url}/v1/images/generations`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${this.config.api_key}`
-      },
-      body: JSON.stringify({
-        model: model,
-        prompt: prompt,
-        n: options.n || 1,
-        size: options.size || '1024x1024',
-        response_format: 'url'
-      })
-    });
-
-    if (!response.ok) {
-      const err = await response.text();
-      throw new Error(`Image API error: ${response.status} ${err}`);
-    }
-
-    const data = await response.json();
-    return data.data?.[0]?.url || data.url || data;
+    return all;
   },
 
-  // ===== 视频生成 =====
-  async generateVideo(prompt, model = 'vidu', options = {}) {
-    if (!this.isConfigured()) {
-      throw new Error('请先在设置页面配置 API Key');
-    }
-
-    // 视频生成通常需要更长时间，可能需要轮询状态
-    const response = await fetch(`${this.config.base_url}/v1/videos/generations`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${this.config.api_key}`
-      },
-      body: JSON.stringify({
-        model: model,
-        prompt: prompt,
-        duration: options.duration || 5,
-        aspect_ratio: options.aspect_ratio || '16:9'
-      })
-    });
-
-    if (!response.ok) {
-      const err = await response.text();
-      throw new Error(`Video API error: ${response.status} ${err}`);
-    }
-
-    const data = await response.json();
-    // 返回任务ID或直接结果
+  async getBalance() {
+    const data = await this.request('/v1/skills/balance');
     return data;
   },
 
-  // ===== 语音合成 =====
-  async generateAudio(text, model = 'gemini-tts', options = {}) {
-    if (!this.isConfigured()) {
-      throw new Error('请先在设置页面配置 API Key');
+  async chat(model, messages, options = {}) {
+    // 判断模型格式
+    const isClaude = model.startsWith('claude');
+    const isGemini = model.startsWith('gemini');
+
+    if (isClaude) {
+      const data = await this.request('/v1/messages', {
+        method: 'POST',
+        body: {
+          model,
+          messages: messages.map(m => ({ role: m.role, content: m.content })),
+          max_tokens: options.max_tokens || 4096,
+          stream: false
+        }
+      });
+      return data?.content?.[0]?.text || '';
     }
 
-    const response = await fetch(`${this.config.base_url}/v1/audio/speech`, {
+    if (isGemini) {
+      const data = await this.request(`/v1beta/models/${model}:generateContent`, {
+        method: 'POST',
+        body: {
+          contents: messages.map(m => ({
+            role: m.role === 'assistant' ? 'model' : 'user',
+            parts: [{ text: m.content }]
+          }))
+        }
+      });
+      return data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+    }
+
+    // 默认 OpenAI 格式
+    const data = await this.request('/v1/chat/completions', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${this.config.api_key}`
-      },
-      body: JSON.stringify({
-        model: model,
-        input: text,
-        voice: options.voice || 'default',
-        response_format: 'mp3'
-      })
+      body: {
+        model,
+        messages,
+        stream: false,
+        temperature: options.temperature || 0.7,
+        max_tokens: options.max_tokens || 4096
+      }
     });
-
-    if (!response.ok) {
-      const err = await response.text();
-      throw new Error(`Audio API error: ${response.status} ${err}`);
-    }
-
-    // 返回音频 URL 或 blob
-    if (response.headers.get('content-type')?.includes('audio')) {
-      const blob = await response.blob();
-      return URL.createObjectURL(blob);
-    }
-
-    const data = await response.json();
-    return data.url || data;
+    return data?.choices?.[0]?.message?.content || '';
   },
 
-  // 保存生成的资源到数据库
+  async generateImage(prompt, model = 'grok-4.2-image', options = {}) {
+    const data = await this.request('/v1/media/generate', {
+      method: 'POST',
+      body: {
+        model,
+        prompt,
+        params: options.params || {}
+      }
+    });
+
+    if (data.code !== 200) {
+      throw new Error(data.msg || '生成失败');
+    }
+
+    const taskId = data.data?.task_id || data.data?.['任务ids']?.[0];
+    return { task_id: taskId, ...data.data };
+  },
+
+  async generateVideo(prompt, model = 'viduq3-turbo', options = {}) {
+    const data = await this.request('/v1/media/generate', {
+      method: 'POST',
+      body: {
+        model,
+        prompt,
+        params: options.params || {}
+      }
+    });
+
+    if (data.code !== 200) {
+      throw new Error(data.msg || '生成失败');
+    }
+
+    const taskId = data.data?.task_id || data.data?.['任务ids']?.[0];
+    return { task_id: taskId, ...data.data };
+  },
+
+  async generateAudio(text, model = 'gemini-2.5-pro-preview-tts', options = {}) {
+    const data = await this.request('/v1/media/generate', {
+      method: 'POST',
+      body: {
+        model,
+        prompt: text,
+        params: options.params || {}
+      }
+    });
+
+    if (data.code !== 200) {
+      throw new Error(data.msg || '生成失败');
+    }
+
+    const taskId = data.data?.task_id || data.data?.['任务ids']?.[0];
+    return { task_id: taskId, ...data.data };
+  },
+
+  async getTaskStatus(taskId) {
+    const data = await this.request(`/v1/skills/task-status?task_id=${taskId}`);
+    return data;
+  },
+
+  async pollTask(taskId, onProgress, maxWaitSeconds = 1800, interval = 5000) {
+    const startTime = Date.now();
+    let lastStatus = null;
+
+    while (Date.now() - startTime < maxWaitSeconds * 1000) {
+      const status = await this.getTaskStatus(taskId);
+      lastStatus = status;
+
+      if (onProgress) onProgress(status);
+
+      if (status.is_final || status.status === '生成完成' || status.state === 'completed') {
+        return status;
+      }
+
+      if (status.state === 'failed' || status.status === '失败') {
+        throw new Error(status.error || '生成失败');
+      }
+
+      await new Promise(resolve => setTimeout(resolve, interval));
+    }
+
+    throw new Error('生成超时');
+  },
+
+  async getVoices(model) {
+    let path = '/v1/skills/voices';
+    if (model) {
+      path += `?model=${encodeURIComponent(model)}`;
+    }
+    const data = await this.request(path);
+    return data?.voices || [];
+  },
+
   async saveAsset(type, prompt, resultUrl, model, employeeId = null, projectId = null) {
     if (typeof db === 'undefined') return null;
     try {
@@ -199,5 +262,4 @@ const ai = {
   }
 };
 
-// 初始化 AI 服务
 ai.init().catch(e => console.warn('AI init failed:', e));

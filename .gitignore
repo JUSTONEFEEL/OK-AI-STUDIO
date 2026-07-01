@@ -19,3 +19,11 @@ Thumbs.db
 *.tmp
 *.temp
 .cache/
+
+# Secrets
+.env
+.env.local
+.env.*.local
+
+# IDE
+.trae/
