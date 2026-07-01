@@ -124,6 +124,12 @@
 <script src="assets/js/app.js"></script>
 <script>
 (function () {
+  var grid = document.getElementById('nav-grid');
+  var categoryFilters = document.getElementById('category-filters');
+  var searchInput = document.getElementById('search-input');
+  var currentCat = 'all';
+  var currentSearch = '';
+
   // ===== AI Navigation Data =====
 var navData = [
   { name: 'MindMarks', desc: '管理和跨平台整合AI对话的浏览器扩展工具MindMarks 是一款专为 AI 重度用户和知识工作者打造的浏览器扩展程序，旨在将混乱无序的 AI 对话记录转化为结构化、可检索的个人知识库。随着用户...', url: 'https://mindmarks.io', cat: 'AI对话工具' },
