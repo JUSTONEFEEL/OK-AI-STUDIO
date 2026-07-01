@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="dark" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.png">
+  <title>热门导航 — OK AI ART</title>
+  <link rel="stylesheet" href="assets/css/theme.css">
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+  <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+  <style type="text/tailwindcss">
+    @theme inline { --color-primary: var(--color-primary); --color-secondary: var(--color-secondary); }
+    @layer base { body { background: var(--surface-bg); color: var(--text-body); } }
+  </style>
+  <style>
+    .nav-card {
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+    .nav-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--color-primary) !important;
+      box-shadow: 0 8px 25px rgba(139, 92, 246, 0.15);
+    }
+    .category-tag {
+      display: inline-flex; align-items: center; padding: 2px 8px;
+      border-radius: 4px; font-size: 11px; font-weight: 600;
+      font-family: var(--font-heading);
+    }
+    .search-input:focus {
+      border-color: var(--color-primary) !important;
+      box-shadow: 0 0 0 2px var(--color-primary-light) !important;
+    }
+    .detail-modal {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6); z-index: 100; display: flex;
+      align-items: center; justify-content: center;
+    }
+    .detail-modal-content {
+      max-width: 560px; width: 90%; max-height: 80vh;
+      border-radius: 12px; padding: 28px; overflow-y: auto;
+      position: relative;
+    }
+  </style>
+</head>
+<body class="min-h-screen font-sans antialiased" data-page="nav" style="font-family: var(--font-body); color: var(--text-body); background-color: var(--surface-bg);">
+
+<div id="app-backdrop" class="app-backdrop"></div>
+
+<!-- ===== LEFT SIDEBAR ===== -->
+<aside id="app-sidebar" class="app-sidebar fixed top-0 left-0 z-30 flex flex-col h-screen border-r"
+  style="width: var(--sidebar-width); background-color: var(--surface-inset); border-color: var(--border-default);">
+  <div class="flex items-center gap-3 px-5 h-16 border-b" style="border-color: var(--border-default);">
+    <div class="flex items-center justify-center flex-shrink-0" style="width: 32px; height: 32px; background-color: var(--color-primary); border-radius: var(--radius-md);">
+      <img src="assets/ok-logo-64.png" alt="OK AI ART" style="width: 20px; height: 20px;" />
+    </div>
+    <span class="text-sm font-semibold tracking-tight" style="font-family: var(--font-heading); color: var(--text-heading);">OK AI ART</span>
+  </div>
+  <nav class="flex-1 overflow-y-auto py-4 px-3">
+    <ul class="flex flex-col gap-1" style="list-style: none; margin: 0; padding: 0;">
+      <li><a href="index.html" data-nav-key="dashboard" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors duration-150" style="font-family: var(--font-heading); color: var(--text-secondary);" onmouseover="if(!this.hasAttribute('data-active'))this.style.backgroundColor='var(--surface-hover)'" onmouseout="if(!this.hasAttribute('data-active'))this.style.backgroundColor='transparent'"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>工作台</span></a></li>
+      <li><a href="ai-employees.html" data-nav-key="ai-employees" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors duration-150" style="font-family: var(--font-heading); color: var(--text-secondary);" onmouseover="if(!this.hasAttribute('data-active'))this.style.backgroundColor='var(--surface-hover)'" onmouseout="if(!this.hasAttribute('data-active'))this.style.backgroundColor='transparent'"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>AI员工</span></a></li>
+      <li><a href="news-hub.html" data-nav-key="news-hub" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors duration-150" style="font-family: var(--font-heading); color: var(--text-secondary);" onmouseover="if(!this.hasAttribute('data-active'))this.style.backgroundColor='var(--surface-hover)'" onmouseout="if(!this.hasAttribute('data-active'))this.style.backgroundColor='transparent'"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/></svg><span>资讯台</span></a></li>
+      <li><a href="chat.html" data-nav-key="chat" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors duration-150" style="font-family: var(--font-heading); color: var(--text-secondary);" onmouseover="if(!this.hasAttribute('data-active'))this.style.backgroundColor='var(--surface-hover)'" onmouseout="if(!this.hasAttribute('data-active'))this.style.backgroundColor='transparent'"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>AI对话</span></a></li>
+      <li><a href="creative-studio.html" data-nav-key="creative-studio" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors duration-150" style="font-family: var(--font-heading); color: var(--text-secondary);" onmouseover="if(!this.hasAttribute('data-active'))this.style.backgroundColor='var(--surface-hover)'" onmouseout="if(!this.hasAttribute('data-active'))this.style.backgroundColor='transparent'"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg><span>创作工坊</span></a></li>
+      <li><a href="projects.html" data-nav-key="projects" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors duration-150" style="font-family: var(--font-heading); color: var(--text-secondary);" onmouseover="if(!this.hasAttribute('data-active'))this.style.backgroundColor='var(--surface-hover)'" onmouseout="if(!this.hasAttribute('data-active'))this.style.backgroundColor='transparent'"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h16Z"/></svg><span>项目中心</span></a></li>
+      <li><a href="resources.html" data-nav-key="resources" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors duration-150" style="font-family: var(--font-heading); color: var(--text-secondary);" onmouseover="if(!this.hasAttribute('data-active'))this.style.backgroundColor='var(--surface-hover)'" onmouseout="if(!this.hasAttribute('data-active'))this.style.backgroundColor='transparent'"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3"/></svg><span>资源库</span></a></li>
+      <li><a href="nav.html" data-nav-key="nav" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors duration-150" style="font-family: var(--font-heading); color: var(--text-secondary);" onmouseover="if(!this.hasAttribute('data-active'))this.style.backgroundColor='var(--surface-hover)'" onmouseout="if(!this.hasAttribute('data-active'))this.style.backgroundColor='transparent'"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg><span>热门导航</span></a></li>
+      <li><a href="settings.html" data-nav-key="settings" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors duration-150" style="font-family: var(--font-heading); color: var(--text-secondary);" onmouseover="if(!this.hasAttribute('data-active'))this.style.backgroundColor='var(--surface-hover)'" onmouseout="if(!this.hasAttribute('data-active'))this.style.backgroundColor='transparent'"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg><span>设置</span></a></li>
+    </ul>
+  </nav>
+  <div class="px-4 py-4 border-t" style="border-color: var(--border-default);">
+    <div class="flex items-center gap-2.5">
+      <div class="flex items-center justify-center flex-shrink-0 text-xs font-semibold" style="width: 28px; height: 28px; background-color: var(--color-primary-light); color: var(--color-primary); border-radius: var(--radius-full); font-family: var(--font-heading);">U</div>
+      <div class="flex-1 min-w-0">
+        <p class="text-xs font-medium truncate" style="font-family: var(--font-heading); color: var(--text-heading);">创作者</p>
+        <p class="text-xs truncate" style="color: var(--text-muted);">专业版</p>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- ===== MAIN CONTENT WRAPPER ===== -->
+<div class="app-main flex flex-col flex-1" style="margin-left: var(--sidebar-width);">
+  <header class="sticky top-0 z-20 flex items-center justify-between h-16 px-4 sm:px-6 border-b gap-3" style="background-color: var(--surface-card); border-color: var(--border-default);">
+    <div class="flex items-center gap-3 min-w-0">
+      <button id="menu-toggle" class="menu-toggle items-center justify-center p-2 rounded-md" style="color: var(--text-secondary); display:none;" aria-label="打开菜单"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+      <h1 class="text-lg font-semibold truncate" style="font-family: var(--font-heading); color: var(--text-heading);">热门导航</h1>
+    </div>
+    <div class="flex items-center flex-1 mx-4 sm:mx-8" style="max-width: 480px;">
+      <div class="relative w-full">
+        <svg class="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-muted);"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.3-4.3"/></svg>
+        <input id="search-input" type="text" placeholder="搜索AI工具..." class="search-input w-full pl-9 pr-4 py-2 text-sm rounded-md outline-none transition-colors duration-150" style="font-family: var(--font-body); background-color: var(--surface-inset); color: var(--text-body); border: 1px solid var(--border-default);" />
+      </div>
+    </div>
+    <div class="flex items-center gap-1 sm:gap-3 flex-shrink-0">
+      <button id="theme-toggle" class="relative flex items-center justify-center p-2 rounded-md transition-colors duration-150" style="color: var(--text-secondary);" aria-label="切换主题"><svg data-theme-icon-moon width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg><svg data-theme-icon-sun width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="M4.93 4.93l1.41 1.41"/><path d="M17.66 17.66l1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="M4.93 19.07l1.41-1.41"/><path d="M17.66 6.34l1.41-1.41"/></svg></button>
+      <button class="flex items-center justify-center flex-shrink-0" style="width: 34px; height: 34px; background-color: var(--color-primary-light); color: var(--color-primary); border-radius: var(--radius-full); font-family: var(--font-heading); font-size: 13px; font-weight: 600;" aria-label="用户菜单">U</button>
+    </div>
+  </header>
+
+  <main class="flex-1 p-4 sm:p-6 lg:p-8" style="background-color: var(--surface-bg);">
+    <!-- Category Filter -->
+    <div class="flex flex-wrap items-center gap-2 mb-6" id="category-filters">
+      <button class="category-filter active px-4 py-1.5 text-sm font-medium rounded-full transition-colors duration-150" data-cat="all" style="font-family: var(--font-heading); background-color: var(--color-primary); color: #fff; border: none; cursor: pointer;">全部</button>
+    </div>
+
+    <!-- Cards Grid -->
+    <div id="nav-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+    </div>
+
+    <!-- Detail Modal -->
+    <div id="detail-modal" class="detail-modal" style="display:none;" onclick="if(event.target===this)closeDetail()">
+      <div class="detail-modal-content" style="background-color: var(--surface-card); border: 1px solid var(--border-default);">
+        <button onclick="closeDetail()" class="absolute top-3 right-3 p-1.5 rounded-md transition-colors" style="color: var(--text-muted); background: none; border: none; cursor: pointer;" onmouseover="this.style.backgroundColor='var(--surface-hover)'" onmouseout="this.style.backgroundColor='transparent'">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+        <div id="detail-content"></div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="assets/js/app.js"></script>
+<script>
+(function () {
+  // ===== AI Navigation Data =====
+  var navData = [
+    // 大模型/对话
+    { name: 'ChatGPT', desc: 'OpenAI 旗舰对话 AI，支持文本、图像、代码等多模态交互', url: 'https://chat.openai.com', cat: 'chat', catLabel: '大模型', icon: '💬', tags: ['GPT-5', '多模态', 'OpenAI'], featured: true },
+    { name: 'Claude', desc: 'Anthropic 开发的安全对话 AI，擅长长文档分析和创作', url: 'https://claude.ai', cat: 'chat', catLabel: '大模型', icon: '🧠', tags: ['长上下文', '安全', 'Anthropic'], featured: true },
+    { name: 'Gemini', desc: 'Google 多模态大模型，深度整合 Google 生态', url: 'https://gemini.google.com', cat: 'chat', catLabel: '大模型', icon: '🌟', tags: ['多模态', 'Google', '搜索'], featured: true },
+    { name: 'DeepSeek', desc: '国产开源大模型，推理能力强，性价比极高', url: 'https://chat.deepseek.com', cat: 'chat', catLabel: '大模型', icon: '🔍', tags: ['开源', '推理', '国产'], featured: false },
+    { name: 'Kimi', desc: '月之暗面推出的长文本对话助手，支持超长文档处理', url: 'https://kimi.moonshot.cn', cat: 'chat', catLabel: '大模型', icon: '🌙', tags: ['长文本', '国产', '文件处理'], featured: false },
+    { name: '豆包', desc: '字节跳动旗下 AI 对话助手，免费好用', url: 'https://www.doubao.com', cat: 'chat', catLabel: '大模型', icon: '🫘', tags: ['免费', '字节跳动', '国产'], featured: false },
+    { name: '通义千问', desc: '阿里云自研大语言模型，支持多轮对话和代码生成', url: 'https://tongyi.aliyun.com', cat: 'chat', catLabel: '大模型', icon: '☁️', tags: ['阿里云', '国产', '多模态'], featured: false },
+    { name: '文心一言', desc: '百度知识增强大语言模型，中文理解能力强', url: 'https://yiyan.baidu.com', cat: 'chat', catLabel: '大模型', icon: '📝', tags: ['百度', '国产', '知识增强'], featured: false },
+    { name: '讯飞星火', desc: '科大讯飞认知大模型，语音交互能力突出', url: 'https://xinghuo.xfyun.cn', cat: 'chat', catLabel: '大模型', icon: '🔥', tags: ['语音', '讯飞', '国产'], featured: false },
+    { name: 'Perplexity', desc: 'AI 驱动搜索引擎，实时联网回答，自动引用来源', url: 'https://www.perplexity.ai', cat: 'chat', catLabel: '大模型', icon: '🔎', tags: ['搜索', '引用', '实时'], featured: true },
+
+    // 图像生成
+    { name: 'Midjourney', desc: '顶级 AI 图像生成工具，艺术风格出众', url: 'https://www.midjourney.com', cat: 'image', catLabel: '图像生成', icon: '🎨', tags: ['艺术', 'Discord', '高质量'], featured: true },
+    { name: 'DALL·E', desc: 'OpenAI 图像生成模型，与 ChatGPT 深度整合', url: 'https://openai.com/dall-e-3', cat: 'image', catLabel: '图像生成', icon: '🖼️', tags: ['OpenAI', 'ChatGPT', '易用'], featured: false },
+    { name: 'Stable Diffusion', desc: '开源图像生成模型，支持本地部署和自定义', url: 'https://stability.ai', cat: 'image', catLabel: '图像生成', icon: '🎯', tags: ['开源', '本地', '可定制'], featured: false },
+    { name: '即梦 AI', desc: '字节跳动文生图工具，中文理解精准，东方美学出色', url: 'https://jimeng.jianying.com', cat: 'image', catLabel: '图像生成', icon: '✨', tags: ['字节跳动', '国产', '国风'], featured: false },
+    { name: 'Canva AI', desc: '在线设计平台，AI 辅助生成海报、社交媒体图片', url: 'https://www.canva.com', cat: 'image', catLabel: '图像生成', icon: '📐', tags: ['设计', '模板', '易用'], featured: false },
+    { name: 'Leonardo AI', desc: '专注游戏和设计领域的 AI 图像生成平台', url: 'https://leonardo.ai', cat: 'image', catLabel: '图像生成', icon: '🎮', tags: ['游戏', '设计', '素材'], featured: false },
+
+    // 视频生成
+    { name: 'Runway', desc: '专业 AI 视频生成和编辑工具，支持 Gen-4 模型', url: 'https://runwayml.com', cat: 'video', catLabel: '视频生成', icon: '🎬', tags: ['视频生成', '编辑', '专业'], featured: true },
+    { name: 'Sora', desc: 'OpenAI 文生视频模型，画质和连贯性业界领先', url: 'https://openai.com/sora', cat: 'video', catLabel: '视频生成', icon: '🎥', tags: ['OpenAI', '高质量', '文生视频'], featured: true },
+    { name: 'Pika', desc: '轻量级 AI 视频生成工具，简单易上手', url: 'https://pika.art', cat: 'video', catLabel: '视频生成', icon: '⚡', tags: ['轻量', '易用', '创意'], featured: false },
+    { name: 'Kling', desc: '快手可灵 AI 视频生成，中文场景表现出色', url: 'https://kling.kuaishou.com', cat: 'video', catLabel: '视频生成', icon: '🧧', tags: ['快手', '国产', '视频'], featured: false },
+    { name: 'HeyGen', desc: 'AI 数字人视频生成，支持多语言口型同步', url: 'https://www.heygen.com', cat: 'video', catLabel: '视频生成', icon: '🤖', tags: ['数字人', '口型同步', '多语言'], featured: false },
+
+    // 音频/音乐
+    { name: 'Suno', desc: 'AI 音乐生成，输入歌词和风格即可生成完整歌曲', url: 'https://suno.com', cat: 'audio', catLabel: '音频音乐', icon: '🎵', tags: ['音乐', '创作', 'AI作曲'], featured: true },
+    { name: 'ElevenLabs', desc: '顶级 AI 语音合成和克隆，支持 29 种语言', url: 'https://elevenlabs.io', cat: 'audio', catLabel: '音频音乐', icon: '🎙️', tags: ['TTS', '语音克隆', '多语言'], featured: true },
+    { name: 'Udio', desc: 'AI 音乐创作平台，由前 Google DeepMind 研究员创立', url: 'https://www.udio.com', cat: 'audio', catLabel: '音频音乐', icon: '🎶', tags: ['音乐', '创作', '高质量'], featured: false },
+
+    // 效率工具
+    { name: 'Notion AI', desc: '集成 AI 的笔记和知识管理工具，AI 辅助写作', url: 'https://www.notion.so/product/ai', cat: 'productivity', catLabel: '效率工具', icon: '📋', tags: ['笔记', '知识管理', '写作'], featured: false },
+    { name: 'Gamma', desc: 'AI 驱动的演示文稿生成工具，一键生成 PPT', url: 'https://gamma.app', cat: 'productivity', catLabel: '效率工具', icon: '📊', tags: ['PPT', '演示', 'AI生成'], featured: false },
+    { name: 'Cursor', desc: 'AI 编程 IDE，集成 GPT-5/Claude，开发者效率神器', url: 'https://cursor.sh', cat: 'productivity', catLabel: '效率工具', icon: '💻', tags: ['编程', 'IDE', 'AI助手'], featured: true },
+    { name: 'GitHub Copilot', desc: '微软 AI 编程助手，深度集成 GitHub 和 VS Code', url: 'https://github.com/features/copilot', cat: 'productivity', catLabel: '效率工具', icon: '👨‍💻', tags: ['微软', '编程', 'GitHub'], featured: false },
+    { name: 'Napkin AI', desc: 'AI 图表生成工具，文字秒变流程图和架构图', url: 'https://www.napkin.ai', cat: 'productivity', catLabel: '效率工具', icon: '📈', tags: ['图表', '可视化', '流程图'], featured: false },
+
+    // 开发平台
+    { name: 'Hugging Face', desc: '全球最大 AI 模型社区，开源模型和数据集宝库', url: 'https://huggingface.co', cat: 'dev', catLabel: '开发者', icon: '🤗', tags: ['开源', '模型', '社区'], featured: true },
+    { name: 'Replicate', desc: '云端 AI 模型运行平台，API 一键调用', url: 'https://replicate.com', cat: 'dev', catLabel: '开发者', icon: '☁️', tags: ['API', '云端', '模型'], featured: false },
+    { name: 'Vercel AI', desc: 'AI 应用开发平台，快速构建和部署 AI 产品', url: 'https://vercel.com/ai', cat: 'dev', catLabel: '开发者', icon: '🚀', tags: ['部署', 'SDK', '开发'], featured: false },
+    { name: 'LangChain', desc: 'LLM 应用开发框架，构建 AI Agent 和 RAG 应用', url: 'https://www.langchain.com', cat: 'dev', catLabel: '开发者', icon: '🔗', tags: ['框架', 'Agent', 'RAG'], featured: false },
+    { name: 'ComfyUI', desc: '节点式 AI 图像生成工作流工具，可视化编排', url: 'https://www.comfy.org', cat: 'dev', catLabel: '开发者', icon: '🧩', tags: ['工作流', '图像', '可视化'], featured: false },
+
+    // 设计/创意
+    { name: 'Figma AI', desc: 'AI 增强的 UI/UX 设计工具，智能布局和设计建议', url: 'https://www.figma.com/ai', cat: 'design', catLabel: '设计创意', icon: '🎯', tags: ['UI', '设计', '协作'], featured: false },
+    { name: 'Adobe Firefly', desc: 'Adobe 旗下 AI 创意工具，集成 Photoshop 等', url: 'https://www.adobe.com/products/firefly.html', cat: 'design', catLabel: '设计创意', icon: '🦋', tags: ['Adobe', '创意', '设计'], featured: false },
+    { name: 'Remove.bg', desc: 'AI 一键抠图，背景去除速度快如闪电', url: 'https://www.remove.bg', cat: 'design', catLabel: '设计创意', icon: '✂️', tags: ['抠图', '背景', '快速'], featured: false }
+  ];
+
+  // ===== Render =====
+  var grid = document.getElementById('nav-grid');
+  var categoryFilters = document.getElementById('category-filters');
+  var searchInput = document.getElementById('search-input');
+  var currentCat = 'all';
+  var currentSearch = '';
+
+  // Build category filters
+  var cats = ['all'].concat([...new Set(navData.map(function(d) { return d.cat; }))]);
+  var catLabels = { all: '全部' };
+  navData.forEach(function(d) { catLabels[d.cat] = d.catLabel; });
+
+  cats.forEach(function(cat) {
+    var btn = document.createElement('button');
+    btn.className = 'category-filter px-4 py-1.5 text-sm font-medium rounded-full transition-colors duration-150';
+    btn.setAttribute('data-cat', cat);
+    btn.textContent = catLabels[cat] || cat;
+    btn.style.cssText = 'font-family: var(--font-heading); background-color: var(--surface-card); color: var(--text-secondary); border: 1px solid var(--border-default); cursor: pointer;';
+    if (cat === 'all') { btn.classList.add('active'); btn.style.cssText += 'background-color: var(--color-primary) !important; color: #fff !important; border-color: var(--color-primary) !important;'; }
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.category-filter').forEach(function(b) {
+        b.classList.remove('active');
+        b.style.cssText = 'font-family: var(--font-heading); background-color: var(--surface-card); color: var(--text-secondary); border: 1px solid var(--border-default); cursor: pointer;';
+      });
+      btn.classList.add('active');
+      btn.style.cssText += 'background-color: var(--color-primary) !important; color: #fff !important; border-color: var(--color-primary) !important;';
+      currentCat = cat;
+      renderCards();
+    });
+    categoryFilters.appendChild(btn);
+  });
+
+  // Search
+  searchInput.addEventListener('input', function() {
+    currentSearch = this.value.trim().toLowerCase();
+    renderCards();
+  });
+
+  function renderCards() {
+    var filtered = navData.filter(function(d) {
+      var matchCat = currentCat === 'all' || d.cat === currentCat;
+      var matchSearch = !currentSearch || d.name.toLowerCase().includes(currentSearch) || d.desc.toLowerCase().includes(currentSearch) || d.tags.some(function(t) { return t.toLowerCase().includes(currentSearch); });
+      return matchCat && matchSearch;
+    });
+
+    grid.innerHTML = filtered.map(function(d, i) {
+      return '<div class="nav-card rounded-lg p-5" style="background-color: var(--surface-card); border: 1px solid var(--border-default);" onclick="openDetail(' + i + ', \'' + d.cat + '\')">' +
+        '<div class="flex items-start justify-between mb-3">' +
+        '<div class="flex items-center gap-3">' +
+        '<div class="flex items-center justify-center flex-shrink-0 rounded-lg" style="width: 40px; height: 40px; background-color: var(--surface-inset); font-size: 20px;">' + d.icon + '</div>' +
+        '<div class="min-w-0">' +
+        '<h3 class="text-sm font-semibold truncate" style="font-family: var(--font-heading); color: var(--text-heading);">' + d.name + (d.featured ? ' <span style="color:var(--color-primary);font-size:11px;">★</span>' : '') + '</h3>' +
+        '<span class="category-tag" style="background-color: var(--color-primary-light); color: var(--color-primary);">' + d.catLabel + '</span>' +
+        '</div></div></div>' +
+        '<p class="text-xs leading-relaxed mb-3" style="font-family: var(--font-body); color: var(--text-secondary); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">' + d.desc + '</p>' +
+        '<div class="flex flex-wrap gap-1.5">' +
+        d.tags.map(function(t) { return '<span class="text-xs px-2 py-0.5 rounded" style="font-family: var(--font-heading); background-color: var(--surface-inset); color: var(--text-muted);">' + t + '</span>'; }).join('') +
+        '</div>' +
+        '<div class="flex items-center justify-between mt-3 pt-3" style="border-top: 1px solid var(--border-subtle);">' +
+        '<span class="text-xs" style="font-family: var(--font-body); color: var(--text-muted);">点击查看详情</span>' +
+        '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--color-primary);"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>' +
+        '</div></div>';
+    }).join('');
+
+    if (filtered.length === 0) {
+      grid.innerHTML = '<div class="col-span-full text-center py-16"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-muted); margin: 0 auto 12px;"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.3-4.3"/></svg><p class="text-sm" style="font-family: var(--font-heading); color: var(--text-muted);">没有找到匹配的 AI 工具</p></div>';
+    }
+  }
+
+  // ===== Detail Modal =====
+  var filteredCache = [];
+  window.openDetail = function(idx, cat) {
+    // Re-filter to get the correct item
+    var filtered = navData.filter(function(d) {
+      var matchCat = currentCat === 'all' || d.cat === currentCat;
+      var matchSearch = !currentSearch || d.name.toLowerCase().includes(currentSearch) || d.desc.toLowerCase().includes(currentSearch) || d.tags.some(function(t) { return t.toLowerCase().includes(currentSearch); });
+      return matchCat && matchSearch;
+    });
+    var d = filtered[idx];
+    if (!d) return;
+
+    var content = document.getElementById('detail-content');
+    content.innerHTML =
+      '<div class="flex items-center gap-4 mb-4">' +
+      '<div class="flex items-center justify-center flex-shrink-0 rounded-lg" style="width: 56px; height: 56px; background-color: var(--surface-inset); font-size: 28px;">' + d.icon + '</div>' +
+      '<div>' +
+      '<h2 class="text-xl font-semibold" style="font-family: var(--font-heading); color: var(--text-heading);">' + d.name + (d.featured ? ' <span style="color:var(--color-primary);">★</span>' : '') + '</h2>' +
+      '<span class="category-tag" style="background-color: var(--color-primary-light); color: var(--color-primary);">' + d.catLabel + '</span>' +
+      '</div></div>' +
+      '<p class="text-sm leading-relaxed mb-4" style="font-family: var(--font-body); color: var(--text-body);">' + d.desc + '</p>' +
+      '<div class="flex flex-wrap gap-1.5 mb-4">' + d.tags.map(function(t) { return '<span class="text-xs px-2 py-0.5 rounded" style="font-family: var(--font-heading); background-color: var(--surface-inset); color: var(--text-muted); border: 1px solid var(--border-subtle);">' + t + '</span>'; }).join('') + '</div>' +
+      '<div class="rounded-lg p-4 mb-4" style="background-color: var(--surface-inset); border: 1px solid var(--border-subtle);">' +
+      '<p class="text-xs mb-1" style="font-family: var(--font-heading); color: var(--text-muted);">网站地址</p>' +
+      '<p class="text-sm font-mono break-all" style="font-family: monospace; color: var(--color-primary);">' + d.url + '</p>' +
+      '</div>' +
+      '<a href="' + d.url + '" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 w-full px-5 py-3 text-sm font-semibold rounded-md transition-colors duration-150" style="font-family: var(--font-heading); background-color: var(--color-primary); color: var(--text-inverse); text-decoration: none;" onmouseover="this.style.backgroundColor=\'var(--color-primary-hover)\'" onmouseout="this.style.backgroundColor=\'var(--color-primary)\'">' +
+      '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>' +
+      '访问网站</a>';
+
+    document.getElementById('detail-modal').style.display = 'flex';
+  };
+
+  window.closeDetail = function() {
+    document.getElementById('detail-modal').style.display = 'none';
+  };
+
+  // ESC to close
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeDetail();
+  });
+
+  // Initial render
+  renderCards();
+})();
+</script>
+</body>
+</html>
