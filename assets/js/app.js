@@ -197,7 +197,7 @@
       'position:absolute;top:calc(100% + 8px);right:0;min-width:280px;' +
       'background:var(--surface-elevated);border:1px solid var(--border-default);' +
       'border-radius:var(--radius-lg);box-shadow:var(--shadow-float);' +
-      'z-index:50;opacity:0;pointer-events:none;' +
+      'z-index:9999;opacity:0;pointer-events:none;' +
       'transform:translateY(-4px);transition:opacity 150ms ease, transform 150ms ease;';
 
     dropdown.innerHTML =
@@ -352,10 +352,31 @@
     userDropdown = createUserDropdown(triggerBtn);
     parent.appendChild(userDropdown);
 
-    triggerBtn.addEventListener('mouseenter', showUserDropdown);
-    triggerBtn.addEventListener('mouseleave', hideUserDropdown);
-    userDropdown.addEventListener('mouseenter', function () { clearTimeout(userDropdownTimeout); });
-    userDropdown.addEventListener('mouseleave', hideUserDropdown);
+    var isHovering = false;
+
+    // Hover events
+    triggerBtn.addEventListener('mouseenter', function() { isHovering = true; showUserDropdown(); });
+    triggerBtn.addEventListener('mouseleave', function() { isHovering = false; hideUserDropdown(); });
+    userDropdown.addEventListener('mouseenter', function () { isHovering = true; clearTimeout(userDropdownTimeout); });
+    userDropdown.addEventListener('mouseleave', function() { isHovering = false; hideUserDropdown(); });
+
+    // Click toggle (fallback for touch / if hover doesn't fire)
+    triggerBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (userDropdown.style.opacity === '1') {
+        hideUserDropdown();
+      } else {
+        showUserDropdown();
+      }
+    });
+
+    // Click outside to close
+    document.addEventListener('click', function (e) {
+      if (userDropdown && userDropdown.style.opacity === '1' &&
+          !userDropdown.contains(e.target) && e.target !== triggerBtn && !triggerBtn.contains(e.target)) {
+        hideUserDropdown();
+      }
+    });
 
     var copyBtn = userDropdown.querySelector('#copy-uid-btn');
     if (copyBtn) {
@@ -390,7 +411,10 @@
     });
 
     document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && logoutModal && logoutModal.style.opacity === '1') hideLogoutModal();
+      if (e.key === 'Escape') {
+        if (logoutModal && logoutModal.style.opacity === '1') hideLogoutModal();
+        else if (userDropdown && userDropdown.style.opacity === '1') hideUserDropdown();
+      }
     });
   }
 
