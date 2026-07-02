@@ -85,7 +85,7 @@
       <!-- Page Heading -->
       <div class="mb-8">
         <h2 class="text-2xl font-semibold" style="font-family: var(--font-heading); color: var(--text-heading); text-wrap: balance; word-break: keep-all; overflow-wrap: break-word;">API配置</h2>
-        <p class="mt-1 text-sm" style="font-family: var(--font-body); color: var(--text-secondary);">管理你的账户、外观、API 密钥与存储</p>
+        <p class="mt-1 text-sm" style="font-family: var(--font-body); color: var(--text-secondary);">管理你的 API 配置与账户余额</p>
       </div>
 
       <!-- Form Container -->
@@ -109,10 +109,10 @@
                 </button>
               </div>
             </div>
-            <div id="balance-display" style="display:none;">
+            <div id="balance-display">
               <div class="rounded-md" style="background-color: var(--surface-inset); padding: 12px 16px;">
-                <p class="text-xs mb-1" style="font-family: var(--font-body); color: var(--text-muted);">账户余额</p>
-                <p id="balance-amount" class="text-lg font-semibold" style="font-family: var(--font-heading); color: var(--text-heading);">—</p>
+                <p class="text-xs mb-1" style="font-family: var(--font-body); color: var(--text-muted);">API 账户余额</p>
+                <p id="balance-amount" class="text-lg font-semibold" style="font-family: var(--font-heading); color: var(--text-heading);">加载中...</p>
               </div>
             </div>
             <div class="flex items-center justify-between">
@@ -128,178 +128,7 @@
           </div>
         </div>
 
-        <!-- ===== Section 1: 个人资料 ===== -->
-        <div class="mb-6 rounded-lg" style="background-color: var(--surface-card); border: 1px solid var(--border-default); padding: 24px;">
-          <h3 class="text-base font-semibold mb-5" style="font-family: var(--font-heading); color: var(--text-heading);">个人资料</h3>
-          <div class="flex items-center gap-4 mb-5">
-            <div class="flex items-center justify-center flex-shrink-0" style="width: 56px; height: 56px; background-color: var(--surface-inset); border-radius: var(--radius-full); border: 1px dashed var(--border-default);">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-muted);"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-            </div>
-            <button type="button" class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-md whitespace-nowrap transition-colors duration-150" style="font-family: var(--font-heading); background-color: var(--surface-bg); color: var(--text-secondary); border: 1px solid var(--border-default);" onmouseover="this.style.borderColor='var(--border-strong)'; this.style.color='var(--text-heading)'" onmouseout="this.style.borderColor='var(--border-default)'; this.style.color='var(--text-secondary)'" data-clickable="更换头像">更换头像</button>
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-            <div>
-              <label class="block text-sm font-medium mb-1.5" style="font-family: var(--font-heading); color: var(--text-secondary);">姓名</label>
-              <input type="text" value="创作者" class="w-full px-3 py-2.5 text-sm rounded-md outline-none transition-colors duration-150" style="font-family: var(--font-body); background-color: var(--surface-bg); color: var(--text-body); border: 1px solid var(--border-default);" onfocus="this.style.borderColor='var(--color-primary)'; this.style.boxShadow='0 0 0 2px var(--color-primary-light)'" onblur="this.style.borderColor='var(--border-default)'; this.style.boxShadow='none'" />
-            </div>
-            <div>
-              <label class="block text-sm font-medium mb-1.5" style="font-family: var(--font-heading); color: var(--text-secondary);">邮箱</label>
-              <input type="email" value="creator@aiworkspace.com" class="w-full px-3 py-2.5 text-sm rounded-md outline-none transition-colors duration-150" style="font-family: var(--font-body); background-color: var(--surface-bg); color: var(--text-body); border: 1px solid var(--border-default);" onfocus="this.style.borderColor='var(--color-primary)'; this.style.boxShadow='0 0 0 2px var(--color-primary-light)'" onblur="this.style.borderColor='var(--border-default)'; this.style.boxShadow='none'" />
-            </div>
-          </div>
-          <div class="flex justify-end mt-5">
-            <button type="button" class="inline-flex items-center justify-center px-5 py-2.5 text-sm font-semibold rounded-md whitespace-nowrap transition-colors duration-150" style="font-family: var(--font-heading); background-color: var(--color-primary); color: var(--text-inverse); border: none;" onmouseover="this.style.backgroundColor='var(--color-primary-hover)'; this.style.transform='translateY(-1px)'" onmouseout="this.style.backgroundColor='var(--color-primary)'; this.style.transform='translateY(0)'" onmousedown="this.style.transform='translateY(0)'" data-clickable="个人资料已保存">保存</button>
-          </div>
-        </div>
 
-        <!-- ===== Section 2: 外观主题 ===== -->
-        <div class="mb-6 rounded-lg" style="background-color: var(--surface-card); border: 1px solid var(--border-default); padding: 24px;">
-          <h3 class="text-base font-semibold mb-5" style="font-family: var(--font-heading); color: var(--text-heading);">外观主题</h3>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <!-- Dark theme card -->
-            <div id="theme-card-dark" class="theme-card relative rounded-md cursor-pointer transition-all duration-150" style="padding: 16px; background-color: var(--surface-bg); border: 1.5px solid var(--color-primary);" data-theme-value="dark">
-              <div class="flex items-center gap-3 mb-3">
-                <div class="flex items-center justify-center flex-shrink-0 rounded-md" style="width: 56px; height: 40px; background: linear-gradient(135deg, #1c1c1f 0%, #2a2a2e 100%); border: 1px solid #3e3e54;">
-                  <div style="width: 14px; height: 14px; background-color: #d97757; border-radius: 3px;"></div>
-                </div>
-                <div>
-                  <p class="text-sm font-semibold" style="font-family: var(--font-heading); color: var(--text-heading);">深色模式</p>
-                  <p class="text-xs" style="font-family: var(--font-body); color: var(--text-muted);">护眼夜间首选</p>
-                </div>
-              </div>
-              <div class="flex items-center gap-2 mt-2">
-                <span style="width: 20px; height: 20px; border-radius: 9999px; background-color: #1c1c1f; border: 1px solid #3e3e54;"></span>
-                <span style="width: 20px; height: 20px; border-radius: 9999px; background-color: #d97757;"></span>
-                <span style="width: 20px; height: 20px; border-radius: 9999px; background-color: #2a2a2e; border: 1px solid #3e3e54;"></span>
-              </div>
-              <span class="theme-check absolute" style="top: 10px; right: 10px; display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; background-color: var(--color-primary); border-radius: var(--radius-full);">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-              </span>
-            </div>
-            <!-- Light theme card -->
-            <div id="theme-card-light" class="theme-card relative rounded-md cursor-pointer transition-all duration-150" style="padding: 16px; background-color: var(--surface-bg); border: 1.5px solid var(--border-default);" data-theme-value="light">
-              <div class="flex items-center gap-3 mb-3">
-                <div class="flex items-center justify-center flex-shrink-0 rounded-md" style="width: 56px; height: 40px; background: linear-gradient(135deg, #ffffff 0%, #f4f5fa 100%); border: 1px solid #e3e5ee;">
-                  <div style="width: 14px; height: 14px; background-color: #d97757; border-radius: 3px;"></div>
-                </div>
-                <div>
-                  <p class="text-sm font-semibold" style="font-family: var(--font-heading); color: var(--text-heading);">浅色模式</p>
-                  <p class="text-xs" style="font-family: var(--font-body); color: var(--text-muted);">明亮日间使用</p>
-                </div>
-              </div>
-              <div class="flex items-center gap-2 mt-2">
-                <span style="width: 20px; height: 20px; border-radius: 9999px; background-color: #ffffff; border: 1px solid #e3e5ee;"></span>
-                <span style="width: 20px; height: 20px; border-radius: 9999px; background-color: #d97757;"></span>
-                <span style="width: 20px; height: 20px; border-radius: 9999px; background-color: #f4f5fa; border: 1px solid #e3e5ee;"></span>
-              </div>
-              <span class="theme-check absolute" style="top: 10px; right: 10px; display: none; align-items: center; justify-content: center; width: 20px; height: 20px; background-color: var(--color-primary); border-radius: var(--radius-full);">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <!-- ===== Section 3: API密钥管理 ===== -->
-        <div class="mb-6 rounded-lg" style="background-color: var(--surface-card); border: 1px solid var(--border-default); padding: 24px;">
-          <h3 class="text-base font-semibold mb-5" style="font-family: var(--font-heading); color: var(--text-heading);">API密钥管理</h3>
-          <div class="rounded-md overflow-hidden" style="border: 1px solid var(--border-default);">
-            <table class="w-full" style="border-collapse: collapse;">
-              <thead>
-                <tr style="background-color: var(--surface-inset);">
-                  <th class="text-left text-xs font-medium px-4 py-2.5" style="font-family: var(--font-heading); color: var(--text-secondary); border-bottom: 1px solid var(--border-default);">服务</th>
-                  <th class="text-left text-xs font-medium px-4 py-2.5" style="font-family: var(--font-heading); color: var(--text-secondary); border-bottom: 1px solid var(--border-default);">状态</th>
-                  <th class="text-left text-xs font-medium px-4 py-2.5 hidden sm:table-cell" style="font-family: var(--font-heading); color: var(--text-secondary); border-bottom: 1px solid var(--border-default);">更新时间</th>
-                  <th class="text-right text-xs font-medium px-4 py-2.5" style="font-family: var(--font-heading); color: var(--text-secondary); border-bottom: 1px solid var(--border-default);">操作</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td class="px-4 py-3 text-sm" style="font-family: var(--font-heading); font-weight: 500; color: var(--text-heading); border-bottom: 1px solid var(--border-subtle);">OpenAI</td>
-                  <td class="px-4 py-3" style="border-bottom: 1px solid var(--border-subtle);"><span class="inline-flex items-center justify-center px-2.5 py-1 text-xs font-medium rounded-md whitespace-nowrap" style="font-family: var(--font-heading); background-color: rgba(34, 197, 94, 0.10); color: var(--state-success);">已配置</span></td>
-                  <td class="px-4 py-3 text-sm hidden sm:table-cell" style="font-family: var(--font-body); color: var(--text-secondary); border-bottom: 1px solid var(--border-subtle);">2025-06-28</td>
-                  <td class="px-4 py-3 text-right" style="border-bottom: 1px solid var(--border-subtle);"><button type="button" class="inline-flex items-center justify-center px-3 py-1.5 text-xs font-medium rounded-md whitespace-nowrap transition-colors duration-150" style="font-family: var(--font-heading); background-color: transparent; color: var(--text-secondary); border: 1px solid var(--border-default);" onmouseover="this.style.borderColor='var(--border-strong)'; this.style.color='var(--text-heading)'" onmouseout="this.style.borderColor='var(--border-default)'; this.style.color='var(--text-secondary)'" data-clickable="管理 OpenAI 密钥">管理</button></td>
-                </tr>
-                <tr>
-                  <td class="px-4 py-3 text-sm" style="font-family: var(--font-heading); font-weight: 500; color: var(--text-heading); border-bottom: 1px solid var(--border-subtle);">Midjourney</td>
-                  <td class="px-4 py-3" style="border-bottom: 1px solid var(--border-subtle);"><span class="inline-flex items-center justify-center px-2.5 py-1 text-xs font-medium rounded-md whitespace-nowrap" style="font-family: var(--font-heading); background-color: var(--surface-inset); color: var(--text-muted);">未配置</span></td>
-                  <td class="px-4 py-3 text-sm hidden sm:table-cell" style="font-family: var(--font-body); color: var(--text-secondary); border-bottom: 1px solid var(--border-subtle);">—</td>
-                  <td class="px-4 py-3 text-right" style="border-bottom: 1px solid var(--border-subtle);"><button type="button" class="inline-flex items-center justify-center px-3 py-1.5 text-xs font-medium rounded-md whitespace-nowrap transition-colors duration-150" style="font-family: var(--font-heading); background-color: transparent; color: var(--text-secondary); border: 1px solid var(--border-default);" onmouseover="this.style.borderColor='var(--border-strong)'; this.style.color='var(--text-heading)'" onmouseout="this.style.borderColor='var(--border-default)'; this.style.color='var(--text-secondary)'" data-clickable="管理 Midjourney 密钥">管理</button></td>
-                </tr>
-                <tr>
-                  <td class="px-4 py-3 text-sm" style="font-family: var(--font-heading); font-weight: 500; color: var(--text-heading);">ElevenLabs</td>
-                  <td class="px-4 py-3"><span class="inline-flex items-center justify-center px-2.5 py-1 text-xs font-medium rounded-md whitespace-nowrap" style="font-family: var(--font-heading); background-color: rgba(34, 197, 94, 0.10); color: var(--state-success);">已配置</span></td>
-                  <td class="px-4 py-3 text-sm hidden sm:table-cell" style="font-family: var(--font-body); color: var(--text-secondary);">2025-06-25</td>
-                  <td class="px-4 py-3 text-right"><button type="button" class="inline-flex items-center justify-center px-3 py-1.5 text-xs font-medium rounded-md whitespace-nowrap transition-colors duration-150" style="font-family: var(--font-heading); background-color: transparent; color: var(--text-secondary); border: 1px solid var(--border-default);" onmouseover="this.style.borderColor='var(--border-strong)'; this.style.color='var(--text-heading)'" onmouseout="this.style.borderColor='var(--border-default)'; this.style.color='var(--text-secondary)'" data-clickable="管理 ElevenLabs 密钥">管理</button></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div class="flex justify-start mt-4">
-            <button type="button" class="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium rounded-md whitespace-nowrap transition-colors duration-150" style="font-family: var(--font-heading); background-color: var(--surface-inset); color: var(--text-secondary); border: 1px solid var(--border-default);" onmouseover="this.style.borderColor='var(--border-strong)'; this.style.color='var(--text-heading)'" onmouseout="this.style.borderColor='var(--border-default)'; this.style.color='var(--text-secondary)'" data-clickable="添加 API 密钥">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
-              添加密钥
-            </button>
-          </div>
-        </div>
-
-        <!-- ===== Section 4: 存储与用量 ===== -->
-        <div class="mb-6 rounded-lg" style="background-color: var(--surface-card); border: 1px solid var(--border-default); padding: 24px;">
-          <h3 class="text-base font-semibold mb-5" style="font-family: var(--font-heading); color: var(--text-heading);">存储与用量</h3>
-          <div class="flex items-center justify-between mb-2">
-            <span class="text-sm" style="font-family: var(--font-heading); color: var(--text-secondary);">总用量</span>
-            <span class="text-sm whitespace-nowrap" style="font-family: var(--font-heading); color: var(--text-heading); font-variant-numeric: tabular-nums;">21.6GB / 30GB</span>
-          </div>
-          <div class="w-full h-2 rounded-full overflow-hidden mb-5" style="background-color: var(--surface-inset);">
-            <div class="h-full rounded-full" style="width: 72%; background-color: var(--color-primary);"></div>
-          </div>
-
-          <!-- Sub-rows -->
-          <div class="flex flex-col gap-4" style="border-top: 1px solid var(--border-subtle); padding-top: 16px;">
-            <div>
-              <div class="flex items-center justify-between mb-1.5">
-                <span class="text-sm" style="font-family: var(--font-heading); color: var(--text-heading);">图片</span>
-                <span class="text-xs whitespace-nowrap" style="font-family: var(--font-body); color: var(--text-muted); font-variant-numeric: tabular-nums;">12.4GB</span>
-              </div>
-              <div class="w-full h-1.5 rounded-full overflow-hidden" style="background-color: var(--surface-inset);">
-                <div class="h-full rounded-full" style="width: 57%; background-color: var(--color-primary);"></div>
-              </div>
-            </div>
-            <div>
-              <div class="flex items-center justify-between mb-1.5">
-                <span class="text-sm" style="font-family: var(--font-heading); color: var(--text-heading);">视频</span>
-                <span class="text-xs whitespace-nowrap" style="font-family: var(--font-body); color: var(--text-muted); font-variant-numeric: tabular-nums;">6.1GB</span>
-              </div>
-              <div class="w-full h-1.5 rounded-full overflow-hidden" style="background-color: var(--surface-inset);">
-                <div class="h-full rounded-full" style="width: 28%; background-color: var(--color-primary);"></div>
-              </div>
-            </div>
-            <div>
-              <div class="flex items-center justify-between mb-1.5">
-                <span class="text-sm" style="font-family: var(--font-heading); color: var(--text-heading);">音频</span>
-                <span class="text-xs whitespace-nowrap" style="font-family: var(--font-body); color: var(--text-muted); font-variant-numeric: tabular-nums;">3.1GB</span>
-              </div>
-              <div class="w-full h-1.5 rounded-full overflow-hidden" style="background-color: var(--surface-inset);">
-                <div class="h-full rounded-full" style="width: 14%; background-color: var(--color-primary);"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- ===== Section 5: 关于 ===== -->
-        <div class="mb-8 rounded-lg" style="background-color: var(--surface-card); border: 1px solid var(--border-default); padding: 24px;">
-          <h3 class="text-base font-semibold mb-5" style="font-family: var(--font-heading); color: var(--text-heading);">关于</h3>
-          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4" style="padding-bottom: 16px; border-bottom: 1px solid var(--border-subtle);">
-            <div>
-              <p class="text-sm font-medium" style="font-family: var(--font-heading); color: var(--text-heading);">OK AI ART</p>
-              <p class="text-xs mt-0.5" style="font-family: var(--font-body); color: var(--text-muted);">版本 v1.0.0</p>
-            </div>
-            <button type="button" class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-md whitespace-nowrap transition-colors duration-150" style="font-family: var(--font-heading); background-color: var(--surface-inset); color: var(--text-secondary); border: 1px solid var(--border-default);" onmouseover="this.style.borderColor='var(--border-strong)'; this.style.color='var(--text-heading)'" onmouseout="this.style.borderColor='var(--border-default)'; this.style.color='var(--text-secondary)'" data-clickable="已是最新版本">检查更新</button>
-          </div>
-          <div class="flex flex-wrap items-center gap-x-5 gap-y-2">
-            <a class="text-sm cursor-pointer transition-colors duration-150" style="font-family: var(--font-heading); color: var(--color-primary);" data-clickable="打开 服务条款">服务条款</a>
-            <a class="text-sm cursor-pointer transition-colors duration-150" style="font-family: var(--font-heading); color: var(--color-primary);" data-clickable="打开 隐私政策">隐私政策</a>
-          </div>
-        </div>
 
       </form>
     </div>
@@ -355,13 +184,18 @@
     }
 
     function formatBalance(data) {
-      if (!data) return '—';
-      var balance = data.balance !== undefined ? data.balance : (data.data?.balance !== undefined ? data.data.balance : null);
+      if (!data) return '¥0.00';
+      var balance = data.balance !== undefined ? data.balance : (data.data && data.data.balance !== undefined ? data.data.balance : null);
       if (balance === null || balance === undefined) {
-        if (typeof data === 'number') return data.toFixed(2) + ' 元';
-        return '—';
+        if (typeof data === 'number') return '¥' + data.toFixed(2);
+        return '¥0.00';
       }
-      return Number(balance).toFixed(2) + ' 元';
+      return '¥' + Number(balance).toFixed(2);
+    }
+
+    function syncBalanceToDropdown(balanceText) {
+      var dropdownBalance = document.getElementById('user-balance-personal');
+      if (dropdownBalance) dropdownBalance.textContent = balanceText;
     }
 
     if (toggleBtn) {
@@ -374,6 +208,24 @@
       });
     }
 
+    async function loadBalance() {
+      try {
+        if (typeof ai !== 'undefined' && typeof ai.getBalance === 'function') {
+          var data = await ai.getBalance();
+          var text = formatBalance(data);
+          if (balanceAmount) balanceAmount.textContent = text;
+          syncBalanceToDropdown(text);
+        } else {
+          if (balanceAmount) balanceAmount.textContent = '¥0.00';
+          syncBalanceToDropdown('¥0.00');
+        }
+      } catch (e) {
+        console.warn('Failed to load balance:', e);
+        if (balanceAmount) balanceAmount.textContent = '¥0.00';
+        syncBalanceToDropdown('¥0.00');
+      }
+    }
+
     async function loadConfig() {
       try {
         if (typeof ai !== 'undefined') {
@@ -382,17 +234,21 @@
             if (baseUrlInput && config.base_url) baseUrlInput.value = config.base_url;
             if (apiKeyInput && config.api_key) apiKeyInput.value = config.api_key;
             updateStatus(config.api_key && config.api_key.length > 0);
+            if (config.api_key) loadBalance();
           } else {
             if (baseUrlInput) baseUrlInput.value = DEFAULT_BASE_URL;
             updateStatus(false);
+            if (balanceAmount) balanceAmount.textContent = '¥0.00';
           }
         } else {
           console.warn('ai not available');
           if (baseUrlInput) baseUrlInput.value = DEFAULT_BASE_URL;
+          if (balanceAmount) balanceAmount.textContent = '¥0.00';
         }
       } catch (e) {
         console.warn('Failed to load API config:', e);
         if (baseUrlInput) baseUrlInput.value = DEFAULT_BASE_URL;
+        if (balanceAmount) balanceAmount.textContent = '¥0.00';
       }
     }
 
@@ -421,6 +277,7 @@
               if (typeof ai !== 'undefined') {
                 ai.config = config;
               }
+              loadBalance();
               if (window.awShowToast) window.awShowToast('API 配置已保存');
             } else {
               throw new Error('保存失败');
@@ -431,6 +288,7 @@
             if (typeof ai !== 'undefined') {
               ai.config = config;
             }
+            loadBalance();
             if (window.awShowToast) window.awShowToast('API 配置已保存');
           } else {
             throw new Error('存储服务不可用');
@@ -472,9 +330,10 @@
           if (typeof ai !== 'undefined' && typeof ai.getBalance === 'function') {
             var data = await ai.getBalance();
             updateStatus(true);
-            if (balanceDisplay && balanceAmount) {
-              balanceAmount.textContent = formatBalance(data);
-              balanceDisplay.style.display = 'block';
+            if (balanceAmount) {
+              var text = formatBalance(data);
+              balanceAmount.textContent = text;
+              syncBalanceToDropdown(text);
             }
             if (window.awShowToast) window.awShowToast('连接成功');
           } else {
@@ -495,62 +354,7 @@
     loadConfig();
   })();
 
-  // ===== Theme selector cards (mirrors app.js theme mechanism + storage key 'ai-workspace-theme') =====
-  (function () {
-    var STORAGE_KEY = 'ai-workspace-theme';
-    var cards = document.querySelectorAll('.theme-card');
-    var darkCard = document.getElementById('theme-card-dark');
-    var lightCard = document.getElementById('theme-card-light');
 
-    function applyTheme(theme) {
-      var html = document.documentElement;
-      if (theme === 'light') {
-        html.classList.remove('dark');
-        html.setAttribute('data-theme', 'light');
-      } else {
-        html.classList.add('dark');
-        html.setAttribute('data-theme', 'dark');
-      }
-      // Sync the header #theme-toggle button state (same logic as app.js)
-      var btn = document.getElementById('theme-toggle');
-      if (btn) {
-        btn.setAttribute('aria-label', theme === 'light' ? '切换到深色模式' : '切换到浅色模式');
-        var sun = btn.querySelector('[data-theme-icon-sun]');
-        var moon = btn.querySelector('[data-theme-icon-moon]');
-        if (sun && moon) {
-          sun.style.display = theme === 'light' ? 'none' : 'inline-flex';
-          moon.style.display = theme === 'light' ? 'inline-flex' : 'none';
-        }
-      }
-      // Update selected card visuals
-      function markSelected(card) {
-        var check = card.querySelector('.theme-check');
-        card.style.borderColor = 'var(--color-primary)';
-        if (check) check.style.display = 'inline-flex';
-      }
-      function markUnselected(card) {
-        var check = card.querySelector('.theme-check');
-        card.style.borderColor = 'var(--border-default)';
-        if (check) check.style.display = 'none';
-      }
-      if (theme === 'light') {
-        if (darkCard) markUnselected(darkCard);
-        if (lightCard) markSelected(lightCard);
-      } else {
-        if (darkCard) markSelected(darkCard);
-        if (lightCard) markUnselected(lightCard);
-      }
-    }
-
-    cards.forEach(function (card) {
-      card.addEventListener('click', function () {
-        var value = card.getAttribute('data-theme-value');
-        applyTheme(value);
-        try { localStorage.setItem(STORAGE_KEY, value); } catch (e) {}
-        if (window.awShowToast) window.awShowToast(value === 'light' ? '已切换到浅色模式' : '已切换到深色模式');
-      });
-    });
-  })();
 </script>
 
 </body>
